@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.meal-planner.invalid/diet.schema.json",
+  "title": "Meal Planner — documento .diet, versione 1",
+  "description": "Contratto documentale. Non viene eseguito nell'app come validatore runtime e non verifica correttezza nutrizionale o delle ricette. Tutti gli oggetti ammettono proprietà di estensione.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["format", "schemaVersion", "planId", "title", "language", "createdAt", "suggestedStartDate", "baseServings", "days"],
+  "properties": {
+    "format": { "const": "meal-planner.diet" },
+    "schemaVersion": { "const": 1 },
+    "planId": { "$ref": "#/$defs/id" },
+    "title": { "type": "string" },
+    "language": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Tag di lingua BCP-47 scelto per i contenuti, per esempio it, en o it-IT. Indipendente dalla lingua dell'interfaccia. Nessun controllo linguistico automatico."
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "suggestedStartDate": { "$ref": "#/$defs/date" },
+    "baseServings": { "const": 1, "description": "Ogni pasto, ingrediente e valore nutrizionale si riferisce a una porzione consumata da una persona." },
+    "notes": { "type": "string" },
+    "preferences": { "$ref": "#/$defs/preferences" },
+    "days": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/day" },
+      "description": "Sequenza non vuota di giorni. Il limite 3–10 giorni è una convenzione del flusso ChatGPT, non un vincolo del formato o dell'esportazione."
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1 },
+    "date": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "time": { "type": "string", "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$" },
+    "nullableNumber": { "type": ["number", "null"] },
+    "macroRange": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["unit"],
+      "properties": {
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "unit": { "const": "g" }
+      },
+      "description": "Intervallo giornaliero desiderato, conservato come metadato. L'app non verifica raggiungimento, compatibilità o adeguatezza dei limiti."
+    },
+    "frequencyLimit": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["subject", "maxMeals", "period"],
+      "properties": {
+        "subject": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["kind", "id"],
+          "properties": {
+            "kind": { "enum": ["ingredient", "tag"] },
+            "id": { "$ref": "#/$defs/id" },
+            "label": { "type": "string" }
+          }
+        },
+        "maxMeals": { "type": "integer" },
+        "period": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["days", "alignment"],
+          "properties": {
+            "days": { "const": 7 },
+            "alignment": { "const": "rolling" }
+          }
+        }
+      },
+      "description": "Numero massimo di pasti contenenti l'ingrediente o il tag in una finestra mobile di sette giorni. Metadato del processo ChatGPT, non regola imposta dall'app."
+    },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "maxKcalPerDay": { "type": "number" },
+        "macros": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "protein": { "$ref": "#/$defs/macroRange" },
+            "carbohydrates": { "$ref": "#/$defs/macroRange" },
+            "fat": { "$ref": "#/$defs/macroRange" }
+          }
+        },
+        "ingredientFrequencyLimits": { "type": "array", "items": { "$ref": "#/$defs/frequencyLimit" } },
+        "workSchedule": { "type": "string" },
+        "leftovers": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["allowed"],
+          "properties": {
+            "allowed": { "type": "boolean" },
+            "notes": { "type": "string" }
+          }
+        }
+      }
+    },
+    "day": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["date", "meals"],
+      "properties": {
+        "date": { "$ref": "#/$defs/date" },
+        "meals": { "type": "array", "items": { "$ref": "#/$defs/meal" } }
+      }
+    },
+    "meal": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["mealId", "type", "title", "time", "ingredients"],
+      "properties": {
+        "mealId": { "$ref": "#/$defs/id" },
+        "type": { "type": "string", "description": "Codice aperto; valori suggeriti: breakfast, lunch, dinner, snack." },
+        "title": { "type": "string" },
+        "time": { "$ref": "#/$defs/time" },
+        "ingredients": { "type": "array", "items": { "$ref": "#/$defs/ingredient" } },
+        "nutrition": { "$ref": "#/$defs/nutrition" },
+        "instructions": { "type": "array", "items": { "type": "string" } },
+        "prepMinutes": { "type": "number" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "preparation": { "$ref": "#/$defs/preparation" },
+        "notes": { "type": "string" }
+      }
+    },
+    "ingredient": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["ingredientId", "name", "quantity", "unit"],
+      "properties": {
+        "ingredientId": { "$ref": "#/$defs/id", "description": "Identità stabile, indipendente dalla traduzione del nome. Usare slug inglesi e distinguere le varianti." },
+        "name": { "type": "string" },
+        "quantity": { "type": "number", "description": "Quantità per una sola porzione consumata, non per l'intera preparazione anticipata." },
+        "unit": { "type": "string", "minLength": 1, "description": "Unità aperta. Convenzioni: g, kg, ml, l, unit." },
+        "category": { "type": "string", "description": "Categoria aperta. Convenzioni: produce, grains, protein, dairy, pantry, other." },
+        "basis": { "type": "string", "description": "Base di misura aperta. Convenzioni: raw, cooked, drained, dry, as_sold. L'assenza non equivale a una di esse." }
+      }
+    },
+    "nutrition": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "kcal": { "$ref": "#/$defs/nullableNumber" },
+        "proteinG": { "$ref": "#/$defs/nullableNumber" },
+        "carbohydratesG": { "$ref": "#/$defs/nullableNumber" },
+        "fatG": { "$ref": "#/$defs/nullableNumber" },
+        "fiberG": { "$ref": "#/$defs/nullableNumber" },
+        "note": { "type": "string" }
+      },
+      "description": "Valori per una persona. Campi assenti o null rappresentano dati non disponibili e non devono essere interpretati come zero. Nessun controllo di correttezza nutrizionale."
+    },
+    "preparation": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["batchId", "role"],
+      "properties": {
+        "batchId": { "$ref": "#/$defs/id" },
+        "role": { "enum": ["cook", "leftover"] },
+        "preparedServings": { "type": "number", "description": "Metadato informativo sulla preparazione. Non moltiplica gli ingredienti e non determina le porzioni dell'app." },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

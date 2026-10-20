@@ -1,0 +1,1193 @@
+{
+  "format": "meal-planner.backup",
+  "schemaVersion": 1,
+  "exportedAt": "2026-10-19T17:20:00.000Z",
+  "state": {
+    "format": "meal-planner.state",
+    "schemaVersion": 1,
+    "settings": {
+      "uiLanguage": "en",
+      "reducedMotion": false,
+      "weekStartsOn": 1
+    },
+    "sourcePlans": {
+      "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea": {
+        "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+        "document": {
+          "format": "meal-planner.diet",
+          "schemaVersion": 1,
+          "planId": "phase-4-technical-demo-it",
+          "title": "Esempio fase 4 · Tre giorni a colori",
+          "language": "it",
+          "createdAt": "2026-10-19T14:30:00Z",
+          "suggestedStartDate": "2026-10-21",
+          "baseServings": 1,
+          "notes": "Dati fittizi per esplorare l’interfaccia di Project Meal Planner. Il calendario della demo parte dalla data del dispositivo; questo documento conserva le date originali suggerite. Ingredienti e valori sono per una persona. I numeri nutrizionali sono valori illustrativi inventati per mostrare riepiloghi completi e dati mancanti; non costituiscono una valutazione del piano. I testi del piano sono in italiano e rimangono invariati quando si cambia la lingua dell’interfaccia. Esempio tecnico della fase 4: due assegnazioni dello stesso documento, con sovrapposizioni confermate, orari modificati e persone impostate nel calendario. Le date del documento originale restano dal 21 al 23 ottobre 2026.",
+          "preferences": {
+            "workSchedule": "Lavoro dalle 09:00 alle 18:00. Colazione alle 07:30, pranzo alle 13:00, spuntino alle 16:30 e cena alle 19:30. Pranzo in ufficio con frigorifero e microonde. Tempo desiderato per la cena: massimo 20 minuti.",
+            "leftovers": {
+              "allowed": true,
+              "notes": "Una preparazione collega la cena del primo giorno al pranzo del giorno successivo. Ogni pasto elenca soltanto gli ingredienti della porzione consumata."
+            },
+            "ingredientFrequencyLimits": [
+              {
+                "subject": {
+                  "kind": "tag",
+                  "id": "contains-cheese",
+                  "label": "Pasti con formaggio"
+                },
+                "maxMeals": 2,
+                "period": {
+                  "days": 7,
+                  "alignment": "rolling"
+                }
+              },
+              {
+                "subject": {
+                  "kind": "tag",
+                  "id": "contains-eggs",
+                  "label": "Pasti con uova"
+                },
+                "maxMeals": 2,
+                "period": {
+                  "days": 7,
+                  "alignment": "rolling"
+                }
+              }
+            ]
+          },
+          "days": [
+            {
+              "date": "2026-10-21",
+              "meals": [
+                {
+                  "mealId": "day-01-breakfast",
+                  "type": "breakfast",
+                  "title": "Yogurt con avena, pera e noci",
+                  "time": "07:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "plain-yogurt",
+                      "name": "Yogurt bianco",
+                      "quantity": 170,
+                      "unit": "g",
+                      "category": "dairy",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "rolled-oats",
+                      "name": "Fiocchi d'avena",
+                      "quantity": 40,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "dry"
+                    },
+                    {
+                      "ingredientId": "pear",
+                      "name": "Pera",
+                      "quantity": 1,
+                      "unit": "unit",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "walnuts",
+                      "name": "Noci sgusciate",
+                      "quantity": 15,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "instructions": [
+                    "Taglia la pera e spezzetta le noci.",
+                    "Aggiungi allo yogurt l'avena, la pera e le noci."
+                  ],
+                  "prepMinutes": 5,
+                  "nutrition": {
+                    "kcal": 410,
+                    "proteinG": 18,
+                    "carbohydratesG": 55,
+                    "fatG": 14,
+                    "fiberG": 9,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                },
+                {
+                  "mealId": "day-01-lunch",
+                  "type": "lunch",
+                  "title": "Insalata di farro, pomodorini e cannellini",
+                  "time": "13:00",
+                  "ingredients": [
+                    {
+                      "ingredientId": "spelt",
+                      "name": "Farro già cotto",
+                      "quantity": 150,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "cooked"
+                    },
+                    {
+                      "ingredientId": "canned-cannellini-beans",
+                      "name": "Cannellini in scatola",
+                      "quantity": 130,
+                      "unit": "g",
+                      "category": "protein",
+                      "basis": "drained"
+                    },
+                    {
+                      "ingredientId": "cherry-tomatoes",
+                      "name": "Pomodorini",
+                      "quantity": 150,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "olive-oil",
+                      "name": "Olio d'oliva",
+                      "quantity": 8,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "basil",
+                      "name": "Basilico",
+                      "quantity": 3,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "salt",
+                      "name": "Sale",
+                      "quantity": 1,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "instructions": [
+                    "Usa il farro già cotto e i cannellini sgocciolati.",
+                    "Taglia i pomodorini, unisci tutti gli ingredienti e sistema la porzione nel contenitore per il pranzo."
+                  ],
+                  "prepMinutes": 12,
+                  "tags": [
+                    "legumes"
+                  ],
+                  "notes": "Il tempo indicato presuppone farro già cotto; la quantità non è un peso a secco.",
+                  "nutrition": {
+                    "kcal": 520,
+                    "proteinG": 22,
+                    "carbohydratesG": 74,
+                    "fatG": 15,
+                    "fiberG": 13,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                },
+                {
+                  "mealId": "day-01-snack",
+                  "type": "snack",
+                  "title": "Mela e mandorle",
+                  "time": "16:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "apple",
+                      "name": "Mela",
+                      "quantity": 1,
+                      "unit": "unit",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "almonds",
+                      "name": "Mandorle",
+                      "quantity": 20,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "instructions": [
+                    "Prepara la mela e la porzione di mandorle per lo spuntino."
+                  ],
+                  "prepMinutes": 2,
+                  "nutrition": {
+                    "kcal": 195,
+                    "proteinG": 5,
+                    "carbohydratesG": 24,
+                    "fatG": 10,
+                    "fiberG": 6,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                },
+                {
+                  "mealId": "day-01-dinner",
+                  "type": "dinner",
+                  "title": "Couscous con ceci e zucchine",
+                  "time": "19:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "instant-couscous",
+                      "name": "Couscous istantaneo",
+                      "quantity": 70,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "dry"
+                    },
+                    {
+                      "ingredientId": "canned-chickpeas",
+                      "name": "Ceci in scatola",
+                      "quantity": 130,
+                      "unit": "g",
+                      "category": "protein",
+                      "basis": "drained"
+                    },
+                    {
+                      "ingredientId": "zucchini",
+                      "name": "Zucchine",
+                      "quantity": 250,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "olive-oil",
+                      "name": "Olio d'oliva",
+                      "quantity": 8,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "lemon-juice",
+                      "name": "Succo di limone",
+                      "quantity": 10,
+                      "unit": "ml",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "water",
+                      "name": "Acqua",
+                      "quantity": 90,
+                      "unit": "ml",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "parsley",
+                      "name": "Prezzemolo",
+                      "quantity": 2,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "salt",
+                      "name": "Sale",
+                      "quantity": 1,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "nutrition": {
+                    "kcal": 580,
+                    "proteinG": 25,
+                    "carbohydratesG": 82,
+                    "fatG": 17,
+                    "fiberG": 14,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  },
+                  "instructions": [
+                    "Per la preparazione condivisa usa il doppio delle quantità per una persona elencate nel piano: una porzione è per questa cena e una per il pranzo del giorno successivo.",
+                    "Taglia le zucchine a rondelle sottili e cuocile in padella con l'olio e il sale; aggiungi i ceci sgocciolati.",
+                    "Reidrata il couscous con l'acqua calda, seguendo i tempi indicati sulla confezione.",
+                    "Unisci il couscous, le verdure e i ceci; aggiungi limone e prezzemolo. Dividi la preparazione in due porzioni."
+                  ],
+                  "prepMinutes": 18,
+                  "tags": [
+                    "legumes"
+                  ],
+                  "preparation": {
+                    "batchId": "couscous-chickpeas-batch-01",
+                    "role": "cook",
+                    "preparedServings": 2,
+                    "note": "La preparazione comprende due porzioni, ma gli ingredienti qui riportati appartengono soltanto alla porzione consumata a cena. La seconda è descritta nel pranzo del giorno successivo."
+                  },
+                  "notes": "Pasto dimostrativo collegato al pranzo del giorno successivo. I due consumi hanno quantità separate per una persona."
+                }
+              ]
+            },
+            {
+              "date": "2026-10-22",
+              "meals": [
+                {
+                  "mealId": "day-02-breakfast",
+                  "type": "breakfast",
+                  "title": "Pane integrale con ricotta e kiwi",
+                  "time": "07:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "wholegrain-bread",
+                      "name": "Pane integrale",
+                      "quantity": 70,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "ricotta",
+                      "name": "Ricotta",
+                      "quantity": 80,
+                      "unit": "g",
+                      "category": "dairy",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "kiwi",
+                      "name": "Kiwi",
+                      "quantity": 1,
+                      "unit": "unit",
+                      "category": "produce",
+                      "basis": "raw"
+                    }
+                  ],
+                  "instructions": [
+                    "Spalma la ricotta sul pane e accompagna con il kiwi."
+                  ],
+                  "prepMinutes": 5,
+                  "tags": [
+                    "contains-cheese"
+                  ],
+                  "nutrition": {
+                    "kcal": 360,
+                    "proteinG": 17,
+                    "carbohydratesG": 48,
+                    "fatG": 12,
+                    "fiberG": 7,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                },
+                {
+                  "mealId": "day-02-lunch",
+                  "type": "lunch",
+                  "title": "Couscous con ceci e zucchine — porzione preparata",
+                  "time": "13:00",
+                  "ingredients": [
+                    {
+                      "ingredientId": "instant-couscous",
+                      "name": "Couscous istantaneo",
+                      "quantity": 70,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "dry"
+                    },
+                    {
+                      "ingredientId": "canned-chickpeas",
+                      "name": "Ceci in scatola",
+                      "quantity": 130,
+                      "unit": "g",
+                      "category": "protein",
+                      "basis": "drained"
+                    },
+                    {
+                      "ingredientId": "zucchini",
+                      "name": "Zucchine",
+                      "quantity": 250,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "olive-oil",
+                      "name": "Olio d'oliva",
+                      "quantity": 8,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "lemon-juice",
+                      "name": "Succo di limone",
+                      "quantity": 10,
+                      "unit": "ml",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "water",
+                      "name": "Acqua",
+                      "quantity": 90,
+                      "unit": "ml",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "parsley",
+                      "name": "Prezzemolo",
+                      "quantity": 2,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "salt",
+                      "name": "Sale",
+                      "quantity": 1,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "nutrition": {
+                    "kcal": 580,
+                    "proteinG": 25,
+                    "carbohydratesG": 82,
+                    "fatG": 17,
+                    "fiberG": 14,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  },
+                  "instructions": [
+                    "Usa la porzione già preparata con la cena del giorno precedente. Gli ingredienti descrivono la sua allocazione originaria, non una seconda preparazione."
+                  ],
+                  "prepMinutes": 5,
+                  "tags": [
+                    "legumes"
+                  ],
+                  "preparation": {
+                    "batchId": "couscous-chickpeas-batch-01",
+                    "role": "leftover",
+                    "note": "Seconda porzione della preparazione condivisa del giorno precedente. Gli ingredienti restano nella base originaria e vengono conteggiati per questo pasto."
+                  },
+                  "notes": "Esempio di pranzo con una porzione preparata in anticipo."
+                },
+                {
+                  "mealId": "day-02-snack",
+                  "type": "snack",
+                  "title": "Arancia e cioccolato fondente",
+                  "time": "16:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "orange",
+                      "name": "Arancia",
+                      "quantity": 1,
+                      "unit": "unit",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "dark-chocolate",
+                      "name": "Cioccolato fondente",
+                      "quantity": 15,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "instructions": [
+                    "Prepara l'arancia e la porzione di cioccolato."
+                  ],
+                  "prepMinutes": 2,
+                  "nutrition": {
+                    "kcal": 150,
+                    "proteinG": 2,
+                    "carbohydratesG": 22,
+                    "fatG": 7,
+                    "fiberG": null,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                },
+                {
+                  "mealId": "day-02-dinner",
+                  "type": "dinner",
+                  "title": "Frittata di spinaci con pane integrale",
+                  "time": "19:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "eggs",
+                      "name": "Uova",
+                      "quantity": 2,
+                      "unit": "unit",
+                      "category": "protein",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "spinach",
+                      "name": "Spinaci freschi",
+                      "quantity": 180,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "olive-oil",
+                      "name": "Olio d'oliva",
+                      "quantity": 8,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "salt",
+                      "name": "Sale",
+                      "quantity": 1,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "wholegrain-bread",
+                      "name": "Pane integrale",
+                      "quantity": 60,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "instructions": [
+                    "Fai appassire gli spinaci in padella con l'olio.",
+                    "Sbatti le uova con il sale, versale sugli spinaci e cuoci la frittata su entrambi i lati.",
+                    "Servi con il pane integrale."
+                  ],
+                  "prepMinutes": 18,
+                  "tags": [
+                    "contains-eggs"
+                  ],
+                  "notes": "Le due uova appartengono a un singolo pasto; la preferenza di frequenza riguarda i pasti, non il numero di uova.",
+                  "nutrition": {
+                    "kcal": 490,
+                    "proteinG": 24,
+                    "carbohydratesG": 49,
+                    "fatG": 22,
+                    "fiberG": 8,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                }
+              ]
+            },
+            {
+              "date": "2026-10-23",
+              "meals": [
+                {
+                  "mealId": "day-03-breakfast",
+                  "type": "breakfast",
+                  "title": "Porridge con banana e cannella",
+                  "time": "07:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "rolled-oats",
+                      "name": "Fiocchi d'avena",
+                      "quantity": 45,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "dry"
+                    },
+                    {
+                      "ingredientId": "milk",
+                      "name": "Latte",
+                      "quantity": 180,
+                      "unit": "ml",
+                      "category": "dairy",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "banana",
+                      "name": "Banana",
+                      "quantity": 1,
+                      "unit": "unit",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "ground-cinnamon",
+                      "name": "Cannella in polvere",
+                      "quantity": 0.5,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "instructions": [
+                    "Scalda l'avena con il latte fino alla consistenza desiderata.",
+                    "Aggiungi la banana a fettine e la cannella."
+                  ],
+                  "prepMinutes": 8,
+                  "nutrition": {
+                    "kcal": 390,
+                    "proteinG": 15,
+                    "carbohydratesG": 64,
+                    "fatG": 10,
+                    "fiberG": 8,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                },
+                {
+                  "mealId": "day-03-lunch",
+                  "type": "lunch",
+                  "title": "Pasta fredda con tonno e pomodorini",
+                  "time": "13:00",
+                  "ingredients": [
+                    {
+                      "ingredientId": "dry-pasta",
+                      "name": "Pasta secca",
+                      "quantity": 75,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "dry"
+                    },
+                    {
+                      "ingredientId": "canned-tuna",
+                      "name": "Tonno in scatola",
+                      "quantity": 100,
+                      "unit": "g",
+                      "category": "protein",
+                      "basis": "drained"
+                    },
+                    {
+                      "ingredientId": "cherry-tomatoes",
+                      "name": "Pomodorini",
+                      "quantity": 150,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "olive-oil",
+                      "name": "Olio d'oliva",
+                      "quantity": 8,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "basil",
+                      "name": "Basilico",
+                      "quantity": 3,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "salt",
+                      "name": "Sale",
+                      "quantity": 1,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "instructions": [
+                    "Cuoci la pasta secondo le indicazioni della confezione e scolala.",
+                    "Taglia i pomodorini e uniscili alla pasta con tonno sgocciolato, olio, basilico e sale.",
+                    "Predisponi la porzione per il pranzo in ufficio."
+                  ],
+                  "prepMinutes": 15,
+                  "notes": "Il tempo indicato è una stima di preparazione; non include il tempo di raffreddamento.",
+                  "nutrition": {
+                    "kcal": null,
+                    "proteinG": 29,
+                    "carbohydratesG": 65,
+                    "fatG": 15,
+                    "fiberG": 7,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                },
+                {
+                  "mealId": "day-03-snack",
+                  "type": "snack",
+                  "title": "Yogurt e mirtilli",
+                  "time": "16:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "plain-yogurt",
+                      "name": "Yogurt bianco",
+                      "quantity": 125,
+                      "unit": "g",
+                      "category": "dairy",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "blueberries",
+                      "name": "Mirtilli",
+                      "quantity": 100,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    }
+                  ],
+                  "instructions": [
+                    "Unisci i mirtilli allo yogurt."
+                  ],
+                  "prepMinutes": 2,
+                  "nutrition": {
+                    "kcal": 140,
+                    "proteinG": 8,
+                    "carbohydratesG": 19,
+                    "fatG": 4,
+                    "fiberG": 3,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                },
+                {
+                  "mealId": "day-03-dinner",
+                  "type": "dinner",
+                  "title": "Pollo al limone con carote e pane",
+                  "time": "19:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "chicken-breast",
+                      "name": "Petto di pollo",
+                      "quantity": 150,
+                      "unit": "g",
+                      "category": "protein",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "carrot",
+                      "name": "Carote",
+                      "quantity": 200,
+                      "unit": "g",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "wholegrain-bread",
+                      "name": "Pane integrale",
+                      "quantity": 60,
+                      "unit": "g",
+                      "category": "grains",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "olive-oil",
+                      "name": "Olio d'oliva",
+                      "quantity": 8,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "lemon-juice",
+                      "name": "Succo di limone",
+                      "quantity": 15,
+                      "unit": "ml",
+                      "category": "produce",
+                      "basis": "raw"
+                    },
+                    {
+                      "ingredientId": "dried-oregano",
+                      "name": "Origano secco",
+                      "quantity": 1,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    },
+                    {
+                      "ingredientId": "salt",
+                      "name": "Sale",
+                      "quantity": 1,
+                      "unit": "g",
+                      "category": "pantry",
+                      "basis": "as_sold"
+                    }
+                  ],
+                  "instructions": [
+                    "Taglia il pollo in strisce sottili e le carote a julienne.",
+                    "Cuoci in padella con olio, sale e origano fino a completare la cottura del pollo; aggiungi il succo di limone.",
+                    "Servi con il pane integrale."
+                  ],
+                  "prepMinutes": 20,
+                  "notes": "La stima presuppone strisce sottili di pollo e carote tagliate fini.",
+                  "nutrition": {
+                    "kcal": 520,
+                    "proteinG": 39,
+                    "carbohydratesG": 45,
+                    "fatG": 18,
+                    "fiberG": 8,
+                    "note": "Numeri fittizi usati per dimostrare l’interfaccia. Un valore null indica un dato non disponibile."
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "importedAt": "2026-10-19T17:00:00.000Z",
+        "fileName": "phase-4-demo-it.diet"
+      }
+    },
+    "calendar": {
+      "2026-10-26": {
+        "date": "2026-10-26",
+        "meals": [
+          {
+            "entryId": "entry-2a9d940c-1a88-4e72-ba34-8a1e2e91e171",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-21",
+            "mealId": "day-01-breakfast",
+            "cookingServings": 2,
+            "timeOverride": "08:15"
+          },
+          {
+            "entryId": "entry-23cacba0-5fa1-41d3-9f31-934e643214bd",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-21",
+            "mealId": "day-01-lunch",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-4c4e8682-f72c-4142-a8ca-e08ec84a1194",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-21",
+            "mealId": "day-01-snack",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-15547282-ef71-42f9-a5a1-b045850db383",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-21",
+            "mealId": "day-01-dinner",
+            "cookingServings": 1,
+            "timeOverride": null
+          }
+        ]
+      },
+      "2026-10-27": {
+        "date": "2026-10-27",
+        "meals": [
+          {
+            "entryId": "entry-ce0c8df5-e7cd-4478-9be1-18e0c84a16e2",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-21",
+            "mealId": "day-01-breakfast",
+            "cookingServings": 3,
+            "timeOverride": "07:45"
+          },
+          {
+            "entryId": "entry-61ce171a-0ab5-4b6f-b32a-3139af15022c",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-21",
+            "mealId": "day-01-lunch",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-aa83f61c-98db-423f-855e-2522d9d1ec38",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-21",
+            "mealId": "day-01-snack",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-c0e18add-c744-46a5-924a-87fbe66c9fb9",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-21",
+            "mealId": "day-01-dinner",
+            "cookingServings": 1,
+            "timeOverride": null
+          }
+        ]
+      },
+      "2026-10-28": {
+        "date": "2026-10-28",
+        "meals": [
+          {
+            "entryId": "entry-63520125-c087-4fa4-b5a0-7a5dfde5ca36",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-22",
+            "mealId": "day-02-breakfast",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-a50bcc02-004e-4a4e-8d68-05648fab99af",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-22",
+            "mealId": "day-02-lunch",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-cf9bfa1f-539f-4471-9685-52d6b9a853e3",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-22",
+            "mealId": "day-02-snack",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-57d6d8a8-c27e-412d-8387-b83b48c73dc5",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-22",
+            "mealId": "day-02-dinner",
+            "cookingServings": 1,
+            "timeOverride": null
+          }
+        ]
+      },
+      "2026-10-29": {
+        "date": "2026-10-29",
+        "meals": [
+          {
+            "entryId": "entry-7c2935b1-34f4-4638-b5d1-ecf6c6f017f5",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-23",
+            "mealId": "day-03-breakfast",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-6797158f-3a40-4019-aedb-05e9c9cca99f",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-23",
+            "mealId": "day-03-lunch",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-d5a7ce0b-3a2d-46c4-b258-60f08de6d772",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-23",
+            "mealId": "day-03-snack",
+            "cookingServings": 1,
+            "timeOverride": null
+          },
+          {
+            "entryId": "entry-56022cb2-390b-4174-b219-f1f0c845d1db",
+            "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+            "sourceDate": "2026-10-23",
+            "mealId": "day-03-dinner",
+            "cookingServings": 1,
+            "timeOverride": null
+          }
+        ]
+      }
+    },
+    "imports": [
+      {
+        "importId": "import-3d506d5e-08f2-42d0-9a6d-3a57c313766e",
+        "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+        "importedAt": "2026-10-19T17:00:00.000Z",
+        "startDate": "2026-10-26",
+        "endDate": "2026-10-28",
+        "fileName": "phase-4-demo-it.diet",
+        "dayMappings": [
+          {
+            "sourceDate": "2026-10-21",
+            "assignedDate": "2026-10-26"
+          },
+          {
+            "sourceDate": "2026-10-22",
+            "assignedDate": "2026-10-27"
+          },
+          {
+            "sourceDate": "2026-10-23",
+            "assignedDate": "2026-10-28"
+          }
+        ],
+        "status": "applied",
+        "duplicate": false,
+        "revision": false,
+        "overwrittenDates": []
+      },
+      {
+        "importId": "import-528054ef-677a-4661-b9ea-e078677e3656",
+        "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+        "importedAt": "2026-10-19T17:10:00.000Z",
+        "startDate": "2026-10-27",
+        "endDate": "2026-10-29",
+        "fileName": "stesso-piano-rinominato.diet",
+        "dayMappings": [
+          {
+            "sourceDate": "2026-10-21",
+            "assignedDate": "2026-10-27"
+          },
+          {
+            "sourceDate": "2026-10-22",
+            "assignedDate": "2026-10-28"
+          },
+          {
+            "sourceDate": "2026-10-23",
+            "assignedDate": "2026-10-29"
+          }
+        ],
+        "status": "applied",
+        "duplicate": true,
+        "revision": false,
+        "overwrittenDates": [
+          "2026-10-27",
+          "2026-10-28"
+        ]
+      }
+    ],
+    "shopping": {
+      "mode": "advanced",
+      "range": {
+        "startDate": "2026-10-26",
+        "endDate": "2026-10-28"
+      },
+      "checked": {
+        "[\"plain-yogurt\",\"g\",\"as_sold\"]": {
+          "checked": false,
+          "quantity": 465,
+          "unit": "g",
+          "updatedAt": "2026-10-19T17:10:00.000Z"
+        },
+        "[\"rolled-oats\",\"g\",\"dry\"]": {
+          "checked": true,
+          "quantity": 200,
+          "unit": "g",
+          "updatedAt": "2026-10-19T17:20:00.000Z"
+        }
+      },
+      "manualItems": [
+        {
+          "itemId": "manual-phase4-1",
+          "name": "Detersivo per piatti · esempio",
+          "quantity": 1,
+          "unit": "unit",
+          "category": "household",
+          "checked": false
+        },
+        {
+          "itemId": "manual-phase4-2",
+          "name": "Sacchetti riutilizzabili · esempio",
+          "quantity": 2,
+          "unit": "unit",
+          "category": "household",
+          "checked": true
+        }
+      ]
+    },
+    "ui": {
+      "view": "calendar",
+      "selectedDate": "2026-10-27"
+    },
+    "meta": {
+      "createdAt": "2026-10-19T17:00:00.000Z",
+      "updatedAt": "2026-10-19T17:20:00.000Z"
+    },
+    "lastImportUndo": {
+      "importId": "import-528054ef-677a-4661-b9ea-e078677e3656",
+      "beforeDays": {
+        "2026-10-27": {
+          "date": "2026-10-27",
+          "meals": [
+            {
+              "entryId": "entry-95bd2b35-8f44-44ec-8a5b-86878f01b443",
+              "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+              "sourceDate": "2026-10-22",
+              "mealId": "day-02-breakfast",
+              "cookingServings": 1,
+              "timeOverride": null
+            },
+            {
+              "entryId": "entry-482c47d6-d05a-4aff-8951-41bfe50f7c98",
+              "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+              "sourceDate": "2026-10-22",
+              "mealId": "day-02-lunch",
+              "cookingServings": 1,
+              "timeOverride": null
+            },
+            {
+              "entryId": "entry-85322b24-675e-4eba-84d4-136771c4357c",
+              "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+              "sourceDate": "2026-10-22",
+              "mealId": "day-02-snack",
+              "cookingServings": 1,
+              "timeOverride": null
+            },
+            {
+              "entryId": "entry-7f6b0c34-1020-49bc-99c9-366ed12dd735",
+              "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+              "sourceDate": "2026-10-22",
+              "mealId": "day-02-dinner",
+              "cookingServings": 1,
+              "timeOverride": null
+            }
+          ]
+        },
+        "2026-10-28": {
+          "date": "2026-10-28",
+          "meals": [
+            {
+              "entryId": "entry-4987bf50-aa8a-41fa-aec0-48a060ebbffe",
+              "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+              "sourceDate": "2026-10-23",
+              "mealId": "day-03-breakfast",
+              "cookingServings": 1,
+              "timeOverride": null
+            },
+            {
+              "entryId": "entry-a83e3ea5-6e2e-4623-97f7-7d41c2922b94",
+              "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+              "sourceDate": "2026-10-23",
+              "mealId": "day-03-lunch",
+              "cookingServings": 1,
+              "timeOverride": null
+            },
+            {
+              "entryId": "entry-2ab412e8-70f1-4d00-960b-0e4b7e978f28",
+              "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+              "sourceDate": "2026-10-23",
+              "mealId": "day-03-snack",
+              "cookingServings": 1,
+              "timeOverride": null
+            },
+            {
+              "entryId": "entry-7bc09f6f-853e-4e40-af6f-ceb3b2a76fcc",
+              "sourceId": "source-8b41c2bc-22d8-472c-871a-017b75f0c7ea",
+              "sourceDate": "2026-10-23",
+              "mealId": "day-03-dinner",
+              "cookingServings": 1,
+              "timeOverride": null
+            }
+          ]
+        },
+        "2026-10-29": null
+      },
+      "shopping": {
+        "range": {
+          "before": {
+            "startDate": "2026-10-26",
+            "endDate": "2026-10-28"
+          },
+          "after": {
+            "startDate": "2026-10-26",
+            "endDate": "2026-10-28"
+          }
+        },
+        "checked": {
+          "[\"plain-yogurt\",\"g\",\"as_sold\"]": {
+            "before": {
+              "checked": true,
+              "quantity": 465,
+              "unit": "g",
+              "updatedAt": "2026-10-19T17:00:00.000Z"
+            },
+            "after": {
+              "checked": false,
+              "quantity": 465,
+              "unit": "g",
+              "updatedAt": "2026-10-19T17:10:00.000Z"
+            }
+          }
+        }
+      }
+    },
+    "x-phase4-example": {
+      "illustrative": true,
+      "description": "Dati fittizi. Originale 21–23 ottobre; prima assegnazione 26–28 ottobre; seconda assegnazione 27–29 ottobre con sostituzione confermata del 27 e 28. Il backup conserva una sorgente, due importazioni, annullamento, persone, orari, spunte e articoli manuali.",
+      "expectedUndoDates": [
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29"
+      ]
+    }
+  }
+}

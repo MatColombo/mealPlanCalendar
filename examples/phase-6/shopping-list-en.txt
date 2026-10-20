@@ -1,0 +1,25 @@
+Meal Planner · Your shopping list
+Your date range: Monday, 26 October 2026 – Wednesday, 28 October 2026
+Both dates are included.
+Calculate amounts: Advanced
+5 meals in this range
+2 of 8 checked
+
+Fruit and vegetables
+[ ] Mela — 600 g · raw · Previously checked: 250 g. Current total: 600 g.
+[ ] Mela — 3 pcs · raw
+[ ] Zucchine — 300 g · raw
+
+Grains and bread
+[x] Riso — 160 g · raw
+[ ] Riso — 450 g · cooked
+
+Dairy
+[ ] Latte — 500 ml · as sold
+
+Your extras
+Fixed, separate amounts: they stay the same in every mode and are not merged with plan ingredients.
+
+Pantry
+[ ] Carta forno — 1 rotolo
+[x] Sacchetti — 2 pcs

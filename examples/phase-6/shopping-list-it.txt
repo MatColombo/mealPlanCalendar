@@ -1,0 +1,25 @@
+Meal Planner · La tua lista
+Il tuo intervallo: lunedì 26 ottobre 2026 – mercoledì 28 ottobre 2026
+Entrambe le date sono incluse.
+Calcola le quantità: Avanzata
+5 pasti nell’intervallo
+2 di 8 spuntati
+
+Frutta e verdura
+[ ] Mela — 600 g · crudo · Prima spuntati: 250 g. Totale attuale: 600 g.
+[ ] Mela — 3 pz · crudo
+[ ] Zucchine — 300 g · crudo
+
+Cereali e pane
+[x] Riso — 160 g · crudo
+[ ] Riso — 450 g · cotto
+
+Latticini
+[ ] Latte — 500 ml · come acquistato
+
+Le tue aggiunte
+Quantità fisse e separate: non cambiano con la modalità e non si uniscono agli ingredienti del piano.
+
+Dispensa
+[ ] Carta forno — 1 rotolo
+[x] Sacchetti — 2 pz

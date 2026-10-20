@@ -1,0 +1,31 @@
+:root {
+  color-scheme: light;
+  --paper: #fcf8ef;
+  --white: #fffef9;
+  --ink: #243e33;
+  --ink-soft: #365849;
+  --muted: #5c685a;
+  --line: #e3e2d5;
+  --line-strong: #c8cebd;
+  --green: #a8ca91;
+  --green-pale: #e4efd9;
+  --mint: #dbeccc;
+  --yellow: #f9d976;
+  --yellow-pale: #fff0bc;
+  --coral: #efaa8d;
+  --coral-pale: #ffe2d1;
+  --lavender: #e8def5;
+  --blue-pale: #dfedf1;
+  --danger: #943c36;
+  --danger-pale: #ffebe4;
+  --focus: #326c50;
+  --shadow: 0 4px 0 #243e3314;
+  --shadow-raised: 0 5px 0 #243e3320;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --font-body: ui-rounded, "Avenir Next", "Trebuchet MS", system-ui, -apple-system, sans-serif;
+  --motion-fast: 160ms;
+  --motion-reveal: 200ms;
+  --ease-out: cubic-bezier(.2, .7, .25, 1);
+}

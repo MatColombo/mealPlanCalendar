@@ -1,0 +1,155 @@
+{
+  "format": "meal-planner.diet",
+  "schemaVersion": 1,
+  "planId": "example-it-three-days",
+  "title": "Esempio tecnico — tre giorni",
+  "language": "it",
+  "createdAt": "2026-10-19T14:30:00Z",
+  "suggestedStartDate": "2026-10-21",
+  "baseServings": 1,
+  "notes": "Dati fittizi per illustrare il formato. Le giornate sono intenzionalmente parziali e i valori nutrizionali sono dimostrativi; questo esempio non rappresenta una proposta nutrizionale verificata.",
+  "preferences": {
+    "maxKcalPerDay": 2000,
+    "macros": {
+      "protein": { "min": 75, "max": 105, "unit": "g" },
+      "carbohydrates": { "min": 200, "max": 260, "unit": "g" },
+      "fat": { "min": 55, "max": 75, "unit": "g" }
+    },
+    "ingredientFrequencyLimits": [
+      {
+        "subject": { "kind": "ingredient", "id": "parmesan", "label": "Parmigiano" },
+        "maxMeals": 2,
+        "period": { "days": 7, "alignment": "rolling" }
+      }
+    ],
+    "workSchedule": "Esempio: lavoro dalle 09:00 alle 17:30; pausa pranzo intorno alle 13:00.",
+    "leftovers": {
+      "allowed": true,
+      "notes": "Nell'esempio una preparazione è condivisa fra cena e pranzo del giorno successivo."
+    }
+  },
+  "days": [
+    {
+      "date": "2026-10-21",
+      "meals": [
+        {
+          "mealId": "day-01-breakfast",
+          "type": "breakfast",
+          "title": "Porridge di avena e mela",
+          "time": "08:00",
+          "ingredients": [
+            { "ingredientId": "rolled-oats", "name": "Fiocchi d'avena", "quantity": 50, "unit": "g", "category": "grains", "basis": "dry" },
+            { "ingredientId": "milk", "name": "Latte", "quantity": 180, "unit": "ml", "category": "dairy", "basis": "as_sold" },
+            { "ingredientId": "apple", "name": "Mela", "quantity": 1, "unit": "unit", "category": "produce", "basis": "raw" }
+          ],
+          "nutrition": {
+            "kcal": 420,
+            "proteinG": 14,
+            "carbohydratesG": 65,
+            "fatG": 12,
+            "fiberG": null,
+            "note": "Valori fittizi dimostrativi. Il valore delle fibre non è disponibile."
+          },
+          "instructions": [
+            "Prepara l'avena con il latte.",
+            "Taglia la mela e aggiungila alla porzione."
+          ],
+          "prepMinutes": 10
+        },
+        {
+          "mealId": "day-01-lunch",
+          "type": "lunch",
+          "title": "Insalata di ceci, carote e pane",
+          "time": "13:00",
+          "ingredients": [
+            { "ingredientId": "canned-chickpeas", "name": "Ceci in scatola", "quantity": 150, "unit": "g", "category": "protein", "basis": "drained" },
+            { "ingredientId": "carrot", "name": "Carota", "quantity": 100, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "wholegrain-bread", "name": "Pane integrale", "quantity": 60, "unit": "g", "category": "grains", "basis": "as_sold" },
+            { "ingredientId": "olive-oil", "name": "Olio d'oliva", "quantity": 10, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "tags": ["legumes"],
+          "notes": "L'oggetto nutrition è assente: i suoi valori non sono disponibili in questo esempio."
+        },
+        {
+          "mealId": "day-01-dinner",
+          "type": "dinner",
+          "title": "Riso con pollo e zucchine",
+          "time": "20:00",
+          "ingredients": [
+            { "ingredientId": "rice", "name": "Riso", "quantity": 80, "unit": "g", "category": "grains", "basis": "dry" },
+            { "ingredientId": "chicken-breast", "name": "Petto di pollo", "quantity": 120, "unit": "g", "category": "protein", "basis": "raw" },
+            { "ingredientId": "zucchini", "name": "Zucchine", "quantity": 150, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "olive-oil", "name": "Olio d'oliva", "quantity": 10, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "prepMinutes": 30,
+          "preparation": {
+            "batchId": "chicken-rice-batch-01",
+            "role": "cook",
+            "preparedServings": 2,
+            "note": "Preparazione di due porzioni. Gli ingredienti di questo pasto coprono soltanto la porzione consumata a cena; l'altra porzione è allocata nel pranzo del 22 ottobre."
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "meals": [
+        {
+          "mealId": "day-02-lunch",
+          "type": "lunch",
+          "title": "Riso con pollo e zucchine — porzione conservata",
+          "time": "12:45",
+          "ingredients": [
+            { "ingredientId": "rice", "name": "Riso", "quantity": 80, "unit": "g", "category": "grains", "basis": "dry" },
+            { "ingredientId": "chicken-breast", "name": "Petto di pollo", "quantity": 120, "unit": "g", "category": "protein", "basis": "raw" },
+            { "ingredientId": "zucchini", "name": "Zucchine", "quantity": 150, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "olive-oil", "name": "Olio d'oliva", "quantity": 10, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "preparation": {
+            "batchId": "chicken-rice-batch-01",
+            "role": "leftover",
+            "note": "Porzione proveniente dalla preparazione della cena precedente. Le quantità descrivono gli ingredienti impiegati per questa porzione, nella stessa base di misura originaria."
+          }
+        },
+        {
+          "mealId": "day-02-dinner",
+          "type": "dinner",
+          "title": "Zuppa di lenticchie e pane",
+          "time": "20:15",
+          "ingredients": [
+            { "ingredientId": "lentils", "name": "Lenticchie", "quantity": 70, "unit": "g", "category": "protein", "basis": "dry" },
+            { "ingredientId": "tomato", "name": "Pomodoro", "quantity": 150, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "carrot", "name": "Carota", "quantity": 80, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "wholegrain-bread", "name": "Pane integrale", "quantity": 40, "unit": "g", "category": "grains", "basis": "as_sold" },
+            { "ingredientId": "olive-oil", "name": "Olio d'oliva", "quantity": 10, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "tags": ["legumes"]
+        }
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "meals": [
+        {
+          "mealId": "day-03-lunch",
+          "type": "lunch",
+          "title": "Pasta con pomodoro e Parmigiano",
+          "time": "13:00",
+          "ingredients": [
+            { "ingredientId": "dry-pasta", "name": "Pasta secca", "quantity": 85, "unit": "g", "category": "grains", "basis": "dry" },
+            { "ingredientId": "tomato-sauce", "name": "Passata di pomodoro", "quantity": 120, "unit": "g", "category": "pantry", "basis": "as_sold" },
+            { "ingredientId": "parmesan", "name": "Parmigiano", "quantity": 15, "unit": "g", "category": "dairy", "basis": "as_sold" },
+            { "ingredientId": "olive-oil", "name": "Olio d'oliva", "quantity": 5, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "instructions": [
+            "Cuoci la pasta secondo le indicazioni della confezione.",
+            "Condisci la porzione con pomodoro, olio e Parmigiano."
+          ],
+          "tags": ["contains-cheese"],
+          "notes": "Il limite di frequenza del Parmigiano è un metadato dimostrativo; l'app non verifica il rispetto dei target."
+        }
+      ]
+    }
+  ],
+  "x-example": { "isFictional": true }
+}

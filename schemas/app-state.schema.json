@@ -1,0 +1,534 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.meal-planner.invalid/app-state.schema.json",
+  "title": "Meal Planner — stato applicativo, versione 1",
+  "description": "Contratto documentale dello stato. Le estensioni vengono conservate. I documenti originali sono distinti dalle assegnazioni al calendario e dai moltiplicatori della spesa.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "format",
+    "schemaVersion",
+    "settings",
+    "sourcePlans",
+    "calendar",
+    "imports",
+    "shopping",
+    "ui",
+    "meta"
+  ],
+  "properties": {
+    "format": {
+      "const": "meal-planner.state"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "uiLanguage",
+        "reducedMotion",
+        "weekStartsOn"
+      ],
+      "properties": {
+        "uiLanguage": {
+          "enum": [
+            "it",
+            "en"
+          ],
+          "default": "it"
+        },
+        "reducedMotion": {
+          "type": "boolean",
+          "default": false
+        },
+        "weekStartsOn": {
+          "enum": [
+            0,
+            1
+          ],
+          "default": 1,
+          "description": "0: domenica; 1: lunedì."
+        }
+      }
+    },
+    "sourcePlans": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/sourcePlan"
+      },
+      "description": "Mappa sourceId → documento originale immutabile. Importazioni JSON identiche riusano la sorgente; revisioni con lo stesso planId e contenuti diversi hanno sourceId distinti."
+    },
+    "calendar": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/date"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/calendarDay"
+      },
+      "description": "Mappa data effettivamente assegnata → pasti del giorno. La corrispondenza fra chiave e campo date è una convenzione del modello."
+    },
+    "imports": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/importRecord"
+      }
+    },
+    "shopping": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "mode",
+        "range",
+        "checked",
+        "manualItems"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "one",
+            "two",
+            "advanced"
+          ],
+          "default": "one"
+        },
+        "range": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "startDate",
+            "endDate"
+          ],
+          "properties": {
+            "startDate": {
+              "$ref": "#/$defs/nullableDate"
+            },
+            "endDate": {
+              "$ref": "#/$defs/nullableDate"
+            }
+          }
+        },
+        "checked": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/checkedItem"
+          },
+          "description": "Mappa chiave di aggregazione → stato della spunta con quantità, unità e data della registrazione."
+        },
+        "manualItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/manualItem"
+          }
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "view",
+        "selectedDate"
+      ],
+      "properties": {
+        "view": {
+          "type": "string",
+          "default": "today"
+        },
+        "selectedDate": {
+          "$ref": "#/$defs/nullableDate"
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "lastImportUndo": {
+      "description": "Facoltativo dalla fase 4. Un solo annullamento persistito: giorni precedenti e differenze della spesa, collegati all’ultima importazione. null o assenza indica nessun annullamento disponibile.",
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/importUndo"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "nullableDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "sourcePlan": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "sourceId",
+        "document",
+        "importedAt"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/$defs/id"
+        },
+        "document": {
+          "$ref": "diet.schema.json"
+        },
+        "importedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "fileName": {
+          "type": "string"
+        }
+      }
+    },
+    "calendarDay": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "date",
+        "meals"
+      ],
+      "properties": {
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "meals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/calendarMeal"
+          }
+        }
+      }
+    },
+    "calendarMeal": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "entryId",
+        "sourceId",
+        "sourceDate",
+        "mealId",
+        "cookingServings",
+        "timeOverride"
+      ],
+      "properties": {
+        "entryId": {
+          "$ref": "#/$defs/id"
+        },
+        "sourceId": {
+          "$ref": "#/$defs/id"
+        },
+        "sourceDate": {
+          "$ref": "#/$defs/date"
+        },
+        "mealId": {
+          "$ref": "#/$defs/id"
+        },
+        "assignmentId": {
+          "$ref": "#/$defs/id",
+          "description": "Facoltativo dalla fase 5. Identità stabile dell’assegnazione: importId per le nuove importazioni, deduzione dallo storico o gruppo legacy per i dati precedenti. Rimane invariata quando cambia la data del pasto."
+        },
+        "cookingServings": {
+          "type": "number",
+          "default": 1,
+          "description": "Moltiplicatore delle quantità richieste in modalità advanced. Non altera gli ingredienti o la nutrizione per persona nel documento originale.",
+          "exclusiveMinimum": 0
+        },
+        "timeOverride": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$",
+          "default": null
+        }
+      }
+    },
+    "importRecord": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "importId",
+        "sourceId",
+        "importedAt",
+        "startDate",
+        "dayMappings"
+      ],
+      "properties": {
+        "importId": {
+          "$ref": "#/$defs/id"
+        },
+        "sourceId": {
+          "$ref": "#/$defs/id"
+        },
+        "importedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startDate": {
+          "$ref": "#/$defs/date"
+        },
+        "dayMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "sourceDate",
+              "assignedDate"
+            ],
+            "properties": {
+              "sourceDate": {
+                "$ref": "#/$defs/date"
+              },
+              "assignedDate": {
+                "$ref": "#/$defs/date"
+              }
+            }
+          },
+          "minItems": 1
+        },
+        "endDate": {
+          "$ref": "#/$defs/date"
+        },
+        "fileName": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "applied",
+            "undone"
+          ],
+          "description": "Assente nei backup v1 precedenti: equivale ad applied."
+        },
+        "undoneAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Presente quando status è undone."
+        },
+        "duplicate": {
+          "type": "boolean",
+          "description": "Riassegnazione esplicita di un documento già presente."
+        },
+        "revision": {
+          "type": "boolean",
+          "description": "Nuovo contenuto con planId già presente."
+        },
+        "overwrittenDates": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/date"
+          }
+        }
+      }
+    },
+    "checkedItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "checked",
+        "quantity",
+        "unit",
+        "updatedAt"
+      ],
+      "properties": {
+        "checked": {
+          "type": "boolean"
+        },
+        "reopened": {
+          "type": "boolean",
+          "description": "Facoltativo dalla fase 6: la voce è stata riaperta perché il fabbisogno supera la quantità precedentemente spuntata. Un nuovo gesto sulla spunta azzera questo indicatore."
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "manualItem": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "itemId",
+        "name",
+        "checked"
+      ],
+      "properties": {
+        "itemId": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "checked": {
+          "type": "boolean"
+        }
+      }
+    },
+    "shoppingRange": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "startDate",
+        "endDate"
+      ],
+      "properties": {
+        "startDate": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "endDate": {
+          "$ref": "#/$defs/nullableDate"
+        }
+      }
+    },
+    "checkedChange": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "before",
+        "after"
+      ],
+      "properties": {
+        "before": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/checkedItem"
+            }
+          ]
+        },
+        "after": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/checkedItem"
+            }
+          ]
+        }
+      }
+    },
+    "importUndo": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "importId",
+        "beforeDays",
+        "shopping"
+      ],
+      "properties": {
+        "importId": {
+          "$ref": "#/$defs/id"
+        },
+        "entryIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "uniqueItems": true,
+          "description": "Facoltativo dalla fase 5. Identità delle presenze create dall’importazione, da rimuovere anche se spostate fuori da beforeDays. I vecchi snapshot lo materializzano prima del primo spostamento."
+        },
+        "beforeDays": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/date"
+          },
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/calendarDay"
+              }
+            ]
+          },
+          "description": "Esattamente le date dayMappings dell’ultima importazione; null significa giorno precedentemente assente. Include i metadati dei giorni."
+        },
+        "shopping": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "range",
+            "checked"
+          ],
+          "properties": {
+            "range": {
+              "type": "object",
+              "additionalProperties": true,
+              "required": [
+                "before",
+                "after"
+              ],
+              "properties": {
+                "before": {
+                  "$ref": "#/$defs/shoppingRange"
+                },
+                "after": {
+                  "$ref": "#/$defs/shoppingRange"
+                }
+              }
+            },
+            "checked": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/checkedChange"
+              },
+              "description": "Solo le spunte cambiate dall’importazione. L’annullamento ripristina before soltanto se la voce corrente coincide ancora con after."
+            }
+          }
+        }
+      }
+    }
+  }
+}

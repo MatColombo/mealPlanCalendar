@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.meal-planner.invalid/backup.schema.json",
+  "title": "Meal Planner — backup completo, versione 1",
+  "description": "Contratto documentale del backup portabile. Il ripristino persistente e la sostituzione atomica appartengono a fasi successive.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["format", "schemaVersion", "exportedAt", "state"],
+  "properties": {
+    "format": { "const": "meal-planner.backup" },
+    "schemaVersion": { "const": 1 },
+    "exportedAt": { "type": "string", "format": "date-time" },
+    "state": { "$ref": "app-state.schema.json" }
+  }
+}

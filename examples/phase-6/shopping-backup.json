@@ -1,0 +1,367 @@
+{
+  "format": "meal-planner.backup",
+  "schemaVersion": 1,
+  "exportedAt": "2026-10-19T18:00:00.000Z",
+  "state": {
+    "format": "meal-planner.state",
+    "schemaVersion": 1,
+    "settings": {
+      "uiLanguage": "it",
+      "reducedMotion": false,
+      "weekStartsOn": 1
+    },
+    "sourcePlans": {
+      "source-1722ee0e-1675-4adb-a65c-f98f752694ed": {
+        "sourceId": "source-1722ee0e-1675-4adb-a65c-f98f752694ed",
+        "document": {
+          "format": "meal-planner.diet",
+          "schemaVersion": 1,
+          "planId": "shopping-demo-it-v1",
+          "title": "Laboratorio della spesa — demo",
+          "language": "it",
+          "createdAt": "2026-10-19T18:00:00.000Z",
+          "suggestedStartDate": "2026-10-26",
+          "baseServings": 1,
+          "notes": "Giornate parziali e quantità fittizie per illustrare calcoli, unità e spunte. Non è un piano personalizzato. Anche la conversione del pezzo di mela in grammi è una dichiarazione dimostrativa.",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "meals": [
+                {
+                  "mealId": "demo-breakfast",
+                  "type": "breakfast",
+                  "title": "Colazione dimostrativa",
+                  "time": "08:00",
+                  "ingredients": [
+                    {
+                      "ingredientId": "milk",
+                      "name": "Latte",
+                      "quantity": 0.2,
+                      "unit": "l",
+                      "basis": "as_sold",
+                      "category": "dairy"
+                    }
+                  ],
+                  "instructions": [
+                    "Voce dimostrativa per la conversione da litri a millilitri."
+                  ]
+                },
+                {
+                  "mealId": "demo-cook",
+                  "type": "dinner",
+                  "title": "Riso e zucchine — preparazione dimostrativa",
+                  "time": "20:00",
+                  "ingredients": [
+                    {
+                      "ingredientId": "rice",
+                      "name": "Riso",
+                      "quantity": 0.08,
+                      "unit": "kg",
+                      "basis": "raw",
+                      "category": "grains"
+                    },
+                    {
+                      "ingredientId": "zucchini",
+                      "name": "Zucchine",
+                      "quantity": 0.15,
+                      "unit": "kg",
+                      "basis": "raw",
+                      "category": "produce"
+                    }
+                  ],
+                  "preparation": {
+                    "batchId": "demo-rice-zucchini-01",
+                    "role": "cook",
+                    "preparedServings": 2,
+                    "note": "Gli ingredienti descrivono soltanto la porzione consumata in questo pasto."
+                  },
+                  "instructions": [
+                    "Nell’esempio le quantità della porzione successiva sono attribuite al pranzo del 27 ottobre."
+                  ]
+                }
+              ]
+            },
+            {
+              "date": "2026-10-27",
+              "meals": [
+                {
+                  "mealId": "demo-leftover",
+                  "type": "lunch",
+                  "title": "Riso e zucchine — porzione conservata",
+                  "time": "13:00",
+                  "ingredients": [
+                    {
+                      "ingredientId": "rice",
+                      "name": "Riso",
+                      "quantity": 80,
+                      "unit": "g",
+                      "basis": "raw",
+                      "category": "grains"
+                    },
+                    {
+                      "ingredientId": "zucchini",
+                      "name": "Zucchine",
+                      "quantity": 150,
+                      "unit": "g",
+                      "basis": "raw",
+                      "category": "produce"
+                    }
+                  ],
+                  "preparation": {
+                    "batchId": "demo-rice-zucchini-01",
+                    "role": "leftover",
+                    "note": "La lista conta gli ingredienti della porzione consumata, senza ripetere l’intera preparazione."
+                  },
+                  "instructions": [
+                    "Esempio di collegamento con la preparazione del giorno precedente."
+                  ]
+                },
+                {
+                  "mealId": "demo-snack",
+                  "type": "snack",
+                  "title": "Mela — conversione dichiarata",
+                  "time": "16:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "apple",
+                      "name": "Mela",
+                      "quantity": 1,
+                      "unit": "unit",
+                      "basis": "raw",
+                      "category": "produce",
+                      "unitConversion": {
+                        "toUnit": "g",
+                        "factor": 150
+                      }
+                    }
+                  ],
+                  "instructions": [
+                    "Equivalenza fittizia dichiarata per questa sola voce: 1 pezzo corrisponde a 150 g."
+                  ]
+                }
+              ]
+            },
+            {
+              "date": "2026-10-28",
+              "meals": [
+                {
+                  "mealId": "demo-final",
+                  "type": "dinner",
+                  "title": "Esempio di basi e unità distinte",
+                  "time": "19:30",
+                  "ingredients": [
+                    {
+                      "ingredientId": "rice",
+                      "name": "Riso",
+                      "quantity": 150,
+                      "unit": "g",
+                      "basis": "cooked",
+                      "category": "grains"
+                    },
+                    {
+                      "ingredientId": "apple",
+                      "name": "Mela",
+                      "quantity": 100,
+                      "unit": "g",
+                      "basis": "raw",
+                      "category": "produce"
+                    },
+                    {
+                      "ingredientId": "apple",
+                      "name": "Mela",
+                      "quantity": 1,
+                      "unit": "unit",
+                      "basis": "raw",
+                      "category": "produce"
+                    },
+                    {
+                      "ingredientId": "milk",
+                      "name": "Latte",
+                      "quantity": 100,
+                      "unit": "ml",
+                      "basis": "as_sold",
+                      "category": "dairy"
+                    }
+                  ],
+                  "instructions": [
+                    "Il riso cotto rimane distinto da quello crudo.",
+                    "La mela in pezzi senza conversione rimane distinta dalla mela espressa in grammi."
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "importedAt": "2026-10-19T18:00:00.000Z",
+        "fileName": "shopping-demo-it.diet"
+      }
+    },
+    "calendar": {
+      "2026-10-26": {
+        "date": "2026-10-26",
+        "meals": [
+          {
+            "entryId": "entry-52a69793-6e06-4851-8420-c1d6fa06ffbf",
+            "sourceId": "source-1722ee0e-1675-4adb-a65c-f98f752694ed",
+            "sourceDate": "2026-10-26",
+            "mealId": "demo-breakfast",
+            "cookingServings": 1,
+            "timeOverride": null,
+            "assignmentId": "import-75987aae-7ba2-4678-9db2-3a668ff36930"
+          },
+          {
+            "entryId": "entry-68c959f1-8721-4bb0-81ee-2891f4b10a2a",
+            "sourceId": "source-1722ee0e-1675-4adb-a65c-f98f752694ed",
+            "sourceDate": "2026-10-26",
+            "mealId": "demo-cook",
+            "cookingServings": 1,
+            "timeOverride": null,
+            "assignmentId": "import-75987aae-7ba2-4678-9db2-3a668ff36930"
+          }
+        ]
+      },
+      "2026-10-27": {
+        "date": "2026-10-27",
+        "meals": [
+          {
+            "entryId": "entry-abb15a35-3d31-4c4e-b834-b8481923ac88",
+            "sourceId": "source-1722ee0e-1675-4adb-a65c-f98f752694ed",
+            "sourceDate": "2026-10-27",
+            "mealId": "demo-leftover",
+            "cookingServings": 1,
+            "timeOverride": null,
+            "assignmentId": "import-75987aae-7ba2-4678-9db2-3a668ff36930"
+          },
+          {
+            "entryId": "entry-1cd3f9c1-b368-4c77-8a10-956bb4391ec0",
+            "sourceId": "source-1722ee0e-1675-4adb-a65c-f98f752694ed",
+            "sourceDate": "2026-10-27",
+            "mealId": "demo-snack",
+            "cookingServings": 2,
+            "timeOverride": null,
+            "assignmentId": "import-75987aae-7ba2-4678-9db2-3a668ff36930"
+          }
+        ]
+      },
+      "2026-10-28": {
+        "date": "2026-10-28",
+        "meals": [
+          {
+            "entryId": "entry-386dc8ec-67cb-4a11-b0b3-2e53f915286f",
+            "sourceId": "source-1722ee0e-1675-4adb-a65c-f98f752694ed",
+            "sourceDate": "2026-10-28",
+            "mealId": "demo-final",
+            "cookingServings": 3,
+            "timeOverride": null,
+            "assignmentId": "import-75987aae-7ba2-4678-9db2-3a668ff36930"
+          }
+        ]
+      }
+    },
+    "imports": [
+      {
+        "importId": "import-75987aae-7ba2-4678-9db2-3a668ff36930",
+        "sourceId": "source-1722ee0e-1675-4adb-a65c-f98f752694ed",
+        "importedAt": "2026-10-19T18:00:00.000Z",
+        "startDate": "2026-10-26",
+        "endDate": "2026-10-28",
+        "fileName": "shopping-demo-it.diet",
+        "dayMappings": [
+          {
+            "sourceDate": "2026-10-26",
+            "assignedDate": "2026-10-26"
+          },
+          {
+            "sourceDate": "2026-10-27",
+            "assignedDate": "2026-10-27"
+          },
+          {
+            "sourceDate": "2026-10-28",
+            "assignedDate": "2026-10-28"
+          }
+        ],
+        "status": "applied",
+        "duplicate": false,
+        "revision": false,
+        "overwrittenDates": []
+      }
+    ],
+    "shopping": {
+      "mode": "advanced",
+      "range": {
+        "startDate": "2026-10-26",
+        "endDate": "2026-10-28"
+      },
+      "checked": {
+        "[\"apple\",\"g\",\"raw\"]": {
+          "checked": false,
+          "quantity": 250,
+          "unit": "g",
+          "updatedAt": "2026-10-19T18:00:00.000Z",
+          "reopened": true
+        },
+        "[\"rice\",\"g\",\"raw\"]": {
+          "checked": true,
+          "quantity": 160,
+          "unit": "g",
+          "updatedAt": "2026-10-19T18:00:00.000Z"
+        }
+      },
+      "manualItems": [
+        {
+          "name": "Sacchetti",
+          "quantity": 2,
+          "unit": "unit",
+          "category": "pantry",
+          "itemId": "manual-demo-bags",
+          "checked": true
+        },
+        {
+          "name": "Carta forno",
+          "quantity": 1,
+          "unit": "rotolo",
+          "category": "pantry",
+          "itemId": "manual-demo-paper",
+          "checked": false
+        }
+      ]
+    },
+    "ui": {
+      "view": "shopping",
+      "selectedDate": "2026-10-27"
+    },
+    "meta": {
+      "createdAt": "2026-10-19T18:00:00.000Z",
+      "updatedAt": "2026-10-19T18:00:00.000Z",
+      "example": "Dati fittizi della fase 6"
+    },
+    "lastImportUndo": {
+      "importId": "import-75987aae-7ba2-4678-9db2-3a668ff36930",
+      "entryIds": [
+        "entry-52a69793-6e06-4851-8420-c1d6fa06ffbf",
+        "entry-68c959f1-8721-4bb0-81ee-2891f4b10a2a",
+        "entry-abb15a35-3d31-4c4e-b834-b8481923ac88",
+        "entry-1cd3f9c1-b368-4c77-8a10-956bb4391ec0",
+        "entry-386dc8ec-67cb-4a11-b0b3-2e53f915286f"
+      ],
+      "beforeDays": {
+        "2026-10-26": null,
+        "2026-10-27": null,
+        "2026-10-28": null
+      },
+      "shopping": {
+        "range": {
+          "before": {
+            "startDate": null,
+            "endDate": null
+          },
+          "after": {
+            "startDate": "2026-10-26",
+            "endDate": "2026-10-28"
+          }
+        },
+        "checked": {}
+      }
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "format": "meal-planner.diet",
+  "schemaVersion": 1,
+  "planId": "example-en-three-days",
+  "title": "Technical example — three days",
+  "language": "en",
+  "createdAt": "2026-10-19T14:30:00Z",
+  "suggestedStartDate": "2026-10-21",
+  "baseServings": 1,
+  "notes": "Fictional data illustrating the format. Days are intentionally partial and nutritional values are illustrative; this example is not a nutritionally assessed proposal.",
+  "preferences": {
+    "maxKcalPerDay": 2000,
+    "macros": {
+      "protein": { "min": 75, "max": 105, "unit": "g" },
+      "carbohydrates": { "min": 200, "max": 260, "unit": "g" },
+      "fat": { "min": 55, "max": 75, "unit": "g" }
+    },
+    "ingredientFrequencyLimits": [
+      {
+        "subject": { "kind": "ingredient", "id": "parmesan", "label": "Parmesan" },
+        "maxMeals": 2,
+        "period": { "days": 7, "alignment": "rolling" }
+      }
+    ],
+    "workSchedule": "Example: work from 09:00 to 17:30, with a lunch break around 13:00.",
+    "leftovers": {
+      "allowed": true,
+      "notes": "In this example, one preparation supplies dinner and lunch the following day."
+    }
+  },
+  "days": [
+    {
+      "date": "2026-10-21",
+      "meals": [
+        {
+          "mealId": "day-01-breakfast",
+          "type": "breakfast",
+          "title": "Oat and apple porridge",
+          "time": "08:00",
+          "ingredients": [
+            { "ingredientId": "rolled-oats", "name": "Rolled oats", "quantity": 50, "unit": "g", "category": "grains", "basis": "dry" },
+            { "ingredientId": "milk", "name": "Milk", "quantity": 180, "unit": "ml", "category": "dairy", "basis": "as_sold" },
+            { "ingredientId": "apple", "name": "Apple", "quantity": 1, "unit": "unit", "category": "produce", "basis": "raw" }
+          ],
+          "nutrition": {
+            "kcal": 420,
+            "proteinG": 14,
+            "carbohydratesG": 65,
+            "fatG": 12,
+            "fiberG": null,
+            "note": "Fictional illustrative values. The fibre value is unavailable."
+          },
+          "instructions": [
+            "Prepare the oats with the milk.",
+            "Chop the apple and add it to the portion."
+          ],
+          "prepMinutes": 10
+        },
+        {
+          "mealId": "day-01-lunch",
+          "type": "lunch",
+          "title": "Chickpea and carrot salad with bread",
+          "time": "13:00",
+          "ingredients": [
+            { "ingredientId": "canned-chickpeas", "name": "Canned chickpeas", "quantity": 150, "unit": "g", "category": "protein", "basis": "drained" },
+            { "ingredientId": "carrot", "name": "Carrot", "quantity": 100, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "wholegrain-bread", "name": "Wholegrain bread", "quantity": 60, "unit": "g", "category": "grains", "basis": "as_sold" },
+            { "ingredientId": "olive-oil", "name": "Olive oil", "quantity": 10, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "tags": ["legumes"],
+          "notes": "The nutrition object is absent: its values are unavailable in this example."
+        },
+        {
+          "mealId": "day-01-dinner",
+          "type": "dinner",
+          "title": "Rice with chicken and courgettes",
+          "time": "20:00",
+          "ingredients": [
+            { "ingredientId": "rice", "name": "Rice", "quantity": 80, "unit": "g", "category": "grains", "basis": "dry" },
+            { "ingredientId": "chicken-breast", "name": "Chicken breast", "quantity": 120, "unit": "g", "category": "protein", "basis": "raw" },
+            { "ingredientId": "zucchini", "name": "Courgettes", "quantity": 150, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "olive-oil", "name": "Olive oil", "quantity": 10, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "prepMinutes": 30,
+          "preparation": {
+            "batchId": "chicken-rice-batch-01",
+            "role": "cook",
+            "preparedServings": 2,
+            "note": "Two portions are prepared. This meal lists only the ingredients allocated to the portion eaten at dinner; the other portion is allocated to lunch on 22 October."
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "meals": [
+        {
+          "mealId": "day-02-lunch",
+          "type": "lunch",
+          "title": "Rice with chicken and courgettes — leftover portion",
+          "time": "12:45",
+          "ingredients": [
+            { "ingredientId": "rice", "name": "Rice", "quantity": 80, "unit": "g", "category": "grains", "basis": "dry" },
+            { "ingredientId": "chicken-breast", "name": "Chicken breast", "quantity": 120, "unit": "g", "category": "protein", "basis": "raw" },
+            { "ingredientId": "zucchini", "name": "Courgettes", "quantity": 150, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "olive-oil", "name": "Olive oil", "quantity": 10, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "preparation": {
+            "batchId": "chicken-rice-batch-01",
+            "role": "leftover",
+            "note": "A portion from the previous dinner preparation. Quantities describe the ingredients allocated to this portion, using their original measurement basis."
+          }
+        },
+        {
+          "mealId": "day-02-dinner",
+          "type": "dinner",
+          "title": "Lentil soup with bread",
+          "time": "20:15",
+          "ingredients": [
+            { "ingredientId": "lentils", "name": "Lentils", "quantity": 70, "unit": "g", "category": "protein", "basis": "dry" },
+            { "ingredientId": "tomato", "name": "Tomato", "quantity": 150, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "carrot", "name": "Carrot", "quantity": 80, "unit": "g", "category": "produce", "basis": "raw" },
+            { "ingredientId": "wholegrain-bread", "name": "Wholegrain bread", "quantity": 40, "unit": "g", "category": "grains", "basis": "as_sold" },
+            { "ingredientId": "olive-oil", "name": "Olive oil", "quantity": 10, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "tags": ["legumes"]
+        }
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "meals": [
+        {
+          "mealId": "day-03-lunch",
+          "type": "lunch",
+          "title": "Pasta with tomato and Parmesan",
+          "time": "13:00",
+          "ingredients": [
+            { "ingredientId": "dry-pasta", "name": "Dried pasta", "quantity": 85, "unit": "g", "category": "grains", "basis": "dry" },
+            { "ingredientId": "tomato-sauce", "name": "Tomato passata", "quantity": 120, "unit": "g", "category": "pantry", "basis": "as_sold" },
+            { "ingredientId": "parmesan", "name": "Parmesan", "quantity": 15, "unit": "g", "category": "dairy", "basis": "as_sold" },
+            { "ingredientId": "olive-oil", "name": "Olive oil", "quantity": 5, "unit": "g", "category": "pantry", "basis": "as_sold" }
+          ],
+          "instructions": [
+            "Cook the pasta following the package instructions.",
+            "Dress the portion with tomato, oil and Parmesan."
+          ],
+          "tags": ["contains-cheese"],
+          "notes": "The Parmesan frequency limit is illustrative metadata; the app does not check whether targets are met."
+        }
+      ]
+    }
+  ],
+  "x-example": { "isFictional": true }
+}

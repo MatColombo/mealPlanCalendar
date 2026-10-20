@@ -1,0 +1,179 @@
+{
+  "format": "meal-planner.diet",
+  "schemaVersion": 1,
+  "planId": "shopping-demo-it-v1",
+  "title": "Laboratorio della spesa — demo",
+  "language": "it",
+  "createdAt": "2026-10-19T18:00:00.000Z",
+  "suggestedStartDate": "2026-10-26",
+  "baseServings": 1,
+  "notes": "Giornate parziali e quantità fittizie per illustrare calcoli, unità e spunte. Non è un piano personalizzato. Anche la conversione del pezzo di mela in grammi è una dichiarazione dimostrativa.",
+  "days": [
+    {
+      "date": "2026-10-26",
+      "meals": [
+        {
+          "mealId": "demo-breakfast",
+          "type": "breakfast",
+          "title": "Colazione dimostrativa",
+          "time": "08:00",
+          "ingredients": [
+            {
+              "ingredientId": "milk",
+              "name": "Latte",
+              "quantity": 0.2,
+              "unit": "l",
+              "basis": "as_sold",
+              "category": "dairy"
+            }
+          ],
+          "instructions": [
+            "Voce dimostrativa per la conversione da litri a millilitri."
+          ]
+        },
+        {
+          "mealId": "demo-cook",
+          "type": "dinner",
+          "title": "Riso e zucchine — preparazione dimostrativa",
+          "time": "20:00",
+          "ingredients": [
+            {
+              "ingredientId": "rice",
+              "name": "Riso",
+              "quantity": 0.08,
+              "unit": "kg",
+              "basis": "raw",
+              "category": "grains"
+            },
+            {
+              "ingredientId": "zucchini",
+              "name": "Zucchine",
+              "quantity": 0.15,
+              "unit": "kg",
+              "basis": "raw",
+              "category": "produce"
+            }
+          ],
+          "preparation": {
+            "batchId": "demo-rice-zucchini-01",
+            "role": "cook",
+            "preparedServings": 2,
+            "note": "Gli ingredienti descrivono soltanto la porzione consumata in questo pasto."
+          },
+          "instructions": [
+            "Nell’esempio le quantità della porzione successiva sono attribuite al pranzo del 27 ottobre."
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "meals": [
+        {
+          "mealId": "demo-leftover",
+          "type": "lunch",
+          "title": "Riso e zucchine — porzione conservata",
+          "time": "13:00",
+          "ingredients": [
+            {
+              "ingredientId": "rice",
+              "name": "Riso",
+              "quantity": 80,
+              "unit": "g",
+              "basis": "raw",
+              "category": "grains"
+            },
+            {
+              "ingredientId": "zucchini",
+              "name": "Zucchine",
+              "quantity": 150,
+              "unit": "g",
+              "basis": "raw",
+              "category": "produce"
+            }
+          ],
+          "preparation": {
+            "batchId": "demo-rice-zucchini-01",
+            "role": "leftover",
+            "note": "La lista conta gli ingredienti della porzione consumata, senza ripetere l’intera preparazione."
+          },
+          "instructions": [
+            "Esempio di collegamento con la preparazione del giorno precedente."
+          ]
+        },
+        {
+          "mealId": "demo-snack",
+          "type": "snack",
+          "title": "Mela — conversione dichiarata",
+          "time": "16:30",
+          "ingredients": [
+            {
+              "ingredientId": "apple",
+              "name": "Mela",
+              "quantity": 1,
+              "unit": "unit",
+              "basis": "raw",
+              "category": "produce",
+              "unitConversion": {
+                "toUnit": "g",
+                "factor": 150
+              }
+            }
+          ],
+          "instructions": [
+            "Equivalenza fittizia dichiarata per questa sola voce: 1 pezzo corrisponde a 150 g."
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "meals": [
+        {
+          "mealId": "demo-final",
+          "type": "dinner",
+          "title": "Esempio di basi e unità distinte",
+          "time": "19:30",
+          "ingredients": [
+            {
+              "ingredientId": "rice",
+              "name": "Riso",
+              "quantity": 150,
+              "unit": "g",
+              "basis": "cooked",
+              "category": "grains"
+            },
+            {
+              "ingredientId": "apple",
+              "name": "Mela",
+              "quantity": 100,
+              "unit": "g",
+              "basis": "raw",
+              "category": "produce"
+            },
+            {
+              "ingredientId": "apple",
+              "name": "Mela",
+              "quantity": 1,
+              "unit": "unit",
+              "basis": "raw",
+              "category": "produce"
+            },
+            {
+              "ingredientId": "milk",
+              "name": "Latte",
+              "quantity": 100,
+              "unit": "ml",
+              "basis": "as_sold",
+              "category": "dairy"
+            }
+          ],
+          "instructions": [
+            "Il riso cotto rimane distinto da quello crudo.",
+            "La mela in pezzi senza conversione rimane distinta dalla mela espressa in grammi."
+          ]
+        }
+      ]
+    }
+  ]
+}
