@@ -338,3 +338,8 @@ date future. Le date originali suggerite non sono conteggiate come assegnazioni.
 Le animazioni mantengono lo scorrimento nativo. Ingresso, lieve inclinazione e
 assestamento aiutano il passaggio fra viste e i feedback. Le preferenze di
 riduzione del movimento dell’app e del sistema disattivano gli effetti.
+
+
+## Aggiornamento 1.2
+
+Spesa con esclusioni facoltative di colazioni e spuntini; categorie orizzontali con elenchi verticali; schede compatte e controllo persone sotto avatar. Oggi è una sequenza completa verticale e statica, Calendario usa un carosello orizzontale dei pasti. Navigazione in cinque destinazioni, inclusa Impostazioni con Importa/Esporta. Il ricettario antepone gli ingredienti trovati con le occorrenze alle ricette. Specifiche e verifiche: [RELEASE_1_2.md](RELEASE_1_2.md).

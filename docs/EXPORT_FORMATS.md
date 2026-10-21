@@ -247,3 +247,8 @@ La ricerca del ricettario è ricostruita dai piani e dal calendario. Non è un
 secondo archivio di ricette modificabili; non duplica i dati nel backup. La
 vista `recipes` può essere ripristinata come ultima schermata, mentre i filtri
 di ricerca sono temporanei e tornano ai valori iniziali a una nuova apertura.
+
+
+## Esclusioni della spesa nella 1.2
+
+Il backup completo conserva `shopping.excludedMealTypes`; il documento `.diet` non contiene questo stato della UI. Il testo della spesa dichiara i tipi esclusi e usa le stesse categorie della schermata. Le voci manuali, mostrate nella propria categoria nell'app, restano una sezione distinta nel testo esportato con quantità assolute. I download si raggiungono anche da Impostazioni -> Esporta.

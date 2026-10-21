@@ -1,0 +1,186 @@
+/* 1.2: compact reading surfaces and native bounded scrolling. */
+.app-shell {max-width:1250px;padding-inline:clamp(12px,3vw,30px);padding-bottom:0}
+.app-header.compact-header {min-height:66px;padding-block:12px;gap:12px}
+.compact-header .brand {font-size:20px}
+.compact-header .brand-mark {width:34px;height:34px;border-radius:12px}
+.compact-header .brand-mark .icon {width:22px;height:22px}
+.app-main {padding-top:0;padding-bottom:90px}
+.pwa-status-slot:empty {display:none}
+.pwa-status-slot {margin-block:4px}
+.compact-intro.page-intro {display:block;padding-block:14px 12px;min-height:0}
+.compact-intro h1 {font-size:clamp(26px,3vw,32px);margin:0 0 3px}
+.compact-intro p.eyebrow {margin:0;font-size:10px;line-height:1.4}
+.day-heading-compact {margin-block:0 10px;gap:8px}
+.day-heading-compact h2 {font-size:17px;margin:0}
+.day-navigation-date {display:none}
+.workday-badge {padding:8px 12px;margin-block:6px 12px}
+.workday-badge > div {display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
+.workday-badge .icon {width:16px;height:16px}
+.day-summary {margin:0 0 12px}
+.day-summary .nutrition-heading {margin-bottom:6px}
+.day-summary .nutrition-heading h3 {font-size:12px;margin:0}
+.day-summary .nutrition-heading > .badge {display:none}
+.day-summary .nutrition-grid {display:flex;flex-wrap:wrap;gap:6px}
+.day-summary .nutrition-stat {flex:1 1 64px;min-width:0;padding:9px 8px;border-radius:14px}
+.day-summary .nutrition-label {font-size:10px}
+.day-summary .nutrition-stat strong {font-size:19px}
+.day-summary .nutrition-stat strong small {font-size:10px;margin-left:2px}
+.day-summary .nutrition-partial-label {font-size:9px}
+.meal-scroll-heading {display:flex;align-items:center;justify-content:space-between;margin-block:8px}
+.meal-scroll-heading h3 {margin:0;font-size:14px}
+.scroll-buttons {display:inline-flex;gap:4px;flex:none}
+.scroll-buttons .icon-button {width:38px;min-height:38px;padding:9px}
+.meal-carousel.meal-list {display:grid;grid-auto-flow:column;grid-auto-columns:min(94%,415px);align-items:start;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;padding:3px 2px 12px;margin:0;scrollbar-width:thin}
+.meal-list > .compact-meal {scroll-snap-align:start;display:grid;grid-template-columns:94px minmax(0,1fr);align-items:start;gap:8px 12px;padding:14px;border-radius:22px;min-width:0;margin:0}
+.compact-meal .meal-side {display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.compact-meal .meal-side .meal-art {width:66px;min-height:62px;height:62px;border-radius:16px;align-self:center}
+.compact-meal .meal-side .food-art {width:60px;height:60px}
+.compact-meal .meal-side .people-compact {margin:0;width:94px;min-width:0}
+.compact-meal .people-compact > label {display:flex;justify-content:center;margin:0 0 2px;min-height:0}
+.compact-meal .people-compact > label .icon {width:15px;height:15px}
+.compact-meal .people-compact .serving-control {display:grid;grid-template-columns:30px minmax(0,1fr) 30px;gap:0;width:94px;border-radius:11px;border:1px solid var(--line-strong);background:var(--white);overflow:hidden}
+.compact-meal .people-compact :is(button,input) {min-height:44px;max-width:100%;width:100%;padding:0;border:0;box-shadow:none;border-radius:0;font-size:16px;text-align:center;background:transparent}
+.compact-meal .people-compact button:focus-visible {outline-offset:-3px}
+.compact-meal .people-compact input {-moz-appearance:textfield}
+.compact-meal .people-compact input::-webkit-outer-spin-button,.compact-meal .people-compact input::-webkit-inner-spin-button {-webkit-appearance:none;margin:0}
+.compact-meal .people-compact button .icon {width:16px;height:16px;margin:auto}
+.card-prep {display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);white-space:nowrap}
+.card-prep .icon {width:13px;height:13px}
+.compact-meal .meal-card-main {align-self:start}
+.compact-meal .meal-card-main h3 {font-size:18px;line-height:1.2;margin:5px 0 8px}
+.compact-meal .meal-card-meta {justify-content:space-between;gap:4px}
+.compact-meal .meal-card-meta time {font-size:11px}
+.compact-meal .meal-type {padding:3px 6px;font-size:9px}
+.compact-meal .meal-title-button {min-height:0}
+.card-energy {display:inline-block;font-size:11px;line-height:1.2}
+.card-energy > strong {font-size:19px}
+.card-energy small {color:var(--muted);font-size:9px;white-space:nowrap}
+.meal-macros {display:flex;flex-wrap:nowrap;gap:7px;margin:7px 0;padding:0;font-size:11px;line-height:1.4}
+.meal-macros > span {display:inline-flex;align-items:baseline;flex-wrap:nowrap;gap:2px;padding:0;border:0;background:none;white-space:nowrap}
+.meal-macros abbr {font-weight:500;text-decoration:none;color:var(--muted)}
+.meal-macros strong {font-size:inherit}
+.meal-macros strong small {font-size:9px;margin-left:1px}
+.compact-meal .ingredient-preview {font-size:11px;line-height:1.5;margin:5px 0}
+.meal-inline-detail {grid-column:1/-1;border-top:1px solid var(--line);padding-top:9px;margin-top:6px}
+.meal-inline-detail h4 {display:flex;justify-content:space-between;align-items:center;margin:0 0 7px;font-size:13px}
+.meal-inline-detail h4 small {display:inline-flex;align-items:center;gap:4px;color:var(--muted)}
+.meal-inline-detail h4 .icon {width:14px;height:14px}
+.meal-inline-detail .ingredient-list li {font-size:12px;padding-block:7px}
+.meal-inline-detail .ingredient-list .basis {font-size:10px}
+.meal-inline-detail .ingredient-list {margin-bottom:14px}
+.meal-inline-detail .instructions {font-size:12px;padding-left:18px}
+/* Today never tilts or replays entrance animations. Only native scrolling moves it. */
+.view-content[data-view="today"],.view-content[data-view="today"] *,
+.view-content[data-view="today"] *::before,.view-content[data-view="today"] *::after {animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.view-content[data-view="today"] :is(.button,.icon-button,.meal-card,.nutrition-stat):is(:hover,:active) {transform:none!important}
+.compact-shopping-filters {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px 18px;padding:14px;margin-bottom:8px}
+.compact-shopping-filters .date-range {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.compact-shopping-filters .field {min-width:0}
+.compact-shopping-filters .field label {margin-bottom:3px;font-size:11px}
+.compact-shopping-filters input[type="date"] {min-width:0;width:100%;padding-inline:7px;font-size:16px}
+.compact-shopping-filters .mode-switch {display:flex;align-self:end;gap:6px;margin:0}
+.compact-shopping-filters .mode-option {flex:1;min-width:0}
+.compact-shopping-filters .mode-option > span {display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;padding:6px 4px;min-height:56px;font-size:11px}
+.compact-shopping-filters .mode-option .icon {width:16px;height:16px}
+.meal-exclusions {display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.meal-exclusions label {display:flex;align-items:center;gap:7px;min-height:44px;font-size:13px}
+.meal-exclusions input {min-height:22px;width:22px;height:22px;accent-color:var(--ink);margin:0}
+.shopping-help {align-self:center;font-size:12px;color:var(--muted)}
+.shopping-help summary {cursor:pointer;padding-block:6px}
+.shopping-help[open] {grid-column:1/-1}
+.shopping-help p {margin-block:8px}
+.shopping-toolbar-compact {display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:4px 0;margin:0 0 8px;border:0;background:none;box-shadow:none}
+.shopping-toolbar-compact p {margin:0;font-size:12px}
+.shopping-toolbar-compact .icon-button {min-width:42px}
+.shopping-content {min-width:0}
+.category-navigation {display:flex;align-items:center;gap:8px;margin:0 0 10px;min-width:0}
+.category-tabs {display:flex;flex:1;gap:6px;overflow-x:auto;min-width:0;scrollbar-width:thin;padding-block:3px}
+.category-tab {flex:none;white-space:nowrap;border-radius:16px;border:1px solid var(--line-strong);background:var(--white);padding:8px 12px;font-size:12px}
+.category-tab small {margin-left:4px;opacity:.7}
+.category-tab.is-active {background:var(--yellow);border-color:var(--ink)}
+.shopping-category-carousel {display:grid;grid-auto-flow:column;grid-auto-columns:min(94%,370px);gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scrollbar-width:thin;padding:3px 2px 12px;min-width:0}
+.shopping-category-carousel > .category-page {scroll-snap-align:start;min-width:0;margin:0;border:1px solid var(--line-strong);border-radius:22px;background:var(--white);overflow:hidden;box-shadow:var(--shadow)}
+.category-page > h3 {display:flex;align-items:center;gap:8px;margin:0;padding:14px;background:var(--green-pale);font-size:15px}
+.category-page > h3 > span {margin-left:auto}
+.category-page[data-category="grains"] > h3 {background:var(--yellow-pale)}
+.category-page[data-category="protein"] > h3 {background:var(--coral-pale)}
+.category-page[data-category="dairy"] > h3 {background:var(--blue-pale)}
+.category-page[data-category="pantry"] > h3 {background:var(--lavender)}
+.category-items {max-height:clamp(280px,52dvh,570px);overflow-y:auto;overscroll-behavior-y:contain;margin:0;padding:4px 12px 10px;scrollbar-width:thin}
+.category-items:focus-visible {outline-offset:-3px}
+.category-items .shopping-row {min-width:0;padding-block:9px}
+.category-items .shopping-check-label {display:grid;grid-template-columns:24px minmax(0,1fr) auto;min-width:0;gap:8px;align-items:center}
+.category-items .shopping-item-name {font-size:13px;overflow-wrap:anywhere}
+.category-items .quantity {font-size:12px;max-width:100px}
+.category-items .shopping-check-label input {min-height:22px;width:22px;height:22px}
+.manual-add {margin-top:12px}
+.manual-add > summary {display:flex;align-items:center;gap:7px;cursor:pointer;min-height:44px;font-size:13px}
+.manual-add .manual-panel {margin:8px 0 0}
+.manual-add .manual-panel .section-heading,.manual-add .manual-panel > p {display:none}
+.settings-tools {grid-column:1/-1}
+.settings-tools .panel-actions {flex-wrap:wrap}
+.ingredient-search-results {margin-block:18px 26px}
+.ingredient-search-results > h2,.recipe-search-results .recipe-counts h2 {font-size:18px}
+.ingredient-result {margin-bottom:12px;padding:18px;background:var(--green-pale)}
+.ingredient-result-heading {display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.ingredient-result-heading h3 {font-size:20px;margin:0 0 4px}
+.ingredient-result-heading p {margin:0}
+.ingredient-result-icon {border-radius:14px;padding:12px;background:var(--white)}
+.ingredient-result .recipe-periods {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:10px}
+.ingredient-result .recipe-occurrences {min-width:0}
+.ingredient-result .recipe-occurrences ul {max-height:320px;overflow-y:auto}
+.recipe-occurrence > span {min-width:0}
+.recipe-occurrence > span > strong {white-space:normal}
+.recipe-filters {padding:14px;gap:10px}
+.recipe-filters > p {display:none}
+.recipe-filters .field label {font-size:11px}
+.app-main > .notice--success {position:fixed;left:50%;transform:translateX(-50%);bottom:86px;z-index:40;width:min(92vw,520px);box-shadow:var(--shadow-raised)}
+@media(max-width:800px) {
+ .compact-header .desktop-nav {display:none}
+ .bottom-nav {display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+ .bottom-nav .nav-pill {font-size:10px}
+ .compact-shopping-filters {grid-template-columns:minmax(0,1fr);gap:9px}
+ .compact-shopping-filters .mode-option > span {flex-direction:row;min-height:44px}
+ .shopping-help {grid-column:1}
+ .ingredient-result .recipe-periods {grid-template-columns:minmax(0,1fr)}
+ .recipe-filters {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .recipe-search {grid-column:1/-1}
+ .calendar-rail {position:relative;top:auto}
+}
+@media(max-width:370px) {
+ .meal-list > .compact-meal {grid-template-columns:86px minmax(0,1fr);gap:8px;padding:11px}
+ .compact-meal .meal-side .people-compact,.compact-meal .people-compact .serving-control {width:86px}
+ .compact-meal .people-compact .serving-control {grid-template-columns:27px minmax(0,1fr) 27px}
+ .compact-meal .meal-card-main h3 {font-size:16px}
+ .meal-macros {font-size:10px;gap:5px}
+ .meal-macros strong small {font-size:8px}
+ .bottom-nav .nav-pill {font-size:9px}
+ .category-navigation {gap:3px}
+ .scroll-buttons {gap:2px}
+ .scroll-buttons .icon-button {width:32px}
+}
+@media print {
+ .meal-carousel.meal-list,.shopping-category-carousel {display:grid;grid-auto-flow:row;grid-auto-columns:auto;overflow:visible}
+ .category-items {max-height:none;overflow:visible}
+ .scroll-buttons,.category-navigation,.meal-people-control {display:none}
+}
+/* Reset the larger v1 controls, rather than letting their min-content sizes win. */
+.compact-shopping-filters {position:static}
+.compact-shopping-filters .field {margin-bottom:0;gap:3px}
+.compact-shopping-filters .mode-option {position:relative;min-height:44px;padding:0;gap:0}
+.compact-shopping-filters .mode-option input {position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0}
+.compact-shopping-filters .mode-option:focus-within {outline:3px solid var(--focus);outline-offset:3px}
+.compact-shopping-filters .mode-option > span {width:100%;flex-direction:row;padding:7px 5px;gap:4px;min-height:44px}
+.compact-shopping-filters .mode-option > span > .icon {display:block;width:15px;height:15px}
+.compact-shopping-filters .mode-option strong {white-space:nowrap;font-size:11px;margin:0}
+.shopping-toolbar-compact .shopping-export-actions {display:flex;flex:none;width:auto;gap:6px}
+.shopping-toolbar-compact p {flex:1;white-space:nowrap}
+.category-items .shopping-row > label > .quantity {max-width:none;width:auto;white-space:nowrap;overflow-wrap:normal;margin-left:0;padding:0;font-size:12px}
+/* Contain absolute screen-reader labels inside each horizontal slide. */
+.meal-carousel,.compact-meal,.people-compact {position:relative}
+.compact-meal .meal-side .people-compact {padding:0;border:0;background:none;gap:2px;border-radius:0}
+.compact-meal .people-compact .serving-control > button {min-width:0;width:100%;height:44px;padding:0}
+.compact-meal .people-compact .serving-control > input {min-width:0;border:0;border-radius:0}
+.meal-macros > span:nth-child(n) {background:none}
+
+.today-meal-list.meal-list {display:grid;grid-template-columns:minmax(0,1fr);gap:12px;overflow:visible;margin:0;padding:0;max-width:820px}

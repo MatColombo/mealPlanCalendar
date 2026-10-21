@@ -4,7 +4,7 @@
  * quantities. No operation changes source plans or calendar multipliers.
  */
 import { addDays } from '../data/dates.js';
-import { getRangeEntries, getShoppingItems } from '../data/session.js';
+import { getShoppingEntries, getShoppingItems } from '../data/session.js';
 import { cloneStateSnapshot, timestampFor } from '../data/state.js';
 
 function shoppingError(code, message) {
@@ -63,11 +63,12 @@ export function getShoppingList(state) {
   const manualItems = structuredClone(state.shopping.manualItems);
   const range = structuredClone(state.shopping.range);
   const mealCount = range.startDate === null || range.endDate === null
-    ? 0 : getRangeEntries(state, range.startDate, range.endDate).length;
+    ? 0 : getShoppingEntries(state).length;
   return {
     rows,
     manualItems,
     mode: state.shopping.mode,
+    excludedMealTypes: [...(state.shopping.excludedMealTypes || [])],
     range,
     mealCount,
     generatedCount: rows.length,
@@ -229,5 +230,18 @@ export function removeManualItem(state, itemId, { now } = {}) {
   const next = cloneStateSnapshot(state);
   next.shopping.manualItems = next.shopping.manualItems.filter(item => item.itemId !== itemId);
   next.meta.updatedAt = timestampFor(now);
+  return next;
+}
+
+/** Persist filters with the existing atomic save path and reconcile acquired quantities. */
+export function setShoppingExcludedMealTypes(state, types, { now } = {}) {
+  if (!Array.isArray(types) || types.some(type => !['breakfast', 'snack'].includes(type))) {
+    throw shoppingError('SHOPPING_INVALID_EXCLUSIONS', 'Only breakfast and snack exclusions are supported.');
+  }
+  const next = cloneStateSnapshot(state);
+  const timestamp = timestampFor(now);
+  next.shopping.excludedMealTypes = ['breakfast', 'snack'].filter(type => types.includes(type));
+  reconcileSnapshot(next, timestamp);
+  next.meta.updatedAt = timestamp;
   return next;
 }

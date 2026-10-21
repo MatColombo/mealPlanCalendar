@@ -234,3 +234,10 @@ restano nel calendario locale; il piano originale conserva quantità e
 nutrizione per una persona. Per trasferire l'intero archivio, comprese persone,
 spesa e impostazioni, usa il backup. Per riportare in chat date e orari effettivi,
 esporta invece il `.diet` dal calendario della sorgente interessata.
+
+
+## Promemoria categorie (app 1.2)
+
+Nei nuovi file, indicare `category` su ogni riga ingrediente: `produce` (frutta e verdura), `grains` (cereali e pane), `protein` (carne, pesce, uova, legumi e alternative), `dairy` (latticini), `pantry` (dispensa), `other` (non classificabile). Conservare ID stabili fra pasti. Non affidarsi al riconoscimento del nome da parte della PWA. Il campo resta tecnicamente facoltativo per compatibilità.
+
+Le nuove esclusioni della lista spesa si impostano nella PWA, senza cancellare colazioni o spuntini dal piano.

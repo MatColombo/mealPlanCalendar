@@ -22,6 +22,7 @@ Questo è un esempio completo di stato vuoto, con istanti fittizi:
   "imports": [],
   "shopping": {
     "mode": "one",
+    "excludedMealTypes": [],
     "range": { "startDate": null, "endDate": null },
     "checked": {},
     "manualItems": []
@@ -530,3 +531,12 @@ IndexedDB; i candidati successivi vengono costruiti dalla copia appena salvata.
 Non si memorizzano moltiplicazioni nelle quantità originali né nei valori
 nutrizionali personali. Un errore interrompe la coda, viene mostrato all’utente
 e lascia disponibili i salvataggi già riusciti.
+
+
+## Estensione 1.2: esclusioni della spesa
+
+`shopping.excludedMealTypes` è un array facoltativo, con valori unici `breakfast` e/o `snack`. Assente oppure vuoto include tutti i tipi. È una preferenza della spesa, non del piano originale. Il salvataggio e il ripristino usano il normale percorso atomico; lo schema resta v1.
+
+La lista filtra le occorrenze programmate PRIMA di aggregare e moltiplicare le quantità. Voci manuali e persone sul calendario non cambiano. Un aumento dopo la reinclusione di un tipo riapre la relativa spunta. La posizione visiva dei caroselli e l'espansione dei form sono transitori e non fanno parte del backup.
+
+Riferimento: [RELEASE_1_2.md](RELEASE_1_2.md).

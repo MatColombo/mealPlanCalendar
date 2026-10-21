@@ -302,13 +302,20 @@ export function setEntryDate(state, entryId, assignedDate, { now } = {}) {
 }
 
 /** Derived ingredient rows only; main/UI manage checked and manual items. */
+export function getShoppingEntries(state) {
+  const { range, excludedMealTypes = [] } = state.shopping;
+  if (range.startDate === null || range.endDate === null) return [];
+  return getRangeEntries(state, range.startDate, range.endDate)
+    .filter(({ meal }) => !excludedMealTypes.includes(meal.type));
+}
+
 export function getShoppingItems(state) {
   const { mode, range } = state.shopping;
   if (!['one', 'two', 'advanced'].includes(mode)) {
     throw sessionError('SESSION_INVALID_SHOPPING_MODE', 'Unknown shopping mode.');
   }
   if (range.startDate === null || range.endDate === null) return [];
-  const rows = getRangeEntries(state, range.startDate, range.endDate);
+  const rows = getShoppingEntries(state);
   return aggregateIngredients(rows.map(({ meal, cookingServings }) => ({
     ingredients: meal.ingredients,
     cookingServings,

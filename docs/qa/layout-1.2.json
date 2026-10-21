@@ -1,0 +1,468 @@
+{
+  "method": "Chromium set_content with inline static markup and CSS. No app navigation, storage or PWA runtime.",
+  "layouts": [
+    {
+      "language": "it",
+      "width": 320,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 320,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 320,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 320,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 320,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 375,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 375,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 375,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 375,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 375,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 390,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 390,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 390,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 390,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 390,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 768,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 768,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 768,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 768,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 768,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 1280,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 1280,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 1280,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 1280,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "it",
+      "width": 1280,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 320,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 320,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 320,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 320,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 320,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 375,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 375,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 375,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 375,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 375,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 390,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 390,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 390,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 390,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 390,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 768,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 768,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 768,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 768,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 768,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 1280,
+      "view": "today",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 1280,
+      "view": "calendar",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 1280,
+      "view": "shopping",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 1280,
+      "view": "recipes",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    },
+    {
+      "language": "en",
+      "width": 1280,
+      "view": "settings",
+      "bodyFits": true,
+      "peopleFit": true,
+      "macroRows": true,
+      "idsUnique": true
+    }
+  ],
+  "interactions": [
+    "horizontal categories",
+    "vertical category items",
+    "category button navigation",
+    "selected category marker",
+    "both scroll offsets survive root rerender",
+    "manual form remains expanded after rerender",
+    "independent native exclusion checkboxes",
+    "focusable native keyboard scroll",
+    "native horizontal meal navigation",
+    "Today CSS animations and transitions disabled"
+  ],
+  "browser": "144.0.7559.96"
+}

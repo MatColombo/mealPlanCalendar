@@ -10,7 +10,7 @@ import { resolveNavigation, resolveRoute, getSelectedCalendarDate } from './data
 import { createIndexedDBRepository, readStoredBackup } from './persistence/indexeddb.js';
 import { loadCompatibleState } from './persistence/migrations.js';
 import { commitCandidate } from './persistence/commit.js';
-import { getShoppingList, setShoppingRange, setShoppingMode, setShoppingItemChecked,
+import { getShoppingList, setShoppingRange, setShoppingMode, setShoppingItemChecked, setShoppingExcludedMealTypes,
   addManualItem, setManualItemChecked, removeManualItem } from './shopping/list.js';
 import { renderApp, renderMealMoveFeedback, renderPwaStatus, renderPwaSettings } from './ui/render.js';
 import { t, formatDate } from './ui/i18n.js';
@@ -19,9 +19,11 @@ import { createPwaManager } from './pwa/client.js';
 import { createMotionController } from './ui/motion.js';
 import { DEFAULT_RECIPE_FILTERS } from './data/recipes.js';
 import { renderRecipeResults } from './ui/recipes-view.js';
+import { createScrollMemory } from './ui/scroll.js';
 
 const root = document.querySelector('#app');
 const motion = createMotionController({ root });
+const scrollMemory = createScrollMemory(root);
 const today = todayISO();
 const model = {
   state: createAppState({ uiLanguage: 'it' }), today,
@@ -209,7 +211,7 @@ function lockUnavailableEdits() {
     'clear-session', 'reset-demo', 'confirm-action', 'undo-last-import', 'remove-manual']);
   const savedControls = new Set(['language', 'reduced-motion', 'week-starts',
     'shopping-start', 'shopping-end', 'shopping-mode', 'meal-date', 'meal-time', 'meal-servings',
-    'shopping-check', 'manual-check']);
+    'shopping-check', 'manual-check', 'shopping-exclusion']);
   for (const control of root.querySelectorAll('button,input,select')) {
     if (servingsWriteActive && (control.dataset.action === 'change-servings' || control.dataset.control === 'meal-servings')) continue;
     if ((model.busy && !model.viewSaving) || (cannotWrite && (mutations.has(control.dataset.action)
@@ -234,8 +236,10 @@ function render({ focus = focusLocator(), top = false } = {}) {
   document.documentElement.lang = model.state.settings.uiLanguage;
   document.documentElement.dataset.reducedMotion = String(model.state.settings.reducedMotion);
   document.title = 'Meal Planner · ' + t(model.state.settings.uiLanguage, 'nav.' + view);
+  scrollMemory.remember();
   root.innerHTML = renderApp(model);
-  root.querySelector('.view-content')?.classList.toggle('is-entering', viewKey !== lastViewKey);
+  scrollMemory.restore();
+  root.querySelector('.view-content')?.classList.toggle('is-entering', view !== 'today' && viewKey !== lastViewKey);
   lockUnavailableEdits();
   const strip = root.querySelector('.mobile-date-strip');
   const selectedDate = strip?.querySelector('[aria-pressed="true"]');
@@ -808,6 +812,8 @@ root.addEventListener('click', async (event) => {
         downloadJSON(model.rawBackup, 'meal-planner-original-archive-' + model.today + '.json');
         notice('notices.storedBackupDownloaded'); render();
       }
+    } else if (scrollMemory.handle(control, model.state.settings.reducedMotion)) {
+      return;
     } else if (action === 'navigate') {
       model.notice = null;
       routeTo(control.dataset.view);
@@ -836,7 +842,7 @@ root.addEventListener('click', async (event) => {
       await rememberView();
     } else if (action === 'clear-recipe-filters' || action === 'search-ingredient') {
       model.recipeFilters = { ...DEFAULT_RECIPE_FILTERS };
-      if (action === 'search-ingredient') Object.assign(model.recipeFilters, { query: control.dataset.ingredientName, searchIn: 'ingredients' });
+      if (action === 'search-ingredient') Object.assign(model.recipeFilters, { query: control.dataset.ingredientName, searchIn: 'ingredients', ingredientId: control.dataset.ingredientId });
       render({ focus: '#recipe-query' });
     } else if (action === 'load-demo-import') {
       model.busy = true; render();
@@ -980,6 +986,10 @@ root.addEventListener('change', async (event) => {
         if (!range.startDate || range.startDate > range.endDate) range.startDate = range.endDate;
       }
       candidate = setShoppingRange(model.state, range);
+    } else if (name === 'shopping-exclusion') {
+      const types = new Set(model.state.shopping.excludedMealTypes || []);
+      if (control.checked) types.add(control.value); else types.delete(control.value);
+      candidate = setShoppingExcludedMealTypes(model.state, [...types]);
     } else if (name === 'shopping-mode') {
       if (!['one', 'two', 'advanced'].includes(control.value)) return;
       candidate = setShoppingMode(model.state, control.value);
@@ -1054,7 +1064,7 @@ function refreshRecipeResults() {
 root.addEventListener('input', (event) => {
   const field = event.target;
   if (field.dataset.control === 'recipe-query') {
-    model.recipeFilters.query = field.value; refreshRecipeResults(); return;
+    model.recipeFilters.query = field.value; delete model.recipeFilters.ingredientId; refreshRecipeResults(); return;
   }
   if (field.closest('[data-form="manual-item"]') && ['name', 'quantity', 'unit', 'customUnit', 'category'].includes(field.name)) {
     model.manualDraft[field.name] = field.value;

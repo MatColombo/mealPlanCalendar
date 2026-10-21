@@ -2,13 +2,13 @@ import { t, getMessages, formatDate, formatNumber, formatTime, formatAmount, for
 import { escape, attributes, button, iconButton, emptyState, nutritionSummary, mealCard, ingredientList, peopleControl, externalMealInfo } from './components.js';
 import { icon, foodArt } from './icons.js';
 import { addDays } from '../data/dates.js';
-import { getDayEntries, findEntry, getRangeEntries, getShoppingItems, getDayWorkday } from '../data/session.js';
+import { getDayEntries, findEntry, getRangeEntries, getShoppingItems, getShoppingEntries, getDayWorkday } from '../data/session.js';
 import { scaleIngredients } from '../shopping/quantities.js';
 import { groupShoppingItems } from './shopping-output.js';
 import { recipesView, recipeDialog } from './recipes-view.js';
 
-const primaryViews = [['today', 'sun'], ['calendar', 'calendar'], ['shopping', 'basket']];
-const toolViews = [['recipes', 'book'], ['import', 'upload'], ['export', 'download'], ['settings', 'settings']];
+const primaryViews = [['today', 'sun'], ['calendar', 'calendar'], ['shopping', 'basket'], ['recipes', 'book'], ['settings', 'settings']];
+const toolViews = [['import', 'upload'], ['export', 'download']];
 const categories = ['produce', 'grains', 'protein', 'dairy', 'pantry', 'other'];
 
 const storageStatus = model => model.storage?.status || 'ready';
@@ -34,6 +34,7 @@ export function renderPwaStatus(model) {
   const language = model.state.settings.uiLanguage;
   const pwa = model.pwa;
   const status = pwa.status || 'checking';
+  if (model.state.ui.view !== 'settings' && pwa.online && !pwa.updateAvailable && !pwa.updating && status !== 'error') return '';
   return `<div class="pwa-status"><span class="pwa-network${pwa.online ? '' : ' is-offline'}" title="${escape(t(language, 'pwa.connectionHint'))}">${icon(pwa.online ? 'globe' : 'leaf')}${escape(t(language, pwa.online ? 'pwa.online' : 'pwa.offline'))}</span><span class="pwa-offline-state pwa-offline-state--${escape(status)}">${icon(status === 'ready' ? 'check' : status === 'error' ? 'info' : 'clock')}${escape(t(language, 'pwa.status.' + status))}</span></div>${pwa.updateAvailable || pwa.updating ? `<div class="pwa-update-banner"><span class="pwa-update-mark">${icon('sparkle')}</span><div class="pwa-update-copy"><strong>${escape(t(language, pwa.updating ? 'pwa.updating' : 'pwa.updateAvailable'))}</strong><p>${escape(t(language, 'pwa.updateHint'))}</p></div>${button(t(language, pwa.updating ? 'pwa.updating' : 'pwa.reviewUpdate'), { action: 'open-update', iconName: 'restore', variant: 'secondary', attrs: { disabled: Boolean(model.busy || pwa.updating) } })}</div>` : ''}`;
 }
 
@@ -115,11 +116,11 @@ function localeSelect(language, id) {
 }
 
 function navigation(language, view, mobile = false) {
-  return `<nav class="${mobile ? 'bottom-nav' : 'desktop-nav'}" aria-label="${escape(t(language, 'nav.primary'))}">${(mobile ? [...primaryViews, ['recipes', 'book']] : primaryViews).map(([route, glyph]) => `<a href="#${route}" class="nav-pill${route === view ? ' is-active' : ''}" data-action="navigate" data-view="${route}"${route === view ? ' aria-current="page"' : ''}>${icon(glyph)}<span>${escape(t(language, 'nav.' + route))}</span></a>`).join('')}</nav>`;
+  return `<nav class="${mobile ? 'bottom-nav' : 'desktop-nav'}" aria-label="${escape(t(language, 'nav.primary'))}">${primaryViews.map(([route, glyph]) => `<a href="#${route}" class="nav-pill${route === view ? ' is-active' : ''}" data-action="navigate" data-view="${route}"${route === view ? ' aria-current="page"' : ''}>${icon(glyph)}<span>${escape(t(language, 'nav.' + route))}</span></a>`).join('')}</nav>`;
 }
 
-function pageIntro(language, view, { illustrated = true } = {}) {
-  return `<section class="page-intro"><div><p class="eyebrow">${escape(t(language, view + '.eyebrow'))}</p><h1 class="hero-heading" id="page-title" tabindex="-1">${escape(t(language, view + '.title'))}</h1><p class="page-description">${escape(t(language, view + '.intro'))}</p></div>${illustrated ? '<div class="hero-art" aria-hidden="true"><img src="./public/assets/meal-bowl.svg" width="250" height="190" alt=""></div>' : ''}</section>`;
+function pageIntro(language, view) {
+  return `<section class="page-intro compact-intro"><h1 id="page-title" tabindex="-1">${escape(t(language, 'nav.' + view))}</h1><p class="eyebrow">${escape(t(language, view + '.eyebrow'))}</p></section>`;
 }
 
 function dayNavigation(date, language, { showToday = false, today } = {}) {
@@ -129,8 +130,8 @@ function dayNavigation(date, language, { showToday = false, today } = {}) {
 function dayContent(model, date, { calendar = false } = {}) {
   const language = model.state.settings.uiLanguage;
   const entries = getDayEntries(model.state, date);
-  const title = calendar ? formatDate(date, language, { year: undefined }) : t(language, 'today.mealsTitle');
-  return `<section class="day-content" aria-labelledby="day-heading"><div class="section-heading"><div><p class="eyebrow">${escape(calendar ? t(language, 'calendar.showing') : formatDate(date, language, { year: undefined }))}</p><h2 id="day-heading" tabindex="-1">${escape(title)}</h2></div>${calendar ? dayNavigation(date, language, { showToday: true, today: model.today }) : button(t(language, 'today.openCalendar'), { action: 'navigate', iconName: 'calendar', variant: 'ghost', attrs: { 'data-view': 'calendar' } })}</div>${workdayBadge(model, date)}<p class="visually-hidden" role="status">${escape(t(language, 'calendar.dayLoaded', { date: formatDate(date, language), count: entries.length }))}</p>${entries.length ? `${nutritionSummary(entries.map(item => item.meal), language)}<div class="meal-list">${entries.map(item => mealCard(item, language)).join('')}</div>` : emptyState(language, { title: 'today.noMealsTitle', body: 'today.noMeals' })}</section>`;
+  const scrollButtons = calendar && entries.length > 1 ? `<div class="scroll-buttons">${iconButton('chevronLeft', t(language, 'compact.previousMeal'), { action: 'scroll-section', attrs: { 'data-scroller': 'meals', 'data-direction': -1 } })}${iconButton('chevronRight', t(language, 'compact.nextMeal'), { action: 'scroll-section', attrs: { 'data-scroller': 'meals', 'data-direction': 1 } })}</div>` : '';
+  return `<section class="day-content${calendar ? '' : ' today-static'}" aria-labelledby="day-heading"><div class="section-heading day-heading-compact"><h2 id="day-heading" tabindex="-1">${escape(formatDate(date, language, { year: undefined }))}</h2>${calendar ? dayNavigation(date, language, { showToday: true, today: model.today }) : ''}</div>${workdayBadge(model, date)}<p class="visually-hidden" role="status">${escape(t(language, 'calendar.dayLoaded', { date: formatDate(date, language), count: entries.length }))}</p>${entries.length ? `${nutritionSummary(entries.map(item => item.meal), language)}<div class="meal-scroll-heading"><h3>${escape(t(language, 'today.mealsTitle'))}</h3>${scrollButtons}</div><div class="meal-list ${calendar ? 'meal-carousel' : 'today-meal-list'}" id="meals"${calendar ? ` data-scroll-memory="meals:${escape(date)}" tabindex="0" role="region" aria-label="${escape(t(language, 'compact.mealScroll'))}"` : ''}>${entries.map(item => mealCard(item, language, { expanded: !calendar })).join('')}</div>` : emptyState(language, { title: 'today.noMealsTitle', body: 'today.noMeals' })}</section>`;
 }
 
 function workdayBadge(model, date) {
@@ -171,8 +172,8 @@ function calendarView(model) {
 }
 
 function shoppingFilters(model, language) {
-  const { mode, range } = model.state.shopping;
-  return `<section class="panel filter-card"><h2>${escape(t(language, 'shopping.period'))}</h2><div class="date-range"><div class="field"><label for="shopping-start">${escape(t(language, 'shopping.from'))}</label><input type="date" id="shopping-start" data-control="shopping-start" value="${escape(range.startDate || '')}"></div><div class="field"><label for="shopping-end">${escape(t(language, 'shopping.to'))}</label><input type="date" id="shopping-end" data-control="shopping-end" value="${escape(range.endDate || '')}"></div></div><p class="muted small">${escape(t(language, 'shopping.included'))}</p><p class="muted small shopping-period-hint">${escape(t(language, 'shopping.periodHint'))}</p><fieldset class="mode-switch"><legend>${escape(t(language, 'shopping.mode'))}</legend>${['one', 'two', 'advanced'].map(value => `<label class="mode-option${mode === value ? ' is-selected' : ''}"><input type="radio" name="shopping-mode" data-control="shopping-mode" value="${value}"${mode === value ? ' checked' : ''}><span>${icon(value === 'one' ? 'person' : value === 'two' ? 'people' : 'settings')}<strong>${escape(t(language, 'shopping.modes.' + value))}</strong><small>${escape(t(language, 'shopping.modeHints.' + value))}</small></span></label>`).join('')}</fieldset><p class="muted small">${escape(t(language, 'shopping.modeHint'))}</p><p class="muted small">${escape(t(language, 'shopping.listHint'))}</p></section>`;
+  const { mode, range, excludedMealTypes = [] } = model.state.shopping;
+  return `<section class="panel filter-card compact-shopping-filters"><div class="date-range"><div class="field"><label for="shopping-start">${escape(t(language, 'shopping.from'))}</label><input type="date" id="shopping-start" data-control="shopping-start" value="${escape(range.startDate || '')}"></div><div class="field"><label for="shopping-end">${escape(t(language, 'shopping.to'))}</label><input type="date" id="shopping-end" data-control="shopping-end" value="${escape(range.endDate || '')}"></div></div><fieldset class="mode-switch"><legend class="visually-hidden">${escape(t(language, 'shopping.mode'))}</legend>${['one', 'two', 'advanced'].map(value => `<label class="mode-option${mode === value ? ' is-selected' : ''}"><input type="radio" name="shopping-mode" data-control="shopping-mode" value="${value}"${mode === value ? ' checked' : ''}><span>${icon(value === 'one' ? 'person' : value === 'two' ? 'people' : 'settings')}<strong>${escape(t(language, 'compact.mode' + value))}</strong></span></label>`).join('')}</fieldset><fieldset class="meal-exclusions"><legend class="visually-hidden">${escape(t(language, 'shopping.exclusions'))}</legend>${['snack','breakfast'].map(type => `<label><input type="checkbox" id="exclude-${type}" data-control="shopping-exclusion" value="${type}"${excludedMealTypes.includes(type) ? ' checked' : ''}>${escape(t(language, 'shopping.exclude.' + type))}</label>`).join('')}</fieldset><details class="shopping-help" data-open-memory="shopping-help"><summary>${escape(t(language, 'compact.calculationHelp'))}</summary><p>${escape(t(language, 'shopping.included'))} ${escape(t(language, 'shopping.modeHint'))} ${escape(t(language, 'shopping.periodHint'))}</p><p>${escape(t(language, 'shopping.categoryFallback'))}</p></details></section>`;
 }
 
 function isShoppingChecked(item, state) {
@@ -191,11 +192,9 @@ function shoppingRow(item, language, state, index, { manual = false } = {}) {
 }
 
 function manualItems(model, language) {
-  const items = groupShoppingItems(model.state.shopping.manualItems, language).flatMap(group => group.items);
   const draft = model.manualDraft || { name: '', quantity: '', unit: 'unit', category: 'other', customUnit: '' };
   const customUnit = draft.unit === 'custom';
   return `<section class="panel manual-panel"><div class="section-heading"><div><h2>${escape(t(language, 'shopping.manual'))}</h2><p class="muted small">${escape(t(language, 'shopping.manualHint'))}</p></div>${icon('plus')}</div>
-    ${items.length ? `<ul class="shopping-items manual-items">${items.map((item, index) => shoppingRow(item, language, model.state, index, { manual: true })).join('')}</ul>` : `<p class="muted">${escape(t(language, 'shopping.manualEmpty'))}</p>`}
     <form class="manual-form" data-form="manual-item">
       <div class="field manual-name"><label for="manual-name">${escape(t(language, 'shopping.name'))}</label><input id="manual-name" name="name" type="text" value="${escape(draft.name)}" placeholder="${escape(t(language, 'shopping.namePlaceholder'))}" autocomplete="off" required></div>
       <div class="field"><label for="manual-quantity">${escape(t(language, 'shopping.quantity'))}</label><input id="manual-quantity" name="quantity" type="number" min="0" step="any" inputmode="decimal" value="${escape(draft.quantity)}" placeholder="1" required></div>
@@ -218,7 +217,7 @@ function shoppingPresentation(model) {
       items = model.shoppingRows ?? (ready ? getShoppingItems(model.state).map(item => ({
         ...item, checked: Boolean(model.state.shopping.checked[item.key]?.checked), reopened: false,
       })) : []);
-      mealCount = model.shoppingSummary?.mealCount ?? (ready ? getRangeEntries(model.state, startDate, endDate).length : 0);
+      mealCount = model.shoppingSummary?.mealCount ?? (ready ? getShoppingEntries(model.state).length : 0);
     } catch {
       error = 'errors.shoppingCalculation';
       items = [];
@@ -234,20 +233,9 @@ function shoppingPresentation(model) {
 }
 
 function shoppingToolbar(model, language, presentation) {
-  const { summary, ready, error } = presentation;
-  const { startDate, endDate } = model.state.shopping.range;
+  const { summary, error } = presentation;
   const unavailable = Boolean(error || summary.totalCount === 0);
-  const period = ready ? t(language, 'shopping.selectedDates', {
-    start: formatDate(startDate, language, { weekday: undefined }),
-    end: formatDate(endDate, language, { weekday: undefined }),
-  }) : t(language, 'shopping.rangeUnselected');
-  return `<section class="panel shopping-toolbar"><div class="shopping-toolbar-heading"><div><h2>${escape(t(language, 'shopping.exportTitle'))}</h2><p class="shopping-toolbar-period">${icon('calendar')}${escape(period)}</p></div><div class="shopping-export-actions">
-      ${button(t(language, 'shopping.copy'), { action: 'copy-shopping', iconName: 'file', variant: 'primary', attrs: { disabled: unavailable } })}
-      ${button(t(language, 'shopping.download'), { action: 'download-shopping', iconName: 'download', variant: 'secondary', attrs: { disabled: unavailable } })}
-    </div></div><p class="muted small">${escape(t(language, 'shopping.exportHint'))}</p>
-    <div class="shopping-summary"><div class="shopping-counts">${!error ? `<span class="badge">${escape(t(language, 'shopping.generatedCount', { count: summary.generatedCount }))}</span>` : ''}<span class="badge">${escape(t(language, 'shopping.manualCount', { count: summary.manualCount }))}</span></div>${!error ? `<strong>${escape(t(language, 'shopping.progress', { checked: summary.checkedCount, total: summary.totalCount }))}</strong>` : ''}</div>
-    ${summary.totalCount > 0 && !error ? `<div class="shopping-progress" role="progressbar" aria-label="${escape(t(language, 'shopping.list'))}" aria-valuemin="0" aria-valuemax="${summary.totalCount}" aria-valuenow="${summary.checkedCount}" aria-valuetext="${escape(t(language, 'shopping.progress', { checked: summary.checkedCount, total: summary.totalCount }))}"><span style="width:${Math.round(summary.checkedCount / summary.totalCount * 100)}%"></span></div><p class="muted small">${escape(t(language, 'shopping.progressHint'))}</p>` : ''}
-  </section>`;
+  return `<div class="shopping-toolbar shopping-toolbar-compact"><p role="status">${escape(t(language, 'shopping.progress', { checked: summary.checkedCount, total: summary.totalCount }))}</p><div class="shopping-export-actions">${iconButton('file', t(language, 'shopping.copy'), { action: 'copy-shopping', attrs: { disabled: unavailable } })}${iconButton('download', t(language, 'shopping.download'), { action: 'download-shopping', attrs: { disabled: unavailable } })}</div></div>`;
 }
 
 function shoppingView(model) {
@@ -256,13 +244,12 @@ function shoppingView(model) {
   const presentation = shoppingPresentation(model);
   const { items, error, summary } = presentation;
   const groups = groupShoppingItems(items, language);
-  const list = error
-    ? `<section class="panel shopping-error" role="alert">${icon('warning')}<h2>${escape(t(language, 'shopping.calculationErrorTitle'))}</h2><p>${escape(t(language, error))}</p></section>`
-    : items.length ? `<div class="section-heading"><div><h2>${escape(t(language, 'shopping.generated'))}</h2><p class="muted small">${escape(t(language, 'shopping.selectedMeals', { count: summary.mealCount }))}</p></div></div>
-      ${summary.reopenedCount ? `<div class="notice notice--warning shopping-reopened-summary" role="status">${icon('warning')}<p>${escape(t(language, 'shopping.reopenedSummary', { count: summary.reopenedCount }))}</p></div>` : ''}
-      ${groups.map(group => `<section class="shopping-group"><h3>${icon(group.category === 'produce' ? 'leaf' : group.category === 'pantry' ? 'basket' : 'bowl')}${escape(group.label)}<span>${group.items.length}</span></h3><ul class="shopping-items">${group.items.map((item, index) => shoppingRow(item, language, model.state, index)).join('')}</ul></section>`).join('')}`
-      : emptyState(language, { title: 'shopping.emptyTitle', body: !startDate || !endDate ? 'shopping.noRange' : 'shopping.empty', action: false, illustration: 'snack' });
-  return `${pageIntro(language, 'shopping', { illustrated: false })}${shoppingToolbar(model, language, presentation)}<div class="shopping-layout"><aside>${shoppingFilters(model, language)}</aside><div class="shopping-content"><section class="shopping-list-panel">${list}</section>${manualItems(model, language)}</div></div>`;
+  const manual = model.state.shopping.manualItems;
+  // Manual rows share category pages visually; quantities and check state stay independent.
+  const combined = groupShoppingItems([...items, ...manual.map(item => ({ ...item, isManual: true }))], language);
+  const pages = combined.map((group, groupIndex) => `<section class="shopping-group category-page" id="shopping-category-${groupIndex}" data-category="${escape(group.category)}"><h3>${icon(group.category === 'produce' ? 'leaf' : group.category === 'pantry' ? 'basket' : 'bowl')}${escape(group.label)}<span>${group.items.length}</span></h3><ul class="shopping-items category-items" data-scroll-memory="category:${escape(group.category)}" tabindex="0" aria-label="${escape(group.label)}">${group.items.map((item, index) => shoppingRow(item, language, model.state, index, { manual: Boolean(item.isManual) })).join('')}</ul></section>`).join('');
+  const list = error ? `<section class="panel shopping-error" role="alert"><h2>${escape(t(language, 'shopping.calculationErrorTitle'))}</h2><p>${escape(t(language, error))}</p></section>` : combined.length ? `<div class="category-navigation"><div class="category-tabs" data-scroll-memory="category-tabs" aria-label="${escape(t(language, 'shopping.category'))}">${combined.map((group,index) => `<button type="button" class="category-tab" data-action="scroll-category" data-category-index="${index}" aria-controls="shopping-category-${index}">${escape(group.label)} <small>${group.items.length}</small></button>`).join('')}</div><div class="scroll-buttons">${iconButton('chevronLeft', t(language, 'compact.previousCategory'), { action: 'scroll-section', attrs: { 'data-scroller': 'shopping-categories', 'data-direction': -1 } })}${iconButton('chevronRight', t(language, 'compact.nextCategory'), { action: 'scroll-section', attrs: { 'data-scroller': 'shopping-categories', 'data-direction': 1 } })}</div></div><div class="shopping-category-carousel" id="shopping-categories" data-scroll-memory="shopping-categories" tabindex="0" role="region" aria-label="${escape(t(language, 'compact.categoryScroll'))}">${pages}</div>` : emptyState(language, { title: 'shopping.emptyTitle', body: !startDate || !endDate ? 'shopping.noRange' : 'shopping.empty', action: false, illustration: 'snack' });
+  return `${pageIntro(language, 'shopping')}${shoppingFilters(model, language)}${shoppingToolbar(model, language, presentation)}<div class="shopping-content"><section class="shopping-list-panel">${summary.reopenedCount ? `<p class="shopping-reopened-summary" role="status">${escape(t(language, 'shopping.reopenedSummary', { count: summary.reopenedCount }))}</p>` : ''}${list}</section><details class="manual-add" data-open-memory="manual-add"><summary>${icon('plus')}${escape(t(language, 'compact.addManual'))}</summary>${manualItems(model, language)}</details></div>`;
 }
 
 function planSummary(document, language) {
@@ -352,7 +339,7 @@ function settingsView(model) {
   const language = model.state.settings.uiLanguage;
   const settings = model.state.settings;
   const recovery = model.storage?.recoveryAvailable;
-  return `${pageIntro(language, 'settings', { illustrated: false })}<div class="settings-layout">
+  return `${pageIntro(language, 'settings', { illustrated: false })}<div class="settings-layout"><section class="panel settings-tools"><h2>${escape(t(language, 'compact.filesAndData'))}</h2><div class="panel-actions">${toolViews.map(([route, glyph]) => button(t(language, 'nav.' + route), { action: 'navigate', iconName: glyph, attrs: { 'data-view': route } })).join('')}</div></section>
     <section class="panel settings-panel"><h2>${icon('settings')}${escape(t(language, 'settings.appearance'))}</h2>
       <div class="setting-row"><div><label for="settings-language">${escape(t(language, 'settings.language'))}</label><p>${escape(t(language, 'settings.languageHint'))}</p></div><div>${localeSelect(language, 'settings-language')}</div></div>
       <div class="setting-row"><div><label for="reduced-motion">${escape(t(language, 'settings.motion'))}</label><p>${escape(t(language, 'settings.motionHint'))}</p></div><label class="switch"><input type="checkbox" id="reduced-motion" data-control="reduced-motion"${settings.reducedMotion ? ' checked' : ''}><span aria-hidden="true"></span><span class="visually-hidden">${escape(t(language, 'settings.motion'))}</span></label></div>
@@ -460,5 +447,5 @@ export function renderApp(model) {
   let content = model.loading ? `<section class="panel loading-state" role="status"><span class="loading-art">${foodArt('lunch')}</span><h1 id="page-title" tabindex="-1">${escape(t(language, 'app.loading'))}</h1></section>` : renderers[view](model);
   if (model.error) content = `<div class="notice notice--error" role="alert">${icon('warning')}<p>${escape(t(language, model.error))}</p></div>` + content;
   const notice = model.notice && !model.dialog ? `<div class="notice notice--${model.notice.type === 'error' ? 'error' : 'success'}" role="${model.notice.type === 'error' ? 'alert' : 'status'}">${icon(model.notice.type === 'error' ? 'warning' : 'check')}<p>${escape(t(language, model.notice.key, model.notice.params || {}))}</p>${['notices.imported', 'notices.importedOne'].includes(model.notice.key) ? undoButton(model, language) : ''}${iconButton('close', t(language, 'notices.dismiss'), { action: 'dismiss-notice' })}</div>` : '';
-  return `<a class="skip-link" href="#main">${escape(t(language, 'app.skip'))}</a><div class="app-shell"><header class="app-header"><a class="brand" href="#today" data-action="navigate" data-view="today"><span class="brand-mark">${icon('leaf')}</span><span>${escape(t(language, 'app.name'))}<small>${escape(t(language, 'app.tagline'))}</small></span></a>${navigation(language, view)}<div class="header-actions" aria-label="${escape(t(language, 'nav.tools'))}">${toolViews.map(([route, glyph]) => `<button type="button" class="header-action${route === view ? ' is-active' : ''}" data-action="navigate" data-view="${route}" aria-label="${escape(t(language, 'nav.' + route))}"${route === view ? ' aria-current="page"' : ''}>${icon(glyph)}<span class="header-action-label">${escape(t(language, 'nav.' + route))}</span></button>`).join('')}<div class="language-control">${localeSelect(language, 'ui-language')}</div></div><div class="pwa-status-slot" data-pwa-status role="status" aria-live="polite" aria-atomic="true" aria-label="${escape(t(language, 'pwa.statusLabel'))}">${renderPwaStatus(model)}</div></header>${storageBanner(model)}<main id="main" class="app-main" tabindex="-1">${notice}<div class="view-content" data-view="${view}">${content}</div></main><footer class="app-footer"><span>${escape(t(language, 'app.footer'))}</span><span>Meal Planner · 1.1</span></footer>${navigation(language, view, true)}</div>${model.dialog ? model.dialog.kind === 'meal' ? mealDialog(model) : model.dialog.kind === 'recipe' ? recipeDialog(model) : model.dialog.kind === 'shopping-copy' ? shoppingCopyDialog(model) : model.dialog.kind === 'app-update' ? appUpdateDialog(model) : confirmationDialog(model) : ''}`;
+  return `<a class="skip-link" href="#main">${escape(t(language, 'app.skip'))}</a><div class="app-shell"><header class="app-header compact-header"><a class="brand" href="#today" data-action="navigate" data-view="today"><span class="brand-mark">${icon('leaf')}</span><span>${escape(t(language, 'app.name'))}</span></a>${navigation(language, view)}</header>${storageFailed(model) ? storageBanner(model) : `<span class="visually-hidden" role="status">${escape(t(language, 'storage.' + storageStatus(model)))}</span>`}<div class="pwa-status-slot" data-pwa-status role="status" aria-live="polite">${renderPwaStatus(model)}</div><main id="main" class="app-main" tabindex="-1">${notice}<div class="view-content" data-view="${view}">${content}</div></main>${navigation(language, view, true)}</div>${model.dialog ? model.dialog.kind === 'meal' ? mealDialog(model) : model.dialog.kind === 'recipe' ? recipeDialog(model) : model.dialog.kind === 'shopping-copy' ? shoppingCopyDialog(model) : model.dialog.kind === 'app-update' ? appUpdateDialog(model) : confirmationDialog(model) : ''}`;
 }

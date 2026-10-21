@@ -1,5 +1,6 @@
 /** Interface copy only. Imported plan content is never translated here. */
 export default {
+  compact: {"modeone": "1 person", "modetwo": "2 people", "modeadvanced": "Advanced","proteinG": "P", "fatG": "F", "carbohydratesG": "C", "previousMeal": "Previous meal", "nextMeal": "Next meal", "mealScroll": "Meals: scroll horizontally", "previousCategory": "Previous category", "nextCategory": "Next category", "categoryScroll": "Categories: scroll horizontally; items: scroll vertically", "calculationHelp": "How it is calculated", "addManual": "Add an item", "filesAndData": "Files and data", "ingredientResults": "Matching ingredients", "recipeResults": "Recipes containing this ingredient", "recipesCount": "{count} recipes", "unknownCategory": "Unclassified"},
   app: { name: 'Meal Planner', tagline: 'A little plan, a little joy.', skip: 'Skip to content',
     demo: 'Demo data', demoHint: 'This plan contains example data.',
     session: 'Data on this device', loading: 'Opening your plans…', loaded: 'Day loaded',
@@ -122,7 +123,7 @@ export default {
     individualAmountHint: 'Each ingredient also shows the amount for one person underneath.',
     chatRevisions: 'To change recipes or ingredients, ask for a revision in ChatGPT and import the new .diet file.',
     amountCalculationError: 'The amounts for this number of people cannot be represented. Reduce the number of people to calculate them again. The original plan is still available.' },
-  shopping: { eyebrow: 'A LITTLE LIST', title: 'Your shopping, all together.',
+  shopping: {"exclusions": "Exclude from shopping", "exclude": {"snack": "Exclude snacks", "breakfast": "Exclude breakfasts"}, "excludedSummary": "Excluded meals: {types}", "categoryFallback": "File categories take precedence. Missing categories use a local ID catalogue; unrecognised ingredients stay in Other.", eyebrow: 'A LITTLE LIST', title: 'Your shopping, all together.',
     intro: 'Choose the days and how many people you are shopping for.',
     period: 'Your date range', from: 'From', to: 'To', included: 'Both dates are included.',
     mode: 'Calculate amounts', modes: { one: 'One person', two: 'Two people', advanced: 'Advanced' },

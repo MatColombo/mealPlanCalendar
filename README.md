@@ -1,18 +1,22 @@
 # Project Meal Planner
 
-**Versione 1.1.0 — ricettario, comandi rapidi, turni lavorativi e agente aggiornato.**
+**Versione 1.2.0 - spesa filtrabile, categorie, schede compatte e navigazione essenziale.**
 
-PWA personale per importare piani creati in ChatGPT web, organizzare i pasti
-nel calendario e calcolare la spesa. Interfaccia italiana e inglese, stile
-colorato, dati locali e continuità offline dopo la preparazione iniziale.
+PWA personale per importare piani creati in ChatGPT web, organizzare i pasti nel calendario e calcolare la spesa. Italiano e inglese, dati locali e risorse offline.
 
-**App esistente:** [matcolombo.github.io/mealPlanCalendar](https://matcolombo.github.io/mealPlanCalendar/).
-La versione 1.1 è preparata in questo progetto; non è ancora pubblicata da questa
-sessione. Il repository è leggibile, ma il tentativo Git di verifica dei permessi
-di invio non dispone di credenziali. La procedura per aggiornare lo stesso URL,
-includendo il service worker compilato, è in [DEPLOYMENT.md](docs/DEPLOYMENT.md).
+**Release preparata, non pubblicata da questa sessione.** La base del pacchetto è la consegna 1.1.0, non il ramo remoto aggiornato. Il pacchetto incrementale preserva il workflow GitHub dell'utente. Dettagli e limiti delle verifiche: [RELEASE_1_2.md](docs/RELEASE_1_2.md).
 
-## Novità della versione 1.1
+## Novità della versione 1.2
+
+- Spesa: esclusioni indipendenti di colazioni e spuntini, salvate nel backup.
+- Categorie da file, con ripiego locale basato su ID conosciuti quando mancano; sorgenti inalterate.
+- Scorrimento orizzontale delle categorie e verticale degli item, con posizioni mantenute durante le spunte.
+- Calendario con schede pasto orizzontali e compatte; Oggi con tutte le schede complete in verticale, senza animazioni.
+- Macro su una riga P/G/C e controllo persone sotto l'avatar, seguito dal tempo di preparazione.
+- Importa ed Esporta dentro Impostazioni, disponibile nella navigazione principale.
+- Ricerca con ingrediente e occorrenze prima delle ricette che lo contengono.
+
+## Funzioni mantenute dalla versione 1.1
 
 - Comandi persone `− / +` direttamente sui pasti di Oggi e Calendario, con coda
   per tocchi rapidi, salvataggio locale e feedback animato.
@@ -60,7 +64,7 @@ un contesto web appropriato.
 Per i test eseguire prima npm ci. La sola dipendenza, fake-indexeddb, simula
 IndexedDB; non viene distribuita nell'app. Il comando npm test esegue i casi
 nello stesso processo in modo seriale; i test ripristinano le API globali
-temporaneamente sostituite. Le prove eseguite qui usano Node 24.19.0.
+temporaneamente sostituite. Per le verifiche effettivamente ripetute nella 1.2 e i limiti ambientali, leggere RELEASE_1_2.md. La suite completa Node 24 con IndexedDB simulato resta da rieseguire in CI.
 
 Durante lo sviluppo, un service worker già attivo può continuare a servire
 la sua release. Usa **Impostazioni → Cerca aggiornamenti** per passare alla
@@ -87,7 +91,7 @@ conversazione e ChatGPT non modifica automaticamente il calendario.
 
 ## Importare un file .diet
 
-1. Apri **Importa**, scegli il file o la demo inclusa.
+1. Apri **Impostazioni -> File e dati -> Importa**, scegli il file o la demo inclusa.
 2. Leggi titolo, durata, data suggerita e intervallo risultante.
 3. Scegli la data iniziale e confermala manualmente, anche mantenendo quella
    suggerita. Cambiare data azzera la conferma.

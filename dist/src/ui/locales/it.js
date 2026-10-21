@@ -1,5 +1,6 @@
 /** Interface copy only. Imported plan content is never translated here. */
 export default {
+  compact: {"modeone": "1 persona", "modetwo": "2 persone", "modeadvanced": "Avanzata","proteinG": "P", "fatG": "G", "carbohydratesG": "C", "previousMeal": "Pasto precedente", "nextMeal": "Pasto successivo", "mealScroll": "Pasti: scorri in orizzontale", "previousCategory": "Categoria precedente", "nextCategory": "Categoria successiva", "categoryScroll": "Categorie: scorri in orizzontale; voci: scorri in verticale", "calculationHelp": "Come viene calcolata", "addManual": "Aggiungi una voce", "filesAndData": "File e dati", "ingredientResults": "Ingredienti trovati", "recipeResults": "Ricette con questo ingrediente", "recipesCount": "{count} ricette", "unknownCategory": "Non classificato"},
   app: { name: 'Meal Planner', tagline: 'Un piccolo piano, più gusto.', skip: 'Vai al contenuto',
     demo: 'Dati dimostrativi', demoHint: 'Questo piano contiene dati di esempio.',
     session: 'Dati su questo dispositivo', loading: 'Ritroviamo i tuoi piani…', loaded: 'Giornata caricata',
@@ -122,7 +123,7 @@ export default {
     individualAmountHint: 'Sotto ogni ingrediente trovi anche la quantità della porzione individuale.',
     chatRevisions: 'Per cambiare ricette o ingredienti, chiedi una revisione in ChatGPT e importa il nuovo file .diet.',
     amountCalculationError: 'Le quantità per questo numero di persone non sono rappresentabili. Riduci il numero di persone per ricalcolarle. Il piano originale resta disponibile.' },
-  shopping: { eyebrow: 'TUTTO IN LISTA', title: 'La spesa, con un piccolo piano.',
+  shopping: {"exclusions": "Escludi dalla spesa", "exclude": {"snack": "Escludi spuntini", "breakfast": "Escludi colazioni"}, "excludedSummary": "Pasti esclusi: {types}", "categoryFallback": "Le categorie dichiarate nel file hanno precedenza. Se mancano, usiamo un catalogo locale di identificativi; gli ingredienti non riconosciuti restano in Altro.", eyebrow: 'TUTTO IN LISTA', title: 'La spesa, con un piccolo piano.',
     intro: 'Scegli i giorni e per quante persone fare la spesa.',
     period: 'Il tuo intervallo', from: 'Dal', to: 'Al', included: 'Entrambe le date sono incluse.',
     mode: 'Calcola le quantità', modes: { one: 'Una persona', two: 'Due persone', advanced: 'Avanzata' },

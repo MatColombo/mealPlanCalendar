@@ -298,3 +298,10 @@ Per opzioni di download, selezione delle date ed esempi consultare
 [EXPORT_FORMATS.md](EXPORT_FORMATS.md). Per identità, tracciamento delle
 importazioni, formule della spesa e ripristino consultare
 [STATE_AND_BACKUP.md](STATE_AND_BACKUP.md).
+
+
+## Categorie nella presentazione 1.2
+
+Per i nuovi piani, fornire `category` su ogni riga ingrediente usando la tassonomia sopra. Il campo rimane facoltativo per leggere i piani precedenti. La UI rispetta una categoria esplicita; in sua assenza consulta `src/shopping/categories.js` per gli ID conosciuti. Gli altri ID restano `other`. Nessun valore viene scritto retroattivamente nella sorgente.
+
+Le esclusioni colazione/spuntino della spesa sono preferenze dell'app e non alterano le giornate nel `.diet`.

@@ -45,10 +45,10 @@ function daySummary(html) {
 test('recipe book has localized toolbar and mobile navigation shortcuts', () => {
   for (const [language, label] of [['it', 'Ricettario'], ['en', 'Recipes']]) {
     const html = renderApp(fixture({ language, view: 'recipes' }));
-    const toolbar = html.match(/<div class="header-actions"[\s\S]*?<div class="language-control"/u)?.[0];
+    const toolbar = html.match(/<nav class="desktop-nav"[\s\S]*?<\/nav>/u)?.[0];
     const mobile = html.match(/<nav class="bottom-nav"[\s\S]*?<\/nav>/u)?.[0];
     assert.ok(toolbar && mobile);
-    assert.match(toolbar, /class="header-action is-active"[^>]*data-view="recipes"/u);
+    assert.match(toolbar, /href="#recipes"[^>]*aria-current="page"/u);
     assert.match(mobile, /href="#recipes"[^>]*aria-current="page"/u);
     assert.ok(toolbar.includes(label));
     assert.ok(mobile.includes(label));
@@ -62,7 +62,7 @@ test('today and calendar expose a labeled people stepper directly on the meal ca
     const card = html.match(/<article class="meal-card [\s\S]*?<\/article>/u)?.[0];
     assert.ok(card);
     assert.doesNotMatch(html, /<dialog\b/u);
-    assert.match(card, /class="field meal-people-control"/u);
+    assert.match(card, /class="field meal-people-control people-compact"/u);
     assert.match(card, /<label for="card-servings-[^"]+"/u);
     assert.match(card, /data-action="change-servings"[^>]*data-delta="-1"/u);
     assert.match(card, /data-action="change-servings"[^>]*data-delta="1"/u);
@@ -79,9 +79,9 @@ test('provided macro values render on cards and personal summaries survive a peo
   const before = renderApp(model);
   const sourceBefore = structuredClone(model.state.sourcePlans);
   const card = before.match(/<article class="meal-card [\s\S]*?<\/article>/u)?.[0];
-  assert.match(card, /class="meal-macros"/u);
+  assert.match(card, /class="meal-macros[^"]*"/u);
   for (const label of ['Proteine', 'Carboidrati', 'Grassi']) assert.ok(card.includes(label));
-  assert.match(card, /<strong>7 g<\/strong>/u);
+  assert.match(card, /<strong>7<small>g<\/small><\/strong>/u);
   const originalSummary = daySummary(before);
   assert.ok(originalSummary);
   assert.match(originalSummary, /<strong>101<small>kcal<\/small><\/strong>/u);

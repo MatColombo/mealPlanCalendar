@@ -213,6 +213,12 @@ export function validateAppState(state) {
   state.imports.forEach(record => importRecord(record, state.sourcePlans, importIds));
   requireValue(['one', 'two', 'advanced'].includes(state.shopping.mode), 'Unknown shopping mode.');
   range(state.shopping.range);
+  if (state.shopping.excludedMealTypes !== undefined) {
+    requireValue(Array.isArray(state.shopping.excludedMealTypes)
+      && state.shopping.excludedMealTypes.every(type => ['breakfast', 'snack'].includes(type))
+      && new Set(state.shopping.excludedMealTypes).size === state.shopping.excludedMealTypes.length,
+    'Unreadable shopping meal exclusions.');
+  }
   requireValue(isRecord(state.shopping.checked) && Array.isArray(state.shopping.manualItems),
     'Unreadable shopping state.');
   Object.values(state.shopping.checked).forEach(checkedItem);

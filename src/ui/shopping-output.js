@@ -1,5 +1,6 @@
 /** Shared ordering and plain-text presentation of a calculated shopping list. */
 import { codeLabel, formatDate, formatShoppingAmount, t } from './i18n.js';
+import { ingredientCategory } from '../shopping/categories.js';
 
 export const SHOPPING_CATEGORIES = ['produce', 'grains', 'protein', 'dairy', 'pantry', 'other'];
 
@@ -8,7 +9,7 @@ export function groupShoppingItems(items, language) {
   const collator = new Intl.Collator(language === 'en' ? 'en-GB' : 'it-IT');
   const groups = new Map();
   for (const item of items) {
-    const category = item.category || 'other';
+    const category = ingredientCategory(item);
     if (!groups.has(category)) groups.set(category, []);
     groups.get(category).push(item);
   }
@@ -55,6 +56,7 @@ export function createShoppingText(list, language = 'it') {
     ...(hasRange ? [t(language, 'shopping.included')] : []),
     `${t(language, 'shopping.mode')}: ${t(language, 'shopping.modes.' + mode)}`,
     t(language, 'shopping.selectedMeals', { count: list.mealCount }),
+    ...((list.excludedMealTypes || []).length ? [t(language, 'shopping.excludedSummary', { types: list.excludedMealTypes.map(type => codeLabel('mealTypes', type, language)).join(', ') })] : []),
     t(language, 'shopping.progress', { checked: list.checkedCount, total: list.totalCount }),
   ];
   for (const group of groupShoppingItems(rows, language)) {

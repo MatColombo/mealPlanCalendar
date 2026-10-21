@@ -35,7 +35,7 @@ export function createMotionController({ root, window: suppliedWindow } = {}) {
   let ignoreScrollUntil = 0;
 
   const clock = () => hostWindow?.performance?.now?.() ?? Date.now();
-  const disabled = () => destroyed || appReduced || Boolean(media?.matches);
+  const disabled = () => destroyed || appReduced || Boolean(media?.matches) || Boolean(root?.querySelector?.('.view-content[data-view="today"]'));
   const queryAll = (selector) => Array.from(root?.querySelectorAll?.(selector) ?? []);
 
   function cancelAnimation(element) {

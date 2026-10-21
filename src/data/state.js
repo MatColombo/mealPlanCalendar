@@ -52,6 +52,7 @@ export function createAppState({ now, uiLanguage = 'it' } = {}) {
     imports: [],
     shopping: {
       mode: 'one',
+      excludedMealTypes: [],
       range: { startDate: null, endDate: null },
       checked: {},
       manualItems: [],

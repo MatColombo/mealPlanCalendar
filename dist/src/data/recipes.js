@@ -1,4 +1,5 @@
 import { getDayEntries } from './session.js';
+import { ingredientCategory } from '../shopping/categories.js';
 
 const normalize = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase().trim();
 const canonical = value => JSON.stringify(value, (_, entry) => entry && typeof entry === 'object' && !Array.isArray(entry)
@@ -56,18 +57,47 @@ export const DEFAULT_RECIPE_FILTERS = Object.freeze({ query: '', searchIn: 'all'
 
 /** Text search never translates or changes original recipe content. All filters are local. */
 export function searchRecipes(index, filters = {}, today) {
-  const { query, searchIn, type, category, period } = { ...DEFAULT_RECIPE_FILTERS, ...filters };
+  const { query, searchIn, type, category, period, ingredientId }  = { ...DEFAULT_RECIPE_FILTERS, ...filters };
   const terms = normalize(query).split(/\s+/).filter(Boolean);
   return index.filter(recipe => {
     const ingredients = recipe.meal.ingredients || [];
     const title = normalize(recipe.meal.title);
     const ingredientText = ingredients.map(item => normalize(item.name) + ' ' + normalize(item.ingredientId)).join(' ');
     const haystack = searchIn === 'recipes' ? title : searchIn === 'ingredients' ? ingredientText : title + ' ' + ingredientText;
-    if (!terms.every(term => haystack.includes(term))) return false;
+    if (ingredientId && !ingredients.some(item => item.ingredientId === ingredientId)) return false;
+    if (searchIn === 'ingredients' ? !ingredients.some(item => terms.every(term => normalize(item.name + ' ' + item.ingredientId).includes(term))) : !terms.every(term => haystack.includes(term))) return false;
     if (type !== 'all' && !recipe.types.includes(type)) return false;
-    if (category !== 'all' && !ingredients.some(item => (item.category || 'other') === category)) return false;
+    if (category !== 'all' && !ingredients.some(item => ingredientCategory(item) === category)) return false;
     const periods = recipePeriods(recipe, today);
     return period === 'all' || (period === 'unscheduled' ? periods.total.length === 0 : (periods[period]?.length || 0) > 0);
   }).map(recipe => ({ ...recipe, periods: recipePeriods(recipe, today), matchedIngredients: terms.length === 0 ? []
     : recipe.meal.ingredients.filter(item => terms.some(term => normalize(item.name + ' ' + item.ingredientId).includes(term))) }));
+}
+
+/** Ingredient-first results retain exact IDs and de-duplicate scheduled meals.
+ * Unscheduled recipes remain searchable but never create fictitious dates.
+ */
+export function searchIngredients(index, filters = {}, today) {
+  const { query, searchIn, category, ingredientId } = { ...DEFAULT_RECIPE_FILTERS, ...filters };
+  if (searchIn === 'recipes' || !String(query).trim()) return [];
+  const terms = normalize(query).split(/\s+/).filter(Boolean);
+  const candidates = searchRecipes(index, { ...filters, query: '', searchIn: 'all' }, today);
+  const groups = new Map();
+  for (const recipe of candidates) for (const item of recipe.meal.ingredients || []) {
+    if (ingredientId && item.ingredientId !== ingredientId) continue;
+    if (category !== 'all' && ingredientCategory(item) !== category) continue;
+    if (!terms.every(term => normalize(item.name + ' ' + item.ingredientId).includes(term))) continue;
+    let group = groups.get(item.ingredientId);
+    if (!group) {
+      group = { ingredientId: item.ingredientId, name: item.name, language: recipe.language,
+        category: ingredientCategory(item), recipes: [], occurrences: [], aliases: [] };
+      groups.set(item.ingredientId, group);
+    }
+    if (!group.aliases.includes(item.name)) group.aliases.push(item.name);
+    if (!group.recipes.some(row => row.key === recipe.key)) group.recipes.push({ key: recipe.key, title: recipe.meal.title });
+    for (const occurrence of recipe.occurrences) {
+      if (!group.occurrences.some(row => row.entryId === occurrence.entryId)) group.occurrences.push({ ...occurrence, title: recipe.meal.title, language: recipe.language });
+    }
+  }
+  return [...groups.values()].sort((a,b) => a.name.localeCompare(b.name));
 }

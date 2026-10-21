@@ -122,6 +122,17 @@
           "items": {
             "$ref": "#/$defs/manualItem"
           }
+        },
+        "excludedMealTypes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "breakfast",
+              "snack"
+            ]
+          },
+          "description": "Optional exclusions used only for shopping; omitted means include all meals."
         }
       }
     },
