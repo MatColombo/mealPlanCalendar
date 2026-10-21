@@ -103,6 +103,8 @@ jobs:
 
       - name: Diagnose deployed service worker
         shell: bash
+        env:
+          MEAL_PLANNER_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
           echo "=== LOCAL ==="
           head -c 250 dist/sw.js
@@ -118,6 +120,11 @@ jobs:
           head -c 250 /tmp/remote-sw.js
           echo
           sha256sum /tmp/remote-sw.js
+
+          echo "=== CONFRONTO ==="
+          cmp dist/sw.js /tmp/remote-sw.js \
+            && echo "MATCH" \
+            || echo "MISMATCH"
 
       - name: Verify the returned public URL
         env:
