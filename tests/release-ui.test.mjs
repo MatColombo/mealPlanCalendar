@@ -132,7 +132,7 @@ async function controller(t, clipboard, initialState = null) {
   await import(url.href);
   await drainWorkerMessages();
   assert.match(app.html, /data-view="shopping"/u);
-  assert.match(app.html, /data-storage-status="ready"/u);
+  assert.match(app.html, /<span class="visually-hidden" role="status">Saved on this device<\/span>/u);
   assert.match(pwaSlot.innerHTML, /pwa-update-banner/u);
   assert.match(pwaSlot.innerHTML, /pwa-offline-state--ready/u);
   assert.equal(pendingWorkerMessages.size, 0);
@@ -173,7 +173,7 @@ for (const outcome of ['success', 'rejection']) {
         assert.match(h.app.html, /Switch to the new version\?/u);
       } else {
         pendingSave = h.checkManual();
-        assert.match(h.app.html, /data-storage-status="saving"/u);
+        assert.match(h.app.html, /data-view="shopping"/u); // Compact header does not render the ordinary storage banner.
       }
       const before = { html: h.app.html, renders: h.app.renders };
       try {

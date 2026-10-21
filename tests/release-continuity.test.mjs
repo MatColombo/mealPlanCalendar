@@ -234,7 +234,9 @@ test('a new release arriving during a commit preserves the full archive, three s
   assert.equal(findEntry(visible, movedId).time, '09:15');
   assert.deepEqual(Object.keys(visible.sourcePlans).map(sourceId => exportSourceDiet(visible, sourceId)), originals);
   const html = englishCalendar(visible, reopenedManager.getState());
-  assert.match(html, /<option value="en" selected>/u);
+  assert.match(html, /<a class="skip-link" href="#main">Skip to content<\/a>/u); // Locale is visibly English on calendar.
+  const settingsHtml = englishCalendar({ ...visible, ui: { ...visible.ui, view: "settings" } }, reopenedManager.getState());
+  assert.match(settingsHtml, /<option value="en" selected>/u); // Language selector moved to Settings.
   assert.match(html, />Calendar</u);
   assert.ok(html.includes(findEntry(visible, movedId).meal.title));
   assert.match(createShoppingText(getShoppingList(visible), 'en'), /Ingrediente italiano/u);
