@@ -1,0 +1,43 @@
+import { buildRecipeIndex, searchRecipes, recipePeriods, DEFAULT_RECIPE_FILTERS } from '../data/recipes.js';
+import { t, codeLabel, formatDate, formatTime, formatNumber } from './i18n.js';
+import { escape, button, iconButton, ingredientList, nutritionSummary, mealMacros, externalMealInfo } from './components.js';
+import { icon, foodArt } from './icons.js';
+
+function occurrences(recipe, language, today) {
+  const periods = recipePeriods(recipe, today);
+  return `<div class="recipe-periods">${['future', 'past', 'total'].map(period => `<details class="recipe-occurrences"${period === 'future' && periods[period].length ? ' open' : ''}><summary><span>${escape(t(language, 'recipes.periods.' + period))}</span><span class="badge">${escape(formatNumber(periods[period].length, language))}</span></summary>${periods[period].length ? `<ul>${periods[period].map(item => `<li><button type="button" class="recipe-occurrence" data-action="open-recipe-occurrence" data-entry-id="${escape(item.entryId)}" data-date="${escape(item.date)}"><span>${icon('calendar')}<strong>${escape(formatDate(item.date, language, { weekday: 'short', year: 'numeric' }))}</strong></span><span>${escape(codeLabel('mealTypes', item.type, language))} · ${escape(formatTime(item.time, language))}</span><small>${icon('people')}${escape(item.cookingServings === 1 ? t(language, 'today.onePerson') : t(language, 'today.people', { count: formatNumber(item.cookingServings, language) }))}${icon('chevronRight')}</small></button></li>`).join('')}</ul>` : `<p class="muted small">${escape(t(language, 'recipes.noOccurrences'))}</p>`}</details>`).join('')}</div>`;
+}
+
+function recipeCard(recipe, model) {
+  const language = model.state.settings.uiLanguage;
+  const ingredients = recipe.meal.ingredients || [];
+  const selected = new Set(recipe.matchedIngredients?.map(item => item.ingredientId));
+  return `<article class="panel recipe-card" data-recipe-key="${escape(recipe.key)}"><div class="recipe-card-heading"><span class="recipe-art">${foodArt(recipe.meal.type)}</span><div><div class="meal-card-meta">${recipe.types.map(type => `<span class="meal-type">${escape(codeLabel('mealTypes', type, language))}</span>`).join('')}</div><h2><button type="button" class="meal-title-button" data-action="open-recipe" data-recipe-key="${escape(recipe.key)}"><span lang="${escape(recipe.language)}">${escape(recipe.meal.title)}</span></button></h2></div></div>${mealMacros(recipe.meal, language)}<div class="recipe-ingredients" aria-label="${escape(t(language, 'recipes.ingredients'))}">${ingredients.map(item => `<button type="button" class="recipe-ingredient${selected.has(item.ingredientId) ? ' recipe-match' : ''}" data-action="search-ingredient" data-ingredient-name="${escape(item.name)}" title="${escape(t(language, 'recipes.findIngredient', { name: item.name }))}"><span lang="${escape(recipe.language)}">${escape(item.name)}</span></button>`).join('')}</div>${occurrences(recipe, language, model.today)}${button(t(language, 'recipes.details'), { action: 'open-recipe', iconName: 'book', variant: 'ghost', attrs: { 'data-recipe-key': recipe.key } })}</article>`;
+}
+
+/** Independent slot keeps the native search field, caret and keyboard intact. */
+export function renderRecipeResults(model) {
+  const language = model.state.settings.uiLanguage;
+  const index = buildRecipeIndex(model.state);
+  const recipes = searchRecipes(index, model.recipeFilters, model.today);
+  const count = recipes.reduce((sum, recipe) => sum + recipe.occurrences.length, 0);
+  return `<div class="section-heading recipe-counts"><p role="status" aria-live="polite">${escape(t(language, 'recipes.resultCount', { count: formatNumber(recipes.length, language), total: formatNumber(index.length, language) }))}</p><span class="badge">${icon('calendar')}${escape(t(language, 'recipes.occurrenceCount', { count: formatNumber(count, language) }))}</span></div>${recipes.length ? `<div class="recipe-grid">${recipes.map(recipe => recipeCard(recipe, model)).join('')}</div>` : `<section class="empty-state"><div class="empty-art">${foodArt('lunch')}</div><h2>${escape(t(language, index.length ? 'recipes.noResults' : 'recipes.emptyTitle'))}</h2><p>${escape(t(language, index.length ? 'recipes.noResultsHint' : 'recipes.emptyHint'))}</p>${button(t(language, index.length ? 'recipes.clearFilters' : 'empty.action'), { action: index.length ? 'clear-recipe-filters' : 'navigate', iconName: index.length ? 'restore' : 'upload', variant: 'primary', attrs: index.length ? {} : { 'data-view': 'import' } })}</section>`}`;
+}
+
+export function recipesView(model) {
+  const language = model.state.settings.uiLanguage;
+  const filters = { ...DEFAULT_RECIPE_FILTERS, ...model.recipeFilters };
+  const index = buildRecipeIndex(model.state);
+  const types = [...new Set(index.flatMap(recipe => recipe.types))];
+  const categories = [...new Set(index.flatMap(recipe => recipe.meal.ingredients.map(item => item.category || 'other')))];
+  const select = (key, values, labelGroup) => `<div class="field"><label for="recipe-${key}">${escape(t(language, 'recipes.filters.' + key))}</label><select id="recipe-${key}" data-control="recipe-${key}">${values.map(value => `<option value="${escape(value)}"${value === filters[key] ? ' selected' : ''}>${escape(value === 'all' ? t(language, 'recipes.all') : codeLabel(labelGroup, value, language))}</option>`).join('')}</select></div>`;
+  return `<section class="recipe-view"><section class="page-intro"><div><p class="eyebrow">${escape(t(language, 'recipes.eyebrow'))}</p><h1 id="page-title" class="hero-heading" tabindex="-1">${escape(t(language, 'recipes.title'))}</h1><p class="page-description">${escape(t(language, 'recipes.intro'))}</p></div><div class="hero-art" aria-hidden="true">${foodArt('dinner')}</div></section><section class="panel recipe-filters" aria-label="${escape(t(language, 'recipes.filterTitle'))}"><div class="field recipe-search"><label for="recipe-query">${icon('search')}${escape(t(language, 'recipes.search'))}</label><input type="search" id="recipe-query" data-control="recipe-query" value="${escape(filters.query)}" placeholder="${escape(t(language, 'recipes.placeholder'))}" autocomplete="off"></div>${select('searchIn', ['all', 'recipes', 'ingredients'], 'recipeSearchScopes')}${select('type', ['all', ...types], 'mealTypes')}${select('category', ['all', ...categories], 'categories')}${select('period', ['all', 'future', 'past', 'unscheduled'], 'recipePeriodFilters')}${button(t(language, 'recipes.clearFilters'), { action: 'clear-recipe-filters', iconName: 'restore', variant: 'ghost' })}<p class="muted small">${escape(t(language, 'recipes.periodHint'))}</p></section><div data-recipe-results>${renderRecipeResults(model)}</div></section>`;
+}
+
+export function recipeDialog(model) {
+  const recipe = buildRecipeIndex(model.state).find(item => item.key === model.dialog.recipeKey);
+  if (!recipe) return '';
+  const language = model.state.settings.uiLanguage;
+  const meal = recipe.meal;
+  return `<dialog id="app-dialog" class="modal recipe-dialog" aria-labelledby="dialog-title"><div class="modal-header"><div><p class="eyebrow">${escape(t(language, 'nav.recipes'))}</p><h2 id="dialog-title" lang="${escape(recipe.language)}">${escape(meal.title)}</h2></div>${iconButton('close', t(language, 'app.close'), { action: 'close-dialog', attrs: { autofocus: true } })}</div><div class="modal-body"><p class="badge">${icon('person')}${escape(t(language, 'meal.amountForOne'))}</p>${externalMealInfo(meal, language)}${nutritionSummary([meal], language, { compact: true, titleKey: 'meal.nutrition' })}<section class="meal-ingredients"><h3>${escape(t(language, 'meal.ingredients'))}</h3>${ingredientList(meal.ingredients, language, { planLanguage: recipe.language })}</section><section class="meal-instructions"><h3>${escape(t(language, 'meal.preparation'))}</h3>${meal.instructions?.length ? `<ol class="instructions" lang="${escape(recipe.language)}">${meal.instructions.map(step => `<li>${escape(step)}</li>`).join('')}</ol>` : `<p class="muted">${escape(t(language, 'meal.instructionsMissing'))}</p>`}</section>${meal.notes ? `<p lang="${escape(recipe.language)}">${escape(meal.notes)}</p>` : ''}<section><h3>${escape(t(language, 'recipes.inCalendar'))}</h3>${occurrences(recipe, language, model.today)}</section><section><h3>${escape(t(language, 'meal.sourcePlan'))}</h3><ul>${recipe.sources.map(source => `<li lang="${escape(recipe.language)}">${escape(source.title)}</li>`).join('')}</ul></section></div><div class="modal-footer">${button(t(language, 'meal.close'), { action: 'close-dialog', variant: 'primary', iconName: 'check' })}</div></dialog>`;
+}

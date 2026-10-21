@@ -1,6 +1,6 @@
 # Esportazione e portabilità — fasi 4–8
 
-Versione dell'app: **1.0.0**. I formati `.diet`, stato e backup restano alla
+Versione dell'app: **1.1.0**. I formati `.diet`, stato e backup restano alla
 **versione 1**. Le aggiunte per storico e annullamento sono facoltative e
 compatibili con i documenti delle fasi precedenti.
 
@@ -100,7 +100,10 @@ contiene più piani o lingue. Le preferenze e i testi non vengono fusi o tradott
 I metadati di ciascuna giornata provengono dal giorno sorgente rappresentato;
 se una giornata ospita pasti di più giorni della stessa sorgente, il primo
 giorno rappresentato fornisce i metadati giornalieri. I singoli pasti
-mantengono comunque le proprie estensioni.
+mantengono comunque le proprie estensioni. Fa eccezione `workday`: viene
+sempre letto dalla data effettiva del calendario, e rimosso dal giorno
+esportato quando quella data non ha un contesto noto. Lo spostamento di un
+pasto non trasporta con sé il turno del giorno originale.
 
 La funzione restituisce una nuova copia e non modifica sorgenti o calendario.
 Per tutti i piani insieme, anche in lingue diverse, il formato è il backup.
@@ -231,3 +234,16 @@ personalizzati o esempi di correttezza nutrizionale.
 - [Stato e backup](STATE_AND_BACKUP.md), [schema dello stato](../schemas/app-state.schema.json)
   e [schema del backup](../schemas/backup.schema.json).
 - [Architettura e verifica della fase 4](PHASE_4_STORAGE.md).
+
+## Estensioni 1.1
+
+Gli originali e il backup conservano `recipeId`, metriche per ingrediente,
+`externalMeal`, `workday` e i metadati facoltativi del profilo. Il backup conserva
+anche i tipi di giornata di date rimaste senza pasti. L’export `.diet` del
+calendario continua a selezionare le date con pasti della sorgente scelta;
+per trasferire tutto il contesto del calendario usare il backup completo.
+
+La ricerca del ricettario è ricostruita dai piani e dal calendario. Non è un
+secondo archivio di ricette modificabili; non duplica i dati nel backup. La
+vista `recipes` può essere ripristinata come ultima schermata, mentre i filtri
+di ricerca sono temporanei e tornano ai valori iniziali a una nuova apertura.

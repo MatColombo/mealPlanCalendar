@@ -26,6 +26,8 @@
   --radius-lg: 26px;
   --font-body: ui-rounded, "Avenir Next", "Trebuchet MS", system-ui, -apple-system, sans-serif;
   --motion-fast: 160ms;
-  --motion-reveal: 200ms;
+  --motion-reveal: 360ms;
+  --motion-spring: 420ms;
   --ease-out: cubic-bezier(.2, .7, .25, 1);
+  --ease-spring: cubic-bezier(.2, .8, .3, 1.16);
 }

@@ -110,7 +110,8 @@ test('release generation inventories local dependencies and includes every conte
   const urls = new Set(release.assets.map(asset => asset.url));
   for (const required of ['index.html', 'manifest.webmanifest', 'src/main.js', 'src/ui/styles.css', 'src/ui/tokens.css',
     'src/ui/locales/it.js', 'src/ui/locales/en.js', 'public/assets/icon-192.png', 'public/assets/icon-512.png',
-    'public/assets/icon-maskable-512.png', 'public/assets/apple-touch-icon.png', 'examples/phase-3/ui-demo-it.diet']) {
+    'public/assets/icon-maskable-512.png', 'public/assets/apple-touch-icon.png', 'examples/release-1.1/meal-plan-it.diet',
+    'src/ui/recipes-view.js', 'src/ui/motion.js', 'src/data/nutrition.js', 'src/data/workday.js']) {
     assert.ok(urls.has(required), required);
   }
   assert.ok(!urls.has('sw.js'));

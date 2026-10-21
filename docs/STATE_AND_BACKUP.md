@@ -56,7 +56,7 @@ Gli oggetti sono estensibili. La garanzia di conservazione dei campi sconosciuti
 | `settings.uiLanguage` | `it` oppure `en` | `it`; non modifica la lingua dei piani importati. |
 | `settings.reducedMotion` | booleano | `false`; conserva la preferenza sulle animazioni. |
 | `settings.weekStartsOn` | `0` oppure `1` | `1`, lunedì. `0` indica domenica. |
-| `ui.view` | stringa | `today`. |
+| `ui.view` | stringa | `today`; supporta anche `calendar`, `shopping`, `recipes`, `import`, `export`, `settings`. |
 | `ui.selectedDate` | `YYYY-MM-DD` oppure `null` | Ultima data selezionata nel Calendario; `null` prima della prima visita. Oggi usa la data locale corrente e conserva questa selezione. |
 | `meta.createdAt` | data e ora con offset | Creazione dello stato. |
 | `meta.updatedAt` | data e ora con offset | Ultimo aggiornamento dello stato. |
@@ -101,6 +101,7 @@ Ogni `calendar[assignedDate]` contiene:
 | --- | --- | --- |
 | `date` | `YYYY-MM-DD` | Data effettiva; coincide con la chiave della mappa. |
 | `meals` | array | Presenze dei pasti in quel giorno. |
+| `workday` | oggetto facoltativo oppure `null` | Classe del giorno e orari espliciti, copiati alla data durante l’importazione; non si spostano con un pasto. |
 
 Ogni presenza contiene:
 
@@ -512,3 +513,20 @@ concessione non è un errore IndexedDB e non blocca le operazioni. Anche quando
 del sito: il backup scaricato rimane il mezzo di recupero indipendente.
 Per installazione, aggiornamenti, limiti e fonti delle API consultare
 [PHASE_7_PWA.md](PHASE_7_PWA.md).
+
+## Continuità delle estensioni 1.1
+
+I vecchi archivi v1 rimangono leggibili senza riscrittura al solo avvio. Se non
+hanno `calendar[date].workday`, il contesto resta sconosciuto, anche quando
+una descrizione sembra contenere un turno. Se il documento originale ha già
+un campo `workday` strutturato, una nuova importazione confermata può applicarlo
+alle date: l’anteprima esplicita la sostituzione e l’undo conserva il contesto
+precedente. Le date con contesto noto sono considerate occupate anche quando
+l’ultimo pasto è stato spostato altrove.
+
+Le richieste di modifica rapida delle persone sono una coda temporanea
+nell’interfaccia. Lo stato persistente cambia solo dopo il completamento di
+IndexedDB; i candidati successivi vengono costruiti dalla copia appena salvata.
+Non si memorizzano moltiplicazioni nelle quantità originali né nei valori
+nutrizionali personali. Un errore interrompe la coda, viene mostrato all’utente
+e lascia disponibili i salvataggi già riusciti.

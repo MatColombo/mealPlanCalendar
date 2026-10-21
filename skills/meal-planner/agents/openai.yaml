@@ -1,4 +1,4 @@
 interface:
   display_name: "Project Meal Planner"
-  short_description: "Piani personali e file .diet in ChatGPT web"
-  default_prompt: "Usa $meal-planner per creare un piano personale di 3–10 giorni e un file .diet, chiedendo solo le informazioni mancanti."
+  short_description: "Piani, turni e macro personali in ChatGPT web"
+  default_prompt: "Usa $meal-planner per raccogliere le informazioni mancanti e creare un piano di 3–10 giorni con turni, pasti esterni, quantità e macro per persona, presentato per sezioni e scaricabile come .diet."

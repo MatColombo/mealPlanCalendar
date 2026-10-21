@@ -8,6 +8,7 @@ import { addDays, daysBetween } from './dates.js';
 import { addSourcePlan, cloneStateSnapshot, createCalendarEntry, timestampFor } from './state.js';
 import { aggregateIngredients, validateUnitConversion } from '../shopping/quantities.js';
 import { materializeCalendarProvenance } from './provenance.js';
+import { assertReadableWorkday, copyWorkdayProperty } from './workday.js';
 
 const CLOCK_TIME = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
 
@@ -68,6 +69,8 @@ export function readablePlan(document) {
       throw sessionError('SESSION_INVALID_PLAN', 'Every day must contain a meals array.');
     }
     assertDate(day.date);
+    try { assertReadableWorkday(day.workday); }
+    catch { throw sessionError('SESSION_INVALID_PLAN', 'A workday must contain readable class and clock fields.'); }
     if (dates.has(day.date)) {
       throw sessionError('SESSION_DUPLICATE_ID', 'Source dates must be distinct.');
     }
@@ -152,6 +155,19 @@ export function getDayEntries(state, date) {
   return entries.sort((a, b) => a.time.localeCompare(b.time));
 }
 
+/**
+ * Read the classification assigned to this date, independently of its meals.
+ * Legacy archives without this metadata return null; moving a meal never
+ * imports its original day's work schedule into the destination date.
+ */
+export function getDayWorkday(state, date) {
+  assertDate(date);
+  const workday = state?.calendar?.[date]?.workday;
+  try { assertReadableWorkday(workday); }
+  catch { throw sessionError('SESSION_INVALID_PLAN', 'The calendar workday metadata is not readable.'); }
+  return workday === undefined || workday === null ? null : structuredClone(workday);
+}
+
 /** Find the unique calendar occurrence, independent of the selected day. */
 export function findEntry(state, entryId) {
   let match = null;
@@ -183,7 +199,7 @@ export function buildImportPreview(state, document, startDate) {
     let assignedDate;
     try { assignedDate = addDays(day.date, shift); }
     catch { throw sessionError('SESSION_INVALID_DATE', 'A mapped date is outside the supported calendar range.'); }
-    return { sourceDate: day.date, assignedDate, mealCount: day.meals.length };
+    return { sourceDate: day.date, assignedDate, mealCount: day.meals.length, ...copyWorkdayProperty(day) };
   });
   // Any existing day is treated as occupied, including an intentionally empty
   // day with metadata. A full-day replacement must always be explicit.
@@ -221,6 +237,7 @@ export function applySessionImport(state, document, { startDate, fileName, overw
     const sourceDay = source.document.days.find(day => day.date === mapping.sourceDate);
     next.calendar[mapping.assignedDate] = {
       date: mapping.assignedDate,
+      ...copyWorkdayProperty(sourceDay),
       meals: sourceDay.meals.map(meal => createCalendarEntry({
         sourceId,
         sourceDate: mapping.sourceDate,

@@ -1,151 +1,341 @@
-# Esempio conversazionale — proposta, revisione ed esportazione
+# Esempio conversazionale — turni, mensa e sostituzione
 
-Questo dialogo usa **una persona e un profilo completamente fittizi**. Le sue preferenze, allergie dichiarate, abitudini e quantità non descrivono l'utente reale del progetto. L'esempio illustra il funzionamento della skill; non rappresenta una valutazione nutrizionale verificata.
+Questo dialogo è dimostrativo. Profilo, quantità e valori numerici sono fittizi:
+illustrano conversazione e contratto software, senza costituire una proposta
+personale o una verifica nutrizionale. I file finali corrispondono alla versione
+**dopo** la sostituzione e si trovano in `examples/release-1.1/`.
 
-I file finali contengono tre giornate, dal **21 al 23 ottobre 2026**, con quattro pasti al giorno e ingredienti per una sola persona:
+## 1. La richiesta e le sole domande mancanti
 
-- [meal-plan-it.diet](../examples/phase-2/meal-plan-it.diet): piano italiano **dopo la revisione**.
-- [meal-plan-en.diet](../examples/phase-2/meal-plan-en.diet): lo stesso piano finale in un file inglese separato.
+**Utente**
 
-Il contratto usato è quello di [DIET_FORMAT.md](DIET_FORMAT.md) e [diet.schema.json](../schemas/diet.schema.json), versione 1. Non vengono aggiunti campi al contratto né modificati i file dimostrativi della fase 1.
+> Vorrei organizzare tre giorni di pasti, dal 20 al 22 ottobre 2026, in italiano.
+> L'obiettivo è gestire meglio i turni; non ho un target kcal o macro. Preferisco
+> vedere comunque kcal, proteine, carboidrati e grassi. Poi vorrei anche una
+> copia inglese del file.
 
-## 1. Dati già forniti
+**Agente**
 
-**Persona fittizia**
+Periodo, lingua e obiettivo sono già chiari. Mi servono questi dettagli:
 
-> Sono una persona adulta e vorrei organizzare pasti pratici per il 21, 22 e 23 ottobre 2026. Il piano è solo per me e lo voglio in italiano. Lavoro dalle 09:00 alle 18:00 e per preparare la cena vorrei impiegare al massimo 20 minuti. Voglio colazione, pranzo, spuntino e cena; posso mangiare avanzi il giorno dopo. Non ho richieste di calorie o macro. Preferisco al massimo due pasti con formaggio e al massimo due pasti con uova in sette giorni.
+1. Quali sono età, sesso, peso e altezza? Puoi non fornire singoli dati.
+2. Che lavoro fai e quali turni avrai in queste date? Se seguono una matrice, qual è la sequenza e da quale data parte?
+3. Devi preparare o trasportare pasti in anticipo? Ci sono pasti esterni inevitabili e conosci il range kcal della mensa? Al lavoro hai frigo e microonde, e accetti avanzi?
+4. Quali dispositivi hai a casa, quanto tempo vuoi cucinare e ci sono condizioni di budget?
+5. Hai allergie, intolleranze o restrizioni?
+6. Quali ingredienti e pasti vuoi escludere e quali preferisci? I preferiti sono esclusivi?
+7. Quali orari e strutture dei pasti preferisci?
+8. Hai limiti agli zuccheri o frequenze massime per ingredienti/pasti? C'è uno storico vicino a queste date da considerare?
 
-**Skill**
+**Utente**
 
-> Ho già durata, date, lingua, numero di pasti, orario di lavoro, tempo per la cena e disponibilità agli avanzi. Mi mancano questi dettagli:
->
-> 1. Hai allergie, intolleranze, esclusioni alimentari o ingredienti che preferisci evitare?
-> 2. A quali orari vuoi i quattro pasti? Per il pranzo in ufficio hai frigorifero o microonde?
-> 3. Vuoi fornire i pasti dei giorni precedenti per contestualizzare le frequenze di formaggi e uova? Se non hai lo storico, lavorerò con il solo segmento richiesto, dichiarando il contesto parziale.
+> Sono una donna di 35 anni, 68 kg, alta 169 cm. Lavoro come tecnica di laboratorio.
+> Il 20 faccio 09:00–18:00, il 21 faccio 22:00–06:00 del giorno dopo e il 22 riposo.
+> Ho solo questi turni confermati, nessuna matrice ripetitiva da applicare.
+> Il 20 pranzo in mensa: mi è stato indicato un intervallo di 550–700 kcal,
+> ma non so ancora i piatti. Al lavoro ho frigo e microonde. Accetto avanzi:
+> prepara il pranzo del 21 insieme alla cena del 20.
+> A casa ho piano cottura, forno, microonde e bollitore; fino a 30 minuti per pasto.
+> Nessun budget preciso, nessuna allergia o restrizione. Escludi i peperoni;
+> preferisco ceci, cous cous e piatti da preparare prima, senza una lista esclusiva.
+> Preferisco piatti unici o secondo con contorno. Colazione alle 08:00, pranzo
+> alle 13:00, cena alle 19:30; spuntino alle 16:30, ma il 21 alle 23:30 al lavoro.
+> Come richiesta sugli zuccheri: massimo 60 g totali al giorno. Uova in massimo
+> tre pasti ogni sette giorni. Non ho uno storico da allegare.
 
-La skill non ripete le domande a cui è già stata data risposta e non introduce un obiettivo calorico o di macronutrienti.
+**Agente**
 
-**Persona fittizia**
+Uso i tre turni confermati, con `night-shift` e fine al giorno successivo per
+il 21. Il limite alle uova è riferito ai pasti in finestre mobili di sette giorni:
+il piano ne copre solo tre e lo storico esterno rimane sconosciuto. Il range
+della mensa resta separato dai valori puntuali; non invento i piatti che servirà.
 
-> Non ho allergie, intolleranze o esclusioni; preferisco evitare i peperoni. Colazione alle 07:30, pranzo alle 13:00, spuntino alle 16:30 e cena alle 19:30. In ufficio ho sia frigorifero sia microonde. Non voglio aggiungere lo storico dei giorni precedenti.
+L'estratto seguente mostra il pasto che sarà modificato. La presentazione completa
+della proposta aggiornata compare nella sezione 3.
 
-## 2. Proposta iniziale leggibile
+### Estratto iniziale · Cena del 20 e pranzo del 21
 
-**Skill**
+**Cous cous con ceci e broccoli · piatto unico · quantità per una persona**
 
-> Ti propongo questi tre giorni. Le quantità sono sempre per una persona; per alcuni ingredienti pronti è specificato il peso già cotto o sgocciolato. Alterno piatti e ingredienti, con una preparazione condivisa fra la prima cena e il pranzo successivo per ridurre il lavoro in cucina.
->
-> I tempi sono stime. La cena del 21 include la preparazione di due porzioni. Le altre quantità descrivono la singola porzione prevista nel rispettivo pasto.
+| Ingrediente | Quantità | Base |
+| --- | --- | --- |
+| Cous cous | 80 g | Secco |
+| Ceci | 130 g | Scolati |
+| Broccoli | 200 g | Crudi |
+| Olio di oliva | 10 g | Come acquistato |
 
-| Data | Ora | Tipo | Proposta iniziale e ingredienti per una persona | Preparazione stimata |
-| --- | --- | --- | --- | --- |
-| 21 ottobre | 07:30 | Colazione | **Yogurt con avena, pera e noci** — yogurt bianco 170 g, fiocchi d'avena 40 g, pera 1, noci sgusciate 15 g. | 5 min |
-| 21 ottobre | 13:00 | Pranzo | **Insalata di farro, pomodorini e cannellini** — farro già cotto 150 g, cannellini sgocciolati 130 g, pomodorini 150 g, olio d'oliva 8 g, basilico 3 g, sale 1 g. | 12 min, con farro già cotto |
-| 21 ottobre | 16:30 | Spuntino | **Mela e mandorle** — mela 1, mandorle 20 g. | 2 min |
-| 21 ottobre | 19:30 | Cena | **Couscous con ceci e broccoli** — couscous istantaneo secco 70 g, ceci sgocciolati 130 g, broccoli crudi 200 g, olio d'oliva 8 g, succo di limone 10 ml, acqua 90 ml, prezzemolo 2 g, sale 1 g. | 20 min, preparando due porzioni |
-| 22 ottobre | 07:30 | Colazione | **Pane integrale con ricotta e kiwi** — pane integrale 70 g, ricotta 80 g, kiwi 1. | 5 min |
-| 22 ottobre | 13:00 | Pranzo | **Couscous con ceci e broccoli, porzione preparata** — couscous secco 70 g, ceci sgocciolati 130 g, broccoli crudi 200 g, olio 8 g, succo di limone 10 ml, acqua 90 ml, prezzemolo 2 g, sale 1 g: ingredienti allocati alla seconda porzione della cena precedente. | 5 min per predisporre la porzione |
-| 22 ottobre | 16:30 | Spuntino | **Arancia e cioccolato fondente** — arancia 1, cioccolato fondente 15 g. | 2 min |
-| 22 ottobre | 19:30 | Cena | **Frittata di spinaci con pane integrale** — uova 2, spinaci freschi 180 g, olio d'oliva 8 g, sale 1 g, pane integrale 60 g. | 18 min |
-| 23 ottobre | 07:30 | Colazione | **Porridge con banana e cannella** — fiocchi d'avena 45 g, latte 180 ml, banana 1, cannella 0,5 g. | 8 min |
-| 23 ottobre | 13:00 | Pranzo | **Pasta fredda con tonno e pomodorini** — pasta secca 75 g, tonno sgocciolato 100 g, pomodorini 150 g, olio d'oliva 8 g, basilico 3 g, sale 1 g. | 15 min, escluso raffreddamento |
-| 23 ottobre | 16:30 | Spuntino | **Yogurt e mirtilli** — yogurt bianco 125 g, mirtilli 100 g. | 2 min |
-| 23 ottobre | 19:30 | Cena | **Pollo al limone con carote e pane** — petto di pollo crudo 150 g, carote crude 200 g, pane integrale 60 g, olio d'oliva 8 g, succo di limone 15 ml, origano secco 1 g, sale 1 g. | 20 min, con taglio sottile |
+Valori dimostrativi della singola porzione: **608 kcal · proteine 24 g ·
+carboidrati 89 g · grassi 15 g · zuccheri totali 6 g**.
+Le due occorrenze hanno ID pasto distinti e condividono una preparazione.
+La scheda della cena contiene solo la propria quota; le istruzioni indicano
+di prepararne due, una per ciascun consumo.
 
-**Skill — contesto della proposta**
+## 2. La sostituzione
 
-> Nei tre giorni proposti compare un pasto con formaggio e uno con uova. Il limite che hai indicato è un massimo in finestre mobili di sette giorni, non una quota da esaurire nei tre giorni. Non ho lo storico esterno a queste date, quindi non posso descrivere come completa una finestra di sette giorni.
->
-> Non hai richiesto target calorici o macro e qui non sono disponibili valori nutrizionali da riportare. Puoi rivedere l'intera proposta, un pasto o un ingrediente.
+**Utente**
 
-Le due uova della frittata appartengono a **un singolo pasto**. Il formaggio è descritto dal tag assegnato alla colazione con ricotta. L'app non esegue una classificazione o una verifica alimentare di questi pasti: le informazioni appartengono alla proposta della skill.
+> Sostituisci i broccoli con le zucchine sia nella cena del 20 sia nel pranzo
+> collegato del 21. Aggiorna anche i valori e genera i due file completi,
+> uno italiano e uno inglese.
 
-## 3. Richiesta di sostituzione di un ingrediente
+**Agente**
 
-**Persona fittizia**
+Aggiorno entrambi i consumi della preparazione, come richiesto. Propongo 250 g
+di zucchine per persona al posto di 200 g di broccoli: cambia la quantità e
+la consistenza del piatto; non è una dichiarazione di equivalenza nutrizionale.
 
-> Per la cena del 21, sostituisci i broccoli con le zucchine.
+| Voce di ogni porzione | Prima | Dopo |
+| --- | --- | --- |
+| Verdura | Broccoli, 200 g crudi | Zucchine, 250 g crude |
+| Energia dimostrativa | 608 kcal | 585 kcal |
+| Proteine dimostrative | 24 g | 22 g |
+| Carboidrati dimostrativi | 89 g | 85 g |
+| Grassi dimostrativi | 15 g | 15 g |
+| Zuccheri totali dimostrativi | 6 g | 8 g |
 
-**Skill**
+La riga ingrediente passa da `broccoli` a `zucchini`; le occorrenze mantengono
+`mealId`, il batch rimane collegato e la variante usa
+`recipeId: "couscous-chickpeas-zucchini"`. Aggiorno istruzioni, dati delle righe,
+dei pasti e riepiloghi. Le altre occorrenze restano nella proposta corrente.
 
-> Propongo 250 g di zucchine crude per porzione al posto dei 200 g di broccoli. È una nuova quantità scelta per questo piatto; non la presento come equivalente dal punto di vista calorico o dei macro.
->
-> La cena del 21 e il pranzo del 22 provengono dalla stessa preparazione. Cambiando le verdure in entrambi puoi continuare a preparare tutto insieme. Mantenere i broccoli soltanto nel pranzo richiederebbe separare le preparazioni. Preferisci applicare la sostituzione anche al pranzo collegato?
+## 3. Proposta aggiornata per sezioni
 
-**Persona fittizia**
+### 🧭 Il tuo piano
 
-> Sì, aggiorna anche il pranzo del 22. Preferisco fare una sola preparazione, anche se la base si ripete.
+**Tre giorni fra turni e riposo · 20–22 ottobre 2026 · italiano**
 
-Qui il compromesso è esplicito: la persona accetta la ripetizione di una base per mantenere il vantaggio organizzativo degli avanzi. La skill non estende silenziosamente una modifica richiesta per un solo pasto a un pasto collegato.
+Quantità e nutrizione si riferiscono a **una persona**. La data iniziale sarà
+confermata nella PWA. Tutti i numeri di questo esempio sono dimostrativi.
 
-## 4. Aggiornamento dei pasti interessati
-
-**Skill**
-
-> Aggiorno la cena del 21 in **Couscous con ceci e zucchine** e il pranzo del 22 in **Couscous con ceci e zucchine — porzione preparata**. Per le zucchine tagliate sottili propongo una stima di 18 minuti per preparare le due porzioni; predisporre il pranzo già preparato rimane stimato in 5 minuti.
->
-> Per entrambi i pasti i valori nutrizionali restano non disponibili. Aggiorno quantità, nomi, istruzioni e note della preparazione, senza dedurre valori calorici o macro dalla sostituzione.
-
-### Quantità finali dei due pasti collegati
-
-| Ingrediente | Cena del 21, una porzione | Pranzo del 22, una porzione | Totale delle due porzioni |
-| --- | --- | --- | --- |
-| Couscous istantaneo, peso secco | 70 g | 70 g | 140 g |
-| Ceci, peso sgocciolato | 130 g | 130 g | 260 g |
-| **Zucchine, peso crudo** | **250 g** | **250 g** | **500 g** |
-| Olio d'oliva | 8 g | 8 g | 16 g |
-| Succo di limone | 10 ml | 10 ml | 20 ml |
-| Acqua | 90 ml | 90 ml | 180 ml |
-| Prezzemolo | 2 g | 2 g | 4 g |
-| Sale | 1 g | 1 g | 2 g |
-
-Le due porzioni richiedevano 400 g di broccoli nella proposta iniziale; la revisione richiede 500 g di zucchine. Nei file finali l'ingrediente dei due pasti è `zucchini`, quantità `250`, unità `g`, base `raw`. L'ID del gruppo di preparazione resta `couscous-chickpeas-batch-01`.
-
-Le quantità nel primo pasto non contengono già il totale della preparazione. Entrambi i pasti mantengono la propria allocazione, quindi la spesa per l'intervallo li somma. `preparedServings: 2` descrive la preparazione e non moltiplica nuovamente gli ingredienti del file.
-
-### Riepilogo del piano finale esportato
-
-| Data | Colazione — 07:30 | Pranzo — 13:00 | Spuntino — 16:30 | Cena — 19:30 |
-| --- | --- | --- | --- | --- |
-| 21 ottobre 2026 | Yogurt con avena, pera e noci | Insalata di farro, pomodorini e cannellini | Mela e mandorle | **Couscous con ceci e zucchine** |
-| 22 ottobre 2026 | Pane integrale con ricotta e kiwi | **Couscous con ceci e zucchine — porzione preparata** | Arancia e cioccolato fondente | Frittata di spinaci con pane integrale |
-| 23 ottobre 2026 | Porridge con banana e cannella | Pasta fredda con tonno e pomodorini | Yogurt e mirtilli | Pollo al limone con carote e pane |
-
-Le quantità complete sono nel file italiano finale; per i dieci pasti non coinvolti nella revisione corrispondono alla proposta iniziale riportata sopra.
-
-## 5. Richiesta del file
-
-**Persona fittizia**
-
-> Questa versione mi va bene. Genera il file `.diet` in italiano e anche una copia inglese separata.
-
-**Skill**
-
-> Ecco i due file del piano aggiornato:
->
-> - [Piano in italiano](../examples/phase-2/meal-plan-it.diet)
-> - [Piano in inglese](../examples/phase-2/meal-plan-en.diet)
->
-> Ogni file contiene una sola lingua e quattro pasti al giorno per il 21, 22 e 23 ottobre. La data di partenza proposta è il 21 ottobre 2026; sarà da confermare nell'importazione. Ogni pasto descrive una porzione per una persona, comprese le due porzioni collegate preparate insieme.
-
-## 6. Corrispondenza con il contratto
-
-| Aspetto | Rappresentazione nei file finali |
+| Scelta | Organizzazione concordata |
 | --- | --- |
-| Formato | `format: "meal-planner.diet"`, `schemaVersion: 1`. |
-| Identità dei due documenti | `phase-2-demo-it-2026-10-21` e `phase-2-demo-en-2026-10-21`. |
-| Lingua dei contenuti | `it` nel primo file, `en` nel secondo; nomi, istruzioni e note sono monolingui. |
-| Porzione di base | `baseServings: 1`; nessuna impostazione `cookingServings` viene inserita nel documento. |
-| Date | `2026-10-21`, `2026-10-22`, `2026-10-23`, con `suggestedStartDate: "2026-10-21"`. |
-| Identificatori degli ingredienti | Stabili e uguali fra le due lingue; il nome leggibile è tradotto. |
-| Revisione | Gli stessi `mealId` della cena del 21 e del pranzo del 22 identificano i pasti aggiornati. Entrambi contengono `zucchini` nella nuova quantità. |
-| Preferenze di frequenza | Due voci con `subject.kind: "tag"`, `maxMeals: 2`, `period.days: 7` e `period.alignment: "rolling"`. Le note dichiarano il contesto parziale. |
-| Obiettivi calorici e macro | Assenti: la persona fittizia non li ha richiesti. |
-| Nutrizione non disponibile | `nutrition` è omesso negli altri pasti; nei due pasti rivisti le metriche sono `null` con una nota esplicita. Non viene usato `0` come sostituto di un dato mancante. |
-| Tempi | `prepMinutes` contiene stime pratiche. Per la cena rivista la stima è 18; per il pranzo collegato è 5. |
-| Avanzi | Stesso `batchId`; ruoli `cook` e `leftover`; `preparedServings: 2` soltanto nel pasto di preparazione. |
-| Profilo fittizio | Dichiarato nelle note del piano e nel presente documento. |
+| Obiettivo | Organizzare pasti attorno ai turni; nessun target kcal o macro. |
+| Preferenze | Ceci e cous cous; esclusi i peperoni; whitelist non esclusiva. |
+| Struttura | Piatto unico oppure secondo con contorno. |
+| Zuccheri e frequenze | Richieste registrate nei metadati, senza valutatori nell'app. |
+| Contesto incompleto | Piatti della mensa e storico esterno al periodo non disponibili. |
 
-L'esempio dimostra una revisione locale con effetto su un pasto collegato. Una revisione dell'intera proposta segue lo stesso principio: mostrare le scelte modificate, mantenere espliciti i compromessi e generare il file della versione richiesta.
+### 🧺 Organizzazione pratica
 
-Le verifiche ammesse per questi artefatti riguardano parsing JSON, campi del contratto, date e riferimenti tecnici. Non vengono introdotti validatori o test alimentari, delle ricette, delle calorie, dei macro o delle frequenze. La conferma delle date e la gestione delle sovrapposizioni appartengono al flusso di importazione dell'app previsto dalle fasi successive.
+La cena del 20 produce due porzioni della preparazione: una per la cena stessa
+e una per il pranzo del 21. Gli ingredienti nei due pasti rappresentano le
+singole quote consumate; la spesa le somma una volta ciascuna. Il pranzo del
+20 viene acquistato in mensa e non aggiunge ingredienti fittizi alla spesa.
+Il turno notturno è classificato sulla giornata del 21; lo spuntino delle
+23:30 appartiene ancora alla data civile del 21.
+
+### 📅 Le giornate
+
+
+---
+
+### Martedì 20 ottobre 2026 · turno diurno 09:00–18:00
+
+| Ora | Pasto | Proposta |
+| --- | --- | --- |
+| 08:00 | Colazione | Avena con latte e banana |
+| 13:00 | Pranzo | Pranzo in mensa da scegliere sul posto |
+| 16:30 | Spuntino | Mela e mandorle |
+| 19:30 | Cena | Cous cous con ceci e zucchine |
+
+#### 08:00 · Colazione — Avena con latte e banana
+
+**Piatto unico · 8 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Fiocchi di avena | 50 g | Secco |
+| Latte | 180 ml | Come acquistato |
+| Banana | 100 g | Crudo |
+
+**Preparazione:** Scalda il latte, aggiungi l’avena e cuoci fino alla consistenza desiderata. Completa con la banana a fette.
+
+**Valori dimostrativi per persona:** 365 kcal · proteine 14 g · carboidrati 60 g · grassi 7 g · zuccheri totali 22 g.
+
+#### 13:00 · Pranzo — Pranzo in mensa da scegliere sul posto
+
+**Pasto esterno · una persona**
+
+Intervallo dichiarato: **550–700 kcal**. Proteine, carboidrati, grassi e zuccheri non disponibili. La composizione sarà nota sul posto; gli ingredienti sono compresi nel servizio e non generano voci della spesa.
+
+#### 16:30 · Spuntino — Mela e mandorle
+
+**Piatto unico · 2 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Mela | 150 g | Crudo |
+| Mandorle | 20 g | Come acquistato |
+
+**Preparazione:** Lava la mela e prepara le mandorle in un contenitore.
+
+**Valori dimostrativi per persona:** 198 kcal · proteine 4 g · carboidrati 20 g · grassi 10 g · zuccheri totali 16 g.
+
+#### 19:30 · Cena — Cous cous con ceci e zucchine
+
+**Piatto unico · 20 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Cous cous | 80 g | Secco |
+| Ceci | 130 g | Scolato |
+| Zucchine | 250 g | Crudo |
+| Olio di oliva | 10 g | Come acquistato |
+
+**Preparazione:** Prepara due porzioni: usa il doppio delle quantità della scheda, che descrivono un solo consumo. Cuoci le zucchine a pezzi con l’olio, prepara il cous cous seguendo la confezione e unisci i ceci scolati. Dividi la preparazione: una porzione per questa cena e una per il pranzo del 21 ottobre. Organizza la conservazione secondo le indicazioni degli ingredienti.
+
+**Valori dimostrativi per persona:** 585 kcal · proteine 22 g · carboidrati 85 g · grassi 15 g · zuccheri totali 8 g.
+
+**Riepilogo personale parziale — mensa esclusa:** 1148 kcal · proteine 40 g · carboidrati 165 g · grassi 32 g · zuccheri totali 46 g. Numeri dimostrativi.
+Il range di 550–700 kcal della mensa resta separato. Questa somma non descrive l’intera giornata.
+
+---
+
+### Mercoledì 21 ottobre 2026 · turno notturno 22:00–06:00 (+1 giorno)
+
+| Ora | Pasto | Proposta |
+| --- | --- | --- |
+| 08:00 | Colazione | Yogurt, pane e frutti di bosco |
+| 13:00 | Pranzo | Cous cous con ceci e zucchine |
+| 19:30 | Cena | Pollo con patate e carote |
+| 23:30 | Spuntino | Mela e mandorle |
+
+#### 08:00 · Colazione — Yogurt, pane e frutti di bosco
+
+**Piatto unico · 5 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Yogurt bianco | 170 g | Come acquistato |
+| Pane integrale | 60 g | Come acquistato |
+| Frutti di bosco | 100 g | Crudo |
+
+**Preparazione:** Servi lo yogurt con i frutti di bosco e il pane a parte.
+
+**Valori dimostrativi per persona:** 305 kcal · proteine 15 g · carboidrati 43 g · grassi 7 g · zuccheri totali 15 g.
+
+#### 13:00 · Pranzo — Cous cous con ceci e zucchine
+
+**Piatto unico · 5 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Cous cous | 80 g | Secco |
+| Ceci | 130 g | Scolato |
+| Zucchine | 250 g | Crudo |
+| Olio di oliva | 10 g | Come acquistato |
+
+**Preparazione:** Usa la porzione attribuita a questo pranzo, preparata con la cena del 20 ottobre. La scheda indica la sua quota di ingredienti, senza aggiungere l’intera preparazione.
+
+**Valori dimostrativi per persona:** 585 kcal · proteine 22 g · carboidrati 85 g · grassi 15 g · zuccheri totali 8 g.
+
+#### 19:30 · Cena — Pollo con patate e carote
+
+**Secondo con contorno · 30 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Petto di pollo | 150 g | Crudo |
+| Patate | 250 g | Crudo |
+| Carote | 180 g | Crudo |
+| Olio di oliva | 10 g | Come acquistato |
+
+**Preparazione:** Taglia le patate e le carote, condiscile con l’olio e cuocile in forno. Cuoci il pollo e servi con le verdure. Segui le indicazioni di cottura del prodotto.
+
+**Valori dimostrativi per persona:** 515 kcal · proteine 40 g · carboidrati 56 g · grassi 13 g · zuccheri totali 10 g.
+
+#### 23:30 · Spuntino — Mela e mandorle
+
+**Piatto unico · 2 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Mela | 150 g | Crudo |
+| Mandorle | 20 g | Come acquistato |
+
+**Preparazione:** Lava la mela e prepara le mandorle in un contenitore.
+
+**Valori dimostrativi per persona:** 198 kcal · proteine 4 g · carboidrati 20 g · grassi 10 g · zuccheri totali 16 g.
+
+**Riepilogo personale dei pasti elencati:** 1603 kcal · proteine 81 g · carboidrati 204 g · grassi 45 g · zuccheri totali 49 g. Numeri dimostrativi.
+
+---
+
+### Giovedì 22 ottobre 2026 · riposo
+
+| Ora | Pasto | Proposta |
+| --- | --- | --- |
+| 08:00 | Colazione | Avena con latte e banana |
+| 13:00 | Pranzo | Riso con tonno e pomodori |
+| 16:30 | Spuntino | Arancia e semi di zucca |
+| 19:30 | Cena | Uova con spinaci e pane |
+
+#### 08:00 · Colazione — Avena con latte e banana
+
+**Piatto unico · 8 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Fiocchi di avena | 50 g | Secco |
+| Latte | 180 ml | Come acquistato |
+| Banana | 100 g | Crudo |
+
+**Preparazione:** Scalda il latte, aggiungi l’avena e cuoci fino alla consistenza desiderata. Completa con la banana a fette.
+
+**Valori dimostrativi per persona:** 365 kcal · proteine 14 g · carboidrati 60 g · grassi 7 g · zuccheri totali 22 g.
+
+#### 13:00 · Pranzo — Riso con tonno e pomodori
+
+**Piatto unico · 20 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Riso | 80 g | Secco |
+| Tonno al naturale | 100 g | Scolato |
+| Pomodori | 200 g | Crudo |
+| Olio di oliva | 10 g | Come acquistato |
+
+**Preparazione:** Cuoci il riso seguendo la confezione. Unisci tonno scolato, pomodori a pezzi e olio.
+
+**Valori dimostrativi per persona:** 521 kcal · proteine 33 g · carboidrati 68 g · grassi 12 g · zuccheri totali 5 g.
+
+#### 16:30 · Spuntino — Arancia e semi di zucca
+
+**Piatto unico · 3 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Arancia | 160 g | Crudo |
+| Semi di zucca | 20 g | Come acquistato |
+
+**Preparazione:** Sbuccia l’arancia e servi con i semi a parte.
+
+**Valori dimostrativi per persona:** 185 kcal · proteine 7 g · carboidrati 18 g · grassi 9 g · zuccheri totali 13 g.
+
+#### 19:30 · Cena — Uova con spinaci e pane
+
+**Secondo con contorno · 15 minuti · una persona**
+
+| Ingrediente | Quantità per persona | Base |
+| --- | --- | --- |
+| Uova | 2 pezzi | Crudo |
+| Spinaci | 200 g | Crudo |
+| Pane integrale | 70 g | Come acquistato |
+| Olio di oliva | 5 g | Come acquistato |
+
+**Preparazione:** Cuoci gli spinaci in padella con l’olio. Prepara le uova nella stessa padella e servi con il pane.
+
+**Valori dimostrativi per persona:** 415 kcal · proteine 24 g · carboidrati 36 g · grassi 18 g · zuccheri totali 3 g.
+
+**Riepilogo personale dei pasti elencati:** 1486 kcal · proteine 78 g · carboidrati 182 g · grassi 46 g · zuccheri totali 43 g. Numeri dimostrativi.
+
+### ✏️ File e modifiche successive
+
+I due file contengono la proposta completa dopo la sostituzione, con `baseServings: 1`, stessi ID tecnici delle occorrenze e una sola lingua per ogni documento. L’app inizializza a una persona tutti i pasti.
+
+- [File italiano](../examples/release-1.1/meal-plan-it.diet).
+- [File inglese](../examples/release-1.1/meal-plan-en.diet).
+
+Questi collegamenti sono agli esempi realmente presenti nel repository. In una chat operativa l’agente deve creare gli allegati con gli strumenti disponibili e fornire soltanto il collegamento effettivamente prodotto.
+
+Una successiva richiesta può modificare un’altra ricetta, un ingrediente o l’intero piano. La lingua UI non traduce questi testi; per una nuova traduzione si genera un altro file nella chat. Il numero di persone da cucinare cambia le quantità della preparazione e della spesa, mantenendo personali tutti i riepiloghi nutrizionali.

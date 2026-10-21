@@ -1,9 +1,9 @@
-/** Recognizable Phase 3 demo initialization, with device-local calendar dates. */
+/** Recognizable release demo initialization, with device-local calendar dates. */
 import { todayISO } from './dates.js';
 import { createAppState } from './state.js';
 import { applySessionImport } from './session.js';
 
-export const DEMO_DOCUMENT_URL = new URL('../../examples/phase-3/ui-demo-it.diet', import.meta.url);
+export const DEMO_DOCUMENT_URL = new URL('../../examples/release-1.1/meal-plan-it.diet', import.meta.url);
 
 /**
  * Map the first source day to the device's current civil date by default.
@@ -14,7 +14,7 @@ export function createDemoState(document, { startDate = todayISO(), uiLanguage =
   const empty = createAppState({ uiLanguage, now });
   const { state, preview } = applySessionImport(empty, document, {
     startDate,
-    fileName: 'ui-demo-it.diet',
+    fileName: 'meal-plan-it.diet',
     now,
   });
   state.ui = { ...state.ui, view: 'today', selectedDate: startDate };

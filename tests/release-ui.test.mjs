@@ -4,6 +4,7 @@ import { IDBFactory } from 'fake-indexeddb';
 import { createAppState } from '../src/data/state.js';
 import { addManualItem } from '../src/shopping/list.js';
 import { createIndexedDBRepository } from '../src/persistence/indexeddb.js';
+import { applySessionImport, getDayEntries } from '../src/data/session.js';
 
 const NOW = '2026-10-19T17:00:00.000Z';
 let controllerNumber = 0;
@@ -19,7 +20,7 @@ function deferred() {
  * renders and dialog markup; it does not parse HTML or emulate a browser's
  * layout, native event ordering, focus behavior, installation or clipboard UI.
  */
-async function controller(t, clipboard) {
+async function controller(t, clipboard, initialState = null) {
   const originals = new Map();
   const connections = new Set();
   const pendingWorkerMessages = new Set();
@@ -119,7 +120,7 @@ async function controller(t, clipboard) {
 
   const repository = createIndexedDBRepository({ indexedDB });
   await repository.load();
-  const state = addManualItem(createAppState({ uiLanguage: 'en', now: NOW }), {
+  const state = initialState ?? addManualItem(createAppState({ uiLanguage: 'en', now: NOW }), {
     name: 'Manual & original', quantity: 2, unit: 'box',
   }, { itemId: 'clipboard-fixture', now: NOW });
   state.ui.view = 'shopping';
@@ -137,7 +138,21 @@ async function controller(t, clipboard) {
   assert.equal(pendingWorkerMessages.size, 0);
   return {
     app, textControl,
-    click(action) { return listeners.get('click')({ target: new Element({ action }), preventDefault() {} }); },
+    click(action, data = {}) { return listeners.get('click')({ target: new Element({ action, ...data }), preventDefault() {} }); },
+    changePeople(entryId, value) {
+      const target = new Element({ control: 'meal-servings', entryId });
+      target.value = String(value);
+      return listeners.get('change')({ target });
+    },
+    changeTime(entryId, value) {
+      const target = new Element({ control: 'meal-time', entryId });
+      target.value = value;
+      return listeners.get('change')({ target });
+    },
+    async readState() {
+      const reader = createIndexedDBRepository({ indexedDB });
+      try { return await reader.load(); } finally { reader.close(); }
+    },
     checkManual() {
       const target = new Element({ control: 'manual-check', itemId: 'clipboard-fixture' });
       target.checked = true;
@@ -199,4 +214,35 @@ test('a current successful clipboard request reports success and keeps the shopp
   assert.match(h.app.html, /Shopping list copied\./u);
   assert.doesNotMatch(h.app.html, /id="shopping-copy-text"/u);
   assert.match(h.app.html, /data-view="shopping"/u);
+});
+
+test('rapid card taps and a typed count are serialized without lost increments; source amounts stay unchanged', async t => {
+  const document = { format: 'meal-planner.diet', schemaVersion: 1, planId: 'ui-counter', title: 'Demo', language: 'it', createdAt: NOW, baseServings: 1,
+    suggestedStartDate: '2026-10-21', days: [{ date: '2026-10-21', meals: [{ mealId: 'm1', title: 'Piatto demo', type: 'lunch', time: '12:00',
+      ingredients: [{ ingredientId: 'item-a', name: 'Articolo', quantity: 10, unit: 'g' }],
+      nutrition: { kcal: 10, proteinG: 2, carbohydratesG: 3, fatG: 4 } }] }] };
+  const { state } = applySessionImport(createAppState({ uiLanguage: 'en', now: NOW }), document, { startDate: '2026-10-21', now: NOW });
+  state.ui.view = 'shopping';
+  const entryId = getDayEntries(state, '2026-10-21')[0].entry.entryId;
+  const h = await controller(t, undefined, state);
+  await Promise.all([h.click('navigate', { view: 'calendar' }), h.changeTime(entryId, '13:35'), h.click('change-servings', { entryId, delta: '1' })]);
+  await Promise.all(Array.from({ length: 8 }, () => h.click('change-servings', { entryId, delta: '1' })));
+  let saved = await h.readState();
+  assert.equal(getDayEntries(saved, '2026-10-21')[0].cookingServings, 10);
+  await Promise.all([h.click('change-servings', { entryId, delta: '1' }), h.changePeople(entryId, 4), h.click('change-servings', { entryId, delta: '-1' })]);
+  saved = await h.readState();
+  const meal = getDayEntries(saved, '2026-10-21')[0];
+  assert.equal(meal.cookingServings, 3);
+  assert.equal(meal.time, '13:35');
+  assert.equal(meal.meal.ingredients[0].quantity, 10);
+  assert.deepEqual(meal.meal.nutrition, document.days[0].meals[0].nutrition);
+});
+
+test('saving a route leaves the rendered destination intact without replaying its entrance', async t => {
+  const h = await controller(t);
+  const before = h.app.renders;
+  await h.click('navigate', { view: 'recipes' });
+  assert.equal(h.app.renders, before + 1);
+  assert.match(h.app.html, /data-view="recipes"/u);
+  assert.equal((await h.readState()).ui.view, 'recipes');
 });

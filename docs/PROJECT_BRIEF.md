@@ -1,8 +1,9 @@
 # Project Meal Planner — specifica di progetto
 
-Versione della specifica: 1.0.0 · Fasi realizzate: 1–8 · Data: 19 ottobre 2026.
-La fase 8 consegna la configurazione di pubblicazione; il deploy effettivo
-richiede accesso e repository GitHub non disponibili in questa sessione.
+Versione della specifica: 1.1.0 · Fasi realizzate: 1–8, aggiornamento 21 ottobre 2026.
+Repository: MatColombo/mealPlanCalendar. L’app 1.0 è già pubblicata; la consegna
+1.1 aggiorna sorgenti, formato documentale, skill e distribuzione. Lo stato
+reale del nuovo deploy è registrato in RELEASE_1_1.md.
 
 ## 1. Prodotto e ambito
 
@@ -49,8 +50,17 @@ un motore di valutazione della dieta e non vengono eseguiti dal frontend.
 
 La skill della fase 2 deve raccogliere solo le informazioni mancanti:
 
-- Obiettivi, preferenze, restrizioni, ingredienti sgraditi e allergie dichiarate.
-- Orari di lavoro, tempo disponibile, orari e tipi di pasto desiderati.
+- Età, sesso, peso e altezza, senza inventare un dato non fornito: registrare
+  eventuali rifiuti o indisponibilità e chiarire come procedere.
+- Obiettivi, preferenze, restrizioni, allergie e limiti per macro e zuccheri.
+- Blacklist e whitelist esplicite di ingredienti e pasti; strutture preferite
+  (piatto unico, primo e secondo, secondo e contorno o altre varianti).
+- Professione, turni, orari, matrice/rotazione lavorativa e data di ancoraggio,
+  incluse eccezioni e turni che terminano il giorno seguente.
+- Orari dei pasti, necessità di preparazioni anticipate, pasti esterni o mensa;
+  per pasti inevitabili a composizione ignota chiedere il range kcal dichiarato.
+- Frigorifero e microonde al lavoro, dispositivi di cucina a casa e tempo
+  disponibile nei diversi tipi di giornata.
 - Durata richiesta, da 3 a 10 giorni, e date suggerite.
 - Lingua del piano.
 - Eventuale limite di kcal giornaliere.
@@ -116,7 +126,7 @@ soltanto dopo il completamento della scrittura.
 
 Questi passaggi sono implementati nella fase 4. La conferma della data non è
 preselezionata e viene azzerata quando cambia la data scelta. Le sovrapposizioni
-riguardano soltanto le date importate che contengono già pasti: i giorni negli
+riguardano le date importate che contengono già pasti o un `workday` esplicito: i giorni negli
 eventuali intervalli del piano restano invariati.
 
 Lo stesso contenuto JSON, anche con un nome file o una formattazione diversa,
@@ -304,3 +314,27 @@ non è disponibile. Il progetto è consegnato pronto per questi passaggi.
 
 Gli esempi sono dichiaratamente illustrativi. Le verifiche della fase 1
 accertano il comportamento del software, senza valutare alimenti o obiettivi.
+
+## 10. Estensioni 1.1
+
+Il `.diet` rimane a `schemaVersion: 1`: `days[].workday`, `meal.recipeId`,
+`meal.externalMeal` e `ingredient.nutrition` sono facoltativi. Le metriche
+comprendono `kcal`, `proteinG`, `carbohydratesG`, `fatG`, `fiberG`, `sugarsG`.
+Ogni valore dell’ingrediente riguarda la quantità della riga per una persona,
+non 100 g. L’app usa numeri disponibili e segnala somme incomplete. Non ricava
+valori dal nome dell’alimento, non trasforma un range in una stima puntuale e
+non valuta obiettivi o qualità alimentare.
+
+`workday.class` è un codice esplicito, non un testo estratto da descrizioni.
+Viene assegnato alla data, conservato nel backup e ripristinato dall’undo. Lo
+spostamento del pasto non sposta il contesto lavorativo. In assenza del campo
+il tipo di giornata rimane sconosciuto.
+
+Il Ricettario indicizza gli originali importati e mostra le occorrenze
+attualmente assegnate al calendario. Le varianti con contenuti differenti
+rimangono separate. I filtri sono locali; oggi appartiene alla sezione delle
+date future. Le date originali suggerite non sono conteggiate come assegnazioni.
+
+Le animazioni mantengono lo scorrimento nativo. Ingresso, lieve inclinazione e
+assestamento aiutano il passaggio fra viste e i feedback. Le preferenze di
+riduzione del movimento dell’app e del sistema disattivano gli effetti.

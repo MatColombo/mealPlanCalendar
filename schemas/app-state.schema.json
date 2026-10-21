@@ -230,6 +230,10 @@
           "items": {
             "$ref": "#/$defs/calendarMeal"
           }
+        },
+        "workday": {
+          "$ref": "diet.schema.json#/$defs/workday",
+          "description": "Contesto assegnato alla data effettiva, separato dai pasti. Assente o null indica sconosciuto; rimane sulla data quando un pasto viene spostato."
         }
       }
     },
@@ -474,7 +478,9 @@
         },
         "entryIds": {
           "type": "array",
-          "items": { "$ref": "#/$defs/id" },
+          "items": {
+            "$ref": "#/$defs/id"
+          },
           "uniqueItems": true,
           "description": "Facoltativo dalla fase 5. Identità delle presenze create dall’importazione, da rimuovere anche se spostate fuori da beforeDays. I vecchi snapshot lo materializzano prima del primo spostamento."
         },

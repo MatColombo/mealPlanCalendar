@@ -1,5 +1,8 @@
 /** A single rounded, hand-drawn-inspired SVG language for the interface. */
 const paths = {
+  book: '<path d="M12 5C8 2 4 3 2 4v16c3-2 7-2 10 0 3-2 7-2 10 0V4c-2-1-6-2-10 1Zm0 0v15M6 8h2m8 0h2M6 12h2m8 0h2"/>',
+  search: '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>',
+  work: '<rect x="3" y="7" width="18" height="14" rx="3"/><path d="M8 7V3h8v4M3 13c5 3 13 3 18 0m-9 0v4"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="4"/><path d="M7 3v4m10-4v4M3 10h18m-13 4h1m6 0h1m-8 4h1"/>',
   basket: '<path d="m3 9 2 11h14l2-11H3Zm4 0 5-7 5 7M9 13v3m6-3v3"/><path d="M2 9h20"/>',

@@ -4,6 +4,8 @@ Un file `.diet` è un documento JSON UTF-8 che descrive un piano alimentare. Con
 
 Il contratto è descritto in [diet.schema.json](../schemas/diet.schema.json). Gli esempi completi sono [example-it.diet](../examples/example-it.diet) e [example-en.diet](../examples/example-en.diet). Sono dati fittizi, con giornate intenzionalmente parziali: illustrano il formato e non rappresentano proposte nutrizionali verificate.
 
+L'aggiornamento dell'app 1.1 aggiunge campi **facoltativi e compatibili con `schemaVersion: 1`**: contesto lavorativo della giornata, identità della ricetta, nutrizione delle righe ingrediente, zuccheri e metadati pratici. I nuovi esempi [italiano](../examples/release-1.1/meal-plan-it.diet) e [inglese](../examples/release-1.1/meal-plan-en.diet) illustrano queste estensioni. Un file precedente continua a essere importabile: ciò che non contiene rimane sconosciuto.
+
 ## Contratto e controlli tecnici
 
 Lo schema usa JSON Schema Draft 2020-12 ed è **documentale**. L'app non esegue un validatore JSON Schema e non controlla l'adeguatezza nutrizionale, la correttezza delle ricette o il rispetto dei target del piano. I tipi numerici e le unità descrivono il contratto tecnico dei dati.
@@ -57,14 +59,39 @@ Le date di calendario sono date civili, senza conversioni automatiche di fuso or
 | --- | --- | --- | --- |
 | `days[].date` | `YYYY-MM-DD` | Sì | Data originaria del giorno nel piano. |
 | `days[].meals` | array di pasti | Sì | Pasti previsti per quel giorno. |
+| `days[].workday` | oggetto oppure `null` | No | Classe esplicita del giorno lavorativo, con eventuali orari. Assente o `null` significa sconosciuta. |
 
 Il generatore produce date ordinate e distinte per rendere univoche le associazioni al calendario. Lo schema non richiede un numero minimo di pasti giornalieri né verifica la completezza della giornata. Non impone una lunghezza massima a `days`.
+
+#### Tipo di giornata lavorativa
+
+`workday` è un dato della **giornata**, separato dai pasti e dalle note. Quando presente come oggetto richiede `class`, una stringa non vuota. I codici consigliati sono:
+
+| `class` | Significato |
+| --- | --- |
+| `day-shift` | Turno diurno. |
+| `morning-shift` | Turno del mattino. |
+| `afternoon-shift` | Turno pomeridiano. |
+| `night-shift` | Turno notturno. |
+| `split-shift` | Giornata con turno spezzato. |
+| `on-call` | Reperibilità. |
+| `remote-work` | Lavoro da remoto. |
+| `day-off` | Riposo. |
+| `leave` | Ferie o permesso. |
+| `other` | Altro tipo dichiarato, descritto in `label`. |
+
+I codici restano aperti a future estensioni. `startTime` e `endTime`, quando presenti, sono stringhe `HH:mm`; `endDayOffset` vale `0` o `1`. Per un turno dalle 22:00 alle 06:00 del giorno successivo usare `{"class":"night-shift","startTime":"22:00","endTime":"06:00","endDayOffset":1}`. L'eventuale `label` è un testo nella lingua del piano: può descrivere il turno, ma non sostituisce la classe. Per un turno spezzato descrivere gli intervalli in `label` e nei metadati del lavoro senza inventare un unico turno continuo.
+
+L'agente assegna la classe a partire dai turni o dalla matrice confermati dall'utente. L'app traduce i codici conosciuti e non cerca parole come «notte» nelle descrizioni per classificare la giornata. Sconosciuto non equivale a riposo.
+
+Il piano conserva il contesto originario. L'importazione copia `workday` sulla giornata assegnata in `state.calendar[date].workday`, anche quando rimappa le date; non ricalcola automaticamente una matrice lavorativa esterna. Se il piano viene spostato a un periodo con turni differenti, aggiornarlo nella chat. Spostare un singolo pasto lascia il contesto sulle rispettive giornate. L'esportazione del calendario usa soltanto il contesto della **data effettiva**, senza ereditare il turno del giorno d'origine; backup e annullamento conservano questo dato. Le date già contenenti un contesto lavorativo conosciuto richiedono la medesima conferma di sostituzione prevista per i giorni con pasti.
 
 ### Pasti
 
 | Campo | Tipo | Obbligatorio | Significato |
 | --- | --- | --- | --- |
 | `mealId` | stringa | Sì | ID stabile e distinto del pasto nel piano. Una modifica del pasto può conservarlo. |
+| `recipeId` | stringa non vuota | No | Identità riutilizzabile della ricetta, distinta dall'occorrenza `mealId`. |
 | `type` | stringa aperta | Sì | Codice del tipo di pasto; convenzioni: `breakfast`, `lunch`, `dinner`, `snack`. |
 | `title` | stringa | Sì | Nome del pasto nella lingua del piano. |
 | `time` | `HH:mm` | Sì | Ora civile proposta, per esempio `13:00`. |
@@ -74,9 +101,15 @@ Il generatore produce date ordinate e distinte per rendere univoche le associazi
 | `prepMinutes` | numero | No | Tempo di preparazione indicato nel piano. |
 | `tags` | array di stringhe | No | Codici stabili usati per descrivere o raggruppare pasti. |
 | `preparation` | oggetto | No | Collegamento informativo fra preparazione anticipata e pasti con avanzi. |
+| `structure` | stringa aperta | No | Struttura del pasto: `single-dish`, `first-and-second`, `main-and-side`, `first-main-and-side`, `other`. |
+| `externalMeal` | oggetto | No | Pasto esterno, con eventuale intervallo calorico dichiarato e note pratiche. |
 | `notes` | stringa | No | Note del singolo pasto. |
 
 `mealId` identifica il pasto nel documento. `entryId`, descritto nello [stato applicativo](STATE_AND_BACKUP.md), identifica una sua specifica presenza nel calendario. Ripetere o spostare un pasto non modifica il documento originale.
+
+Conservare `recipeId` quando viene ripetuta la medesima ricetta; usare un nuovo ID per una variante significativa. Il ricettario distingue comunque contenuti diversi con lo stesso ID, evitando di perdere una revisione. L'ID non provoca fusioni dei pasti nel calendario e non deduplica gli ingredienti della spesa. Per un pasto a più portate, `ingredients` contiene una sola volta tutte le quantità della porzione completa; `nutrition` descrive l'intero pasto, mentre titolo e istruzioni distinguono le portate.
+
+`externalMeal` richiede `kind` (`canteen`, `restaurant` oppure `other`); ammette `note` e `kcalRange: {"min":550,"max":700,"unit":"kcal"}`. Gli estremi sono facoltativi e documentano il range comunicato dall'utente o dal servizio, per persona. Non trasformare un intervallo in un valore puntuale inventato. Se la composizione non è nota, usare `ingredients: []`, macro `null` e una nota: il pasto resta nel calendario, senza ingredienti fittizi nella spesa. Gli ingredienti eventualmente elencati sono sempre quantità da procurare per quel pasto; se il pasto è acquistato pronto, lasciare vuoto l'elenco degli acquisti e descrivere la composizione nota nelle note.
 
 ### Ingredienti
 
@@ -89,6 +122,7 @@ Il generatore produce date ordinate e distinte per rendere univoche le associazi
 | `category` | stringa aperta | No | Convenzioni: `produce`, `grains`, `protein`, `dairy`, `pantry`, `other`. |
 | `basis` | stringa aperta | No | Base della quantità: `raw`, `cooked`, `drained`, `dry`, `as_sold`, o altro codice esplicito. |
 | `unitConversion` | oggetto | No | Conversione esplicita di questa sola voce per il calcolo della spesa; disponibile dalla fase 6. |
+| `nutrition` | oggetto | No | Valori personali attribuiti alla **quantità di questa riga**; stessi campi di `meal.nutrition`. Non sono valori per 100 g. |
 
 Le varianti rilevanti hanno ID diversi: `milk` e `lactose-free-milk`, per esempio, non vengono unite automaticamente. Le traduzioni di uno stesso ingrediente possono conservare lo stesso ID. Il nome, la categoria e una somiglianza testuale non bastano a identificare ingredienti equivalenti.
 
@@ -160,11 +194,14 @@ della lista vedere [PHASE_6_SHOPPING.md](PHASE_6_SHOPPING.md).
 | `carbohydratesG` | numero oppure `null` | Carboidrati in grammi. |
 | `fatG` | numero oppure `null` | Grassi in grammi. |
 | `fiberG` | numero oppure `null` | Fibre in grammi. |
+| `sugarsG` | numero oppure `null` | Zuccheri totali in grammi; non significa automaticamente zuccheri aggiunti. |
 | `note` | stringa | Eventuali annotazioni sulla provenienza o natura dei valori. |
 
-Tutti questi campi sono facoltativi. Un campo assente o `null` indica un dato non disponibile; `0` è un valore numerico esplicito. Se manca una metrica in almeno un pasto incluso in un totale, quella metrica totale è `null`, anziché una somma parziale presentata come completa. Le altre metriche possono essere sommate se disponibili in tutti i pasti interessati.
+Questi campi restano facoltativi nel formato per leggere i file precedenti. Il generatore aggiornato include sempre `kcal`, `proteinG`, `carbohydratesG` e `fatG` per ogni pasto: stime dichiarate, oppure `null` con una motivazione in `note`. Include `sugarsG` quando richiesto e `fiberG` quando disponibile. Non omette i macro solo perché l'utente non ha impostato obiettivi numerici. Un campo assente o `null` indica un dato non disponibile; `0` è un valore esplicito.
 
-Il calcolo dei totali è aritmetico e mantiene i valori per persona. L'app non ricava valori mancanti dagli ingredienti e non controlla che calorie e macro siano tra loro coerenti.
+Per ciascuna metrica l'app usa prima il valore numerico di `meal.nutrition`. In sua assenza somma i valori di `ingredient.nutrition` soltanto quando **tutte le righe** hanno quella metrica disponibile. Una somma di righe incomplete non diventa un totale completo, e un pasto senza ingredienti non produce automaticamente zero. Non vengono sommati insieme il valore del pasto e quelli dei suoi ingredienti.
+
+I riepiloghi personali sommano i pasti con dati disponibili e distinguono le somme parziali dai totali completi. Un dato mancante non viene nascosto come zero. Nessun valore viene moltiplicato per le persone per cui cucinare; cambiano le quantità da preparare e la spesa. L'app svolge aritmetica sui valori forniti e non usa tabelle alimentari per inventare dati mancanti, né controlla coerenza tra energia e macro.
 
 ## Preferenze: metadati della conversazione
 
@@ -179,6 +216,22 @@ Il calcolo dei totali è aritmetico e mantiene i valori per persona. L'app non r
 | `preferences.workSchedule` | stringa | Orari e organizzazione del lavoro descritti nella chat. |
 | `preferences.leftovers.allowed` | booleano | Disponibilità a usare avanzi; richiesto se l'oggetto `leftovers` è presente. |
 | `preferences.leftovers.notes` | stringa facoltativa | Dettagli sulla preferenza per gli avanzi. |
+| `preferences.profile` | oggetto | `ageYears`, `sex`, `weightKg`, `heightCm`, dichiarati dall'utente; i numeri possono essere `null` quando non forniti. |
+| `preferences.goal` | stringa | Obiettivo personale espresso nella chat. |
+| `preferences.work` | oggetto | Professione, fuso, turni espliciti o matrice e dotazioni al lavoro. |
+| `preferences.cooking` | oggetto | Attrezzatura, tempo, necessità di preparare in anticipo o trasportare pasti. |
+| `preferences.allergens`, `preferences.restrictions` | array di stringhe | Allergeni e restrizioni dichiarati. |
+| `preferences.ingredientBlacklist`, `preferences.mealBlacklist` | array di stringhe | Ingredienti e pasti esclusi. |
+| `preferences.ingredientWhitelist`, `preferences.mealWhitelist` | array di stringhe | Ingredienti e pasti graditi; non implicano esclusività se non concordata. |
+| `preferences.mealStructures` | array di codici | Strutture preferite, con gli stessi codici di `meal.structure`. |
+| `preferences.sugars` | oggetto | Eventuali `min`, `max`, `unit: "g"` e `basis: "total"` oppure `"added"`, per giorno. |
+| `preferences.externalMeals` | array di oggetti | Appuntamenti esterni noti, con data, tipo, orario e `externalMeal`. |
+
+Tutti i nuovi metadati sono facoltativi e descrittivi. L'intervista deve chiarire il profilo e le condizioni pratiche anche quando poi l'utente preferisce non conservarli nel file. Non inventare dati personali e considerare valida una risposta «non desidero fornirlo».
+
+In `work`, usare `occupation`, `timezone`, `notes` e `facilities: {"fridge":true,"microwave":false}`; `null` indica una dotazione sconosciuta. `roster` contiene oggetti `{date, workday}` per date note. Se l'utente fornisce una matrice ripetitiva, `rotation: {anchorDate, days:[workday, ...]}` descrive un ciclo giornaliero: indice 0 nella data di ancoraggio, indici successivi nei giorni seguenti, poi ripetizione. L'agente espande solo i dati effettivamente noti in `days[].workday`, chiarendo eccezioni e ancoraggio; l'app non esegue la matrice. La vecchia stringa `workSchedule` rimane leggibile, ma non determina il tipo di giornata.
+
+In `cooking`, usare `equipment` (array di nomi), `maxMinutesPerMeal`, `preparationAheadNeeded`, `transportNeeded` e `notes`. In `externalMeals`, usare `date`, `time`, `type` ed `externalMeal`; il singolo pasto conserva a sua volta `externalMeal`. Descrizioni e preferenze usano la lingua del piano. Un limite agli zuccheri aggiunti non può essere confrontato automaticamente con `nutrition.sugarsG`, che indica zuccheri totali. L'agente chiarisce la distinzione senza inventare la componente aggiunta.
 
 Una voce di `ingredientFrequencyLimits` contiene:
 

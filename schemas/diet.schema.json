@@ -2,71 +2,151 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://schemas.meal-planner.invalid/diet.schema.json",
   "title": "Meal Planner — documento .diet, versione 1",
-  "description": "Contratto documentale. Non viene eseguito nell'app come validatore runtime e non verifica correttezza nutrizionale o delle ricette. Tutti gli oggetti ammettono proprietà di estensione.",
+  "description": "Contratto documentale. Non viene eseguito nell'app come validatore runtime e non verifica correttezza nutrizionale o delle ricette. Tutti gli oggetti ammettono proprietà di estensione. Estensioni facoltative introdotte con app 1.1; schemaVersion rimane 1.",
   "type": "object",
   "additionalProperties": true,
-  "required": ["format", "schemaVersion", "planId", "title", "language", "createdAt", "suggestedStartDate", "baseServings", "days"],
+  "required": [
+    "format",
+    "schemaVersion",
+    "planId",
+    "title",
+    "language",
+    "createdAt",
+    "suggestedStartDate",
+    "baseServings",
+    "days"
+  ],
   "properties": {
-    "format": { "const": "meal-planner.diet" },
-    "schemaVersion": { "const": 1 },
-    "planId": { "$ref": "#/$defs/id" },
-    "title": { "type": "string" },
+    "format": {
+      "const": "meal-planner.diet"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "planId": {
+      "$ref": "#/$defs/id"
+    },
+    "title": {
+      "type": "string"
+    },
     "language": {
       "type": "string",
       "minLength": 1,
       "description": "Tag di lingua BCP-47 scelto per i contenuti, per esempio it, en o it-IT. Indipendente dalla lingua dell'interfaccia. Nessun controllo linguistico automatico."
     },
-    "createdAt": { "type": "string", "format": "date-time" },
-    "suggestedStartDate": { "$ref": "#/$defs/date" },
-    "baseServings": { "const": 1, "description": "Ogni pasto, ingrediente e valore nutrizionale si riferisce a una porzione consumata da una persona." },
-    "notes": { "type": "string" },
-    "preferences": { "$ref": "#/$defs/preferences" },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "suggestedStartDate": {
+      "$ref": "#/$defs/date"
+    },
+    "baseServings": {
+      "const": 1,
+      "description": "Ogni pasto, ingrediente e valore nutrizionale si riferisce a una porzione consumata da una persona."
+    },
+    "notes": {
+      "type": "string"
+    },
+    "preferences": {
+      "$ref": "#/$defs/preferences"
+    },
     "days": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/day" },
+      "items": {
+        "$ref": "#/$defs/day"
+      },
       "description": "Sequenza non vuota di giorni. Il limite 3–10 giorni è una convenzione del flusso ChatGPT, non un vincolo del formato o dell'esportazione."
     }
   },
   "$defs": {
-    "id": { "type": "string", "minLength": 1 },
-    "date": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
-    "time": { "type": "string", "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$" },
-    "nullableNumber": { "type": ["number", "null"] },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "time": {
+      "type": "string",
+      "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$"
+    },
+    "nullableNumber": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
     "macroRange": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["unit"],
+      "required": [
+        "unit"
+      ],
       "properties": {
-        "min": { "type": "number" },
-        "max": { "type": "number" },
-        "unit": { "const": "g" }
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "unit": {
+          "const": "g"
+        }
       },
       "description": "Intervallo giornaliero desiderato, conservato come metadato. L'app non verifica raggiungimento, compatibilità o adeguatezza dei limiti."
     },
     "frequencyLimit": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["subject", "maxMeals", "period"],
+      "required": [
+        "subject",
+        "maxMeals",
+        "period"
+      ],
       "properties": {
         "subject": {
           "type": "object",
           "additionalProperties": true,
-          "required": ["kind", "id"],
+          "required": [
+            "kind",
+            "id"
+          ],
           "properties": {
-            "kind": { "enum": ["ingredient", "tag"] },
-            "id": { "$ref": "#/$defs/id" },
-            "label": { "type": "string" }
+            "kind": {
+              "enum": [
+                "ingredient",
+                "tag"
+              ]
+            },
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "label": {
+              "type": "string"
+            }
           }
         },
-        "maxMeals": { "type": "integer" },
+        "maxMeals": {
+          "type": "integer"
+        },
         "period": {
           "type": "object",
           "additionalProperties": true,
-          "required": ["days", "alignment"],
+          "required": [
+            "days",
+            "alignment"
+          ],
           "properties": {
-            "days": { "const": 7 },
-            "alignment": { "const": "rolling" }
+            "days": {
+              "const": 7
+            },
+            "alignment": {
+              "const": "rolling"
+            }
           }
         }
       },
@@ -76,25 +156,263 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "maxKcalPerDay": { "type": "number" },
+        "maxKcalPerDay": {
+          "type": "number"
+        },
         "macros": {
           "type": "object",
           "additionalProperties": true,
           "properties": {
-            "protein": { "$ref": "#/$defs/macroRange" },
-            "carbohydrates": { "$ref": "#/$defs/macroRange" },
-            "fat": { "$ref": "#/$defs/macroRange" }
+            "protein": {
+              "$ref": "#/$defs/macroRange"
+            },
+            "carbohydrates": {
+              "$ref": "#/$defs/macroRange"
+            },
+            "fat": {
+              "$ref": "#/$defs/macroRange"
+            }
           }
         },
-        "ingredientFrequencyLimits": { "type": "array", "items": { "$ref": "#/$defs/frequencyLimit" } },
-        "workSchedule": { "type": "string" },
+        "ingredientFrequencyLimits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/frequencyLimit"
+          }
+        },
+        "workSchedule": {
+          "type": "string",
+          "description": "Descrizione precedente mantenuta per compatibilità. Non determina workday.class."
+        },
         "leftovers": {
           "type": "object",
           "additionalProperties": true,
-          "required": ["allowed"],
+          "required": [
+            "allowed"
+          ],
           "properties": {
-            "allowed": { "type": "boolean" },
-            "notes": { "type": "string" }
+            "allowed": {
+              "type": "boolean"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "profile": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "ageYears": {
+              "$ref": "#/$defs/nullableNumber"
+            },
+            "sex": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "weightKg": {
+              "$ref": "#/$defs/nullableNumber"
+            },
+            "heightCm": {
+              "$ref": "#/$defs/nullableNumber"
+            }
+          },
+          "description": "Dati dichiarati, mai inferiti. Intervista da chiarire una volta; esportazione facoltativa. Null indica dato non fornito."
+        },
+        "goal": {
+          "type": "string"
+        },
+        "work": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "occupation": {
+              "type": "string"
+            },
+            "timezone": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            },
+            "facilities": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "fridge": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                },
+                "microwave": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "roster": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "date": {
+                    "$ref": "#/$defs/date"
+                  },
+                  "workday": {
+                    "$ref": "#/$defs/workday"
+                  }
+                },
+                "required": [
+                  "date",
+                  "workday"
+                ]
+              }
+            },
+            "rotation": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "anchorDate": {
+                  "$ref": "#/$defs/date"
+                },
+                "days": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/workday"
+                  }
+                }
+              },
+              "required": [
+                "anchorDate",
+                "days"
+              ],
+              "description": "Ciclo giornaliero descrittivo, indice zero nella data anchorDate. L’agente espande le date note; l’app non esegue una matrice lavorativa."
+            }
+          }
+        },
+        "cooking": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "equipment": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "maxMinutesPerMeal": {
+              "type": "number"
+            },
+            "preparationAheadNeeded": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "transportNeeded": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        },
+        "allergens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "restrictions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ingredientBlacklist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ingredientWhitelist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mealBlacklist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mealWhitelist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mealStructures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sugars": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "g"
+            },
+            "basis": {
+              "enum": [
+                "total",
+                "added"
+              ]
+            }
+          },
+          "required": [
+            "unit",
+            "basis"
+          ],
+          "description": "Preferenza giornaliera descrittiva. Nutrition.sugarsG indica zuccheri totali; non ne deduce quelli aggiunti."
+        },
+        "externalMeals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "date": {
+                "$ref": "#/$defs/date"
+              },
+              "time": {
+                "$ref": "#/$defs/time"
+              },
+              "type": {
+                "type": "string"
+              },
+              "externalMeal": {
+                "$ref": "#/$defs/externalMeal"
+              }
+            }
           }
         }
       }
@@ -102,51 +420,153 @@
     "day": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["date", "meals"],
+      "required": [
+        "date",
+        "meals"
+      ],
       "properties": {
-        "date": { "$ref": "#/$defs/date" },
-        "meals": { "type": "array", "items": { "$ref": "#/$defs/meal" } }
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "meals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/meal"
+          }
+        },
+        "workday": {
+          "$ref": "#/$defs/workday"
+        }
       }
     },
     "meal": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["mealId", "type", "title", "time", "ingredients"],
+      "required": [
+        "mealId",
+        "type",
+        "title",
+        "time",
+        "ingredients"
+      ],
       "properties": {
-        "mealId": { "$ref": "#/$defs/id" },
-        "type": { "type": "string", "description": "Codice aperto; valori suggeriti: breakfast, lunch, dinner, snack." },
-        "title": { "type": "string" },
-        "time": { "$ref": "#/$defs/time" },
-        "ingredients": { "type": "array", "items": { "$ref": "#/$defs/ingredient" } },
-        "nutrition": { "$ref": "#/$defs/nutrition" },
-        "instructions": { "type": "array", "items": { "type": "string" } },
-        "prepMinutes": { "type": "number" },
-        "tags": { "type": "array", "items": { "type": "string" } },
-        "preparation": { "$ref": "#/$defs/preparation" },
-        "notes": { "type": "string" }
+        "mealId": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "type": "string",
+          "description": "Codice aperto; valori suggeriti: breakfast, lunch, dinner, snack."
+        },
+        "title": {
+          "type": "string"
+        },
+        "time": {
+          "$ref": "#/$defs/time"
+        },
+        "ingredients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ingredient"
+          }
+        },
+        "nutrition": {
+          "$ref": "#/$defs/nutrition"
+        },
+        "instructions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "prepMinutes": {
+          "type": "number"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "preparation": {
+          "$ref": "#/$defs/preparation"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "recipeId": {
+          "$ref": "#/$defs/id",
+          "description": "Identità riutilizzabile della ricetta. Un nuovo mealId identifica ogni occorrenza; varianti sostanziali hanno un nuovo recipeId."
+        },
+        "structure": {
+          "type": "string",
+          "description": "Codice aperto: single-dish, first-and-second, main-and-side, first-main-and-side, other. Nutrition riguarda il pasto completo e ingredients elenca una volta tutte le sue quantità."
+        },
+        "externalMeal": {
+          "$ref": "#/$defs/externalMeal"
+        }
       }
     },
     "ingredient": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["ingredientId", "name", "quantity", "unit"],
+      "required": [
+        "ingredientId",
+        "name",
+        "quantity",
+        "unit"
+      ],
       "properties": {
-        "ingredientId": { "$ref": "#/$defs/id", "description": "Identità stabile, indipendente dalla traduzione del nome. Usare slug inglesi e distinguere le varianti." },
-        "name": { "type": "string" },
-        "quantity": { "type": "number", "description": "Quantità per una sola porzione consumata, non per l'intera preparazione anticipata." },
-        "unit": { "type": "string", "minLength": 1, "description": "Unità aperta. Convenzioni: g, kg, ml, l, unit." },
-        "category": { "type": "string", "description": "Categoria aperta. Convenzioni: produce, grains, protein, dairy, pantry, other." },
-        "basis": { "type": "string", "description": "Base di misura aperta. Convenzioni: raw, cooked, drained, dry, as_sold. L'assenza non equivale a una di esse." },
-        "unitConversion": { "$ref": "#/$defs/unitConversion" }
+        "ingredientId": {
+          "$ref": "#/$defs/id",
+          "description": "Identità stabile, indipendente dalla traduzione del nome. Usare slug inglesi e distinguere le varianti."
+        },
+        "name": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Quantità per una sola porzione consumata, non per l'intera preparazione anticipata."
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unità aperta. Convenzioni: g, kg, ml, l, unit."
+        },
+        "category": {
+          "type": "string",
+          "description": "Categoria aperta. Convenzioni: produce, grains, protein, dairy, pantry, other."
+        },
+        "basis": {
+          "type": "string",
+          "description": "Base di misura aperta. Convenzioni: raw, cooked, drained, dry, as_sold. L'assenza non equivale a una di esse."
+        },
+        "unitConversion": {
+          "$ref": "#/$defs/unitConversion"
+        },
+        "nutrition": {
+          "$ref": "#/$defs/nutrition",
+          "description": "Valori già attribuiti alla quantity della riga per una persona, nella basis dichiarata; non valori per 100 g e non per la preparazione completa."
+        }
       }
     },
     "unitConversion": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["toUnit", "factor"],
+      "required": [
+        "toUnit",
+        "factor"
+      ],
       "properties": {
-        "toUnit": { "type": "string", "minLength": 1, "description": "Unità di destinazione della conversione esplicita di questa sola voce." },
-        "factor": { "type": "number", "exclusiveMinimum": 0, "description": "Una unità originale equivale a factor unità di destinazione. Il valore è fornito dal piano e non viene stimato dall'app." }
+        "toUnit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unità di destinazione della conversione esplicita di questa sola voce."
+        },
+        "factor": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Una unità originale equivale a factor unità di destinazione. Il valore è fornito dal piano e non viene stimato dall'app."
+        }
       },
       "description": "Facoltativo dalla fase 6, compatibile con v1. La spesa moltiplica quantity per factor una volta e poi normalizza kg/g e l/ml. Non cambia basis e non propaga la conversione ad altre righe dello stesso ingrediente. La plausibilità del fattore non viene valutata."
     },
@@ -154,25 +574,130 @@
       "type": "object",
       "additionalProperties": true,
       "properties": {
-        "kcal": { "$ref": "#/$defs/nullableNumber" },
-        "proteinG": { "$ref": "#/$defs/nullableNumber" },
-        "carbohydratesG": { "$ref": "#/$defs/nullableNumber" },
-        "fatG": { "$ref": "#/$defs/nullableNumber" },
-        "fiberG": { "$ref": "#/$defs/nullableNumber" },
-        "note": { "type": "string" }
+        "kcal": {
+          "$ref": "#/$defs/nullableNumber"
+        },
+        "proteinG": {
+          "$ref": "#/$defs/nullableNumber"
+        },
+        "carbohydratesG": {
+          "$ref": "#/$defs/nullableNumber"
+        },
+        "fatG": {
+          "$ref": "#/$defs/nullableNumber"
+        },
+        "fiberG": {
+          "$ref": "#/$defs/nullableNumber"
+        },
+        "note": {
+          "type": "string"
+        },
+        "sugarsG": {
+          "$ref": "#/$defs/nullableNumber",
+          "description": "Zuccheri totali in grammi, non automaticamente zuccheri aggiunti."
+        }
       },
-      "description": "Valori per una persona. Campi assenti o null rappresentano dati non disponibili e non devono essere interpretati come zero. Nessun controllo di correttezza nutrizionale."
+      "description": "Valori per una persona: dell’intero pasto in meal.nutrition, della sola quantità della riga in ingredient.nutrition. Il generatore include kcal/proteinG/carbohydratesG/fatG anche senza target, oppure null con note. Ogni valore numerico del pasto prevale sul fallback aritmetico dagli ingredienti; il fallback è completo solo se tutte le righe hanno il dato. Null/assenza non significa zero. Nessun controllo di correttezza nutrizionale."
     },
     "preparation": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["batchId", "role"],
+      "required": [
+        "batchId",
+        "role"
+      ],
       "properties": {
-        "batchId": { "$ref": "#/$defs/id" },
-        "role": { "enum": ["cook", "leftover"] },
-        "preparedServings": { "type": "number", "description": "Metadato informativo sulla preparazione. Non moltiplica gli ingredienti e non determina le porzioni dell'app." },
-        "note": { "type": "string" }
+        "batchId": {
+          "$ref": "#/$defs/id"
+        },
+        "role": {
+          "enum": [
+            "cook",
+            "leftover"
+          ]
+        },
+        "preparedServings": {
+          "type": "number",
+          "description": "Metadato informativo sulla preparazione. Non moltiplica gli ingredienti e non determina le porzioni dell'app."
+        },
+        "note": {
+          "type": "string"
+        }
       }
+    },
+    "workday": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": true,
+      "required": [
+        "class"
+      ],
+      "properties": {
+        "class": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Classe esplicita aperta. Codici consigliati: day-shift, morning-shift, afternoon-shift, night-shift, split-shift, on-call, remote-work, day-off, leave, other. Mai dedotta da note o titoli."
+        },
+        "startTime": {
+          "$ref": "#/$defs/time"
+        },
+        "endTime": {
+          "$ref": "#/$defs/time"
+        },
+        "endDayOffset": {
+          "enum": [
+            0,
+            1
+          ],
+          "description": "1 quando il turno termina nella data civile successiva."
+        },
+        "label": {
+          "type": "string",
+          "description": "Descrizione facoltativa nella lingua del piano; non sostituisce class."
+        }
+      },
+      "description": "Contesto della giornata. Assente o null significa sconosciuto, non riposo. Importato sul giorno assegnato; non viene spostato insieme a un singolo pasto."
+    },
+    "externalMeal": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "kind": {
+          "enum": [
+            "canteen",
+            "restaurant",
+            "other"
+          ]
+        },
+        "kcalRange": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "kcal"
+            }
+          },
+          "required": [
+            "unit"
+          ],
+          "description": "Intervallo dichiarato per persona, senza conversione automatica in un valore puntuale."
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "description": "Pasto esterno. Ingredienti sconosciuti o già compresi nel pasto acquistato non vanno inventati nella lista della spesa."
     }
   }
 }

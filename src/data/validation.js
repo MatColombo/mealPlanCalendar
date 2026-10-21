@@ -3,6 +3,7 @@ import { addDays, daysBetween } from './dates.js';
 import { cloneStateSnapshot } from './state.js';
 import { readablePlan } from './session.js';
 import { assignmentIdFor } from './provenance.js';
+import { assertReadableWorkday } from './workday.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const isText = value => typeof value === 'string';
@@ -63,6 +64,8 @@ function calendarDay(day, assignedDate, sources, entryIds) {
   date(assignedDate);
   requireValue(isRecord(day) && day.date === assignedDate && Array.isArray(day.meals),
     'Calendar keys and stored dates must agree.');
+  try { assertReadableWorkday(day.workday); }
+  catch (cause) { throw Object.assign(invalid('Unreadable calendar workday metadata.'), { cause }); }
   for (const entry of day.meals) {
     requireValue(isRecord(entry) && [entry.entryId, entry.sourceId, entry.mealId].every(isId),
       'A calendar occurrence is missing an identifier.');

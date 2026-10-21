@@ -1,0 +1,19 @@
+# Installed dependencies and local package-manager caches.
+node_modules/
+.npm/
+.npm-cache/
+.cache/
+
+# Local diagnostics and generated test reports.
+*.log
+coverage/
+playwright-report/
+test-results/
+
+# Local machine files.
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# dist/ remains tracked for this project; Pages builds it again from source.

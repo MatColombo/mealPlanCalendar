@@ -1,0 +1,1035 @@
+{
+  "format": "meal-planner.diet",
+  "schemaVersion": 1,
+  "planId": "demo-release-1-1-it",
+  "title": "Tre giorni fra turni e riposo — DEMO",
+  "language": "it",
+  "createdAt": "2026-10-19T10:00:00Z",
+  "suggestedStartDate": "2026-10-20",
+  "baseServings": 1,
+  "notes": "Profilo, quantità e valori nutrizionali fittizi per mostrare l’app. Non è una proposta personale. Storico esterno al periodo non disponibile. Versione dopo la sostituzione dei broccoli con zucchine nei due consumi collegati.",
+  "preferences": {
+    "profile": {
+      "ageYears": 35,
+      "sex": "femminile",
+      "weightKg": 68,
+      "heightCm": 169
+    },
+    "goal": "Esempio fittizio: organizzare i pasti attorno a turni diversi, senza target calorico o macro.",
+    "work": {
+      "occupation": "Tecnica di laboratorio — profilo fittizio",
+      "timezone": "Europe/Rome",
+      "facilities": {
+        "fridge": true,
+        "microwave": true
+      },
+      "roster": [
+        {
+          "date": "2026-10-20",
+          "workday": {
+            "class": "day-shift",
+            "startTime": "09:00",
+            "endTime": "18:00",
+            "endDayOffset": 0,
+            "label": "Turno diurno"
+          }
+        },
+        {
+          "date": "2026-10-21",
+          "workday": {
+            "class": "night-shift",
+            "startTime": "22:00",
+            "endTime": "06:00",
+            "endDayOffset": 1,
+            "label": "Turno notturno"
+          }
+        },
+        {
+          "date": "2026-10-22",
+          "workday": {
+            "class": "day-off",
+            "label": "Riposo dopo il turno"
+          }
+        }
+      ],
+      "notes": "Sono note soltanto queste tre giornate; nessuna matrice ciclica dichiarata."
+    },
+    "cooking": {
+      "equipment": [
+        "Piano cottura",
+        "Forno",
+        "Microonde",
+        "Bollitore"
+      ],
+      "maxMinutesPerMeal": 30,
+      "preparationAheadNeeded": true,
+      "transportNeeded": true,
+      "notes": "Preparare la porzione del giorno successivo insieme alla cena quando previsto. Budget non specificato."
+    },
+    "allergens": [],
+    "restrictions": [],
+    "ingredientBlacklist": [
+      "Peperoni"
+    ],
+    "mealBlacklist": [],
+    "ingredientWhitelist": [
+      "Ceci",
+      "Cous cous"
+    ],
+    "mealWhitelist": [
+      "Piatti unici da preparare in anticipo"
+    ],
+    "mealStructures": [
+      "single-dish",
+      "main-and-side"
+    ],
+    "sugars": {
+      "max": 60,
+      "unit": "g",
+      "basis": "total"
+    },
+    "ingredientFrequencyLimits": [
+      {
+        "subject": {
+          "kind": "tag",
+          "id": "contains-eggs",
+          "label": "Pasti con uova"
+        },
+        "maxMeals": 3,
+        "period": {
+          "days": 7,
+          "alignment": "rolling"
+        }
+      }
+    ],
+    "externalMeals": [
+      {
+        "date": "2026-10-20",
+        "time": "13:00",
+        "type": "lunch",
+        "externalMeal": {
+          "kind": "canteen",
+          "kcalRange": {
+            "min": 550,
+            "max": 700,
+            "unit": "kcal"
+          },
+          "note": "Intervallo comunicato dall’utente fittizio. Pasto acquistato in mensa; composizione e macro non noti."
+        }
+      }
+    ],
+    "leftovers": {
+      "allowed": true,
+      "notes": "La cena del 20 ottobre e il pranzo del 21 condividono una preparazione."
+    }
+  },
+  "days": [
+    {
+      "date": "2026-10-20",
+      "workday": {
+        "class": "day-shift",
+        "startTime": "09:00",
+        "endTime": "18:00",
+        "endDayOffset": 0,
+        "label": "Turno diurno"
+      },
+      "meals": [
+        {
+          "mealId": "demo-2026-10-20-breakfast",
+          "recipeId": "oat-banana-bowl",
+          "type": "breakfast",
+          "title": "Avena con latte e banana",
+          "time": "08:00",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "oat-flakes",
+              "name": "Fiocchi di avena",
+              "quantity": 50,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 190,
+                "proteinG": 7,
+                "carbohydratesG": 30,
+                "fatG": 4,
+                "fiberG": 5,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "milk",
+              "name": "Latte",
+              "quantity": 180,
+              "unit": "ml",
+              "category": "dairy",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 85,
+                "proteinG": 6,
+                "carbohydratesG": 9,
+                "fatG": 3,
+                "fiberG": 0,
+                "sugarsG": 9
+              }
+            },
+            {
+              "ingredientId": "banana",
+              "name": "Banana",
+              "quantity": 100,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 1,
+                "carbohydratesG": 21,
+                "fatG": 0,
+                "fiberG": 2,
+                "sugarsG": 12
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 365,
+            "proteinG": 14,
+            "carbohydratesG": 60,
+            "fatG": 7,
+            "fiberG": 7,
+            "sugarsG": 22,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Scalda il latte, aggiungi l’avena e cuoci fino alla consistenza desiderata.",
+            "Completa con la banana a fette."
+          ],
+          "prepMinutes": 8,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-20-lunch",
+          "type": "lunch",
+          "title": "Pranzo in mensa da scegliere sul posto",
+          "time": "13:00",
+          "structure": "other",
+          "ingredients": [],
+          "nutrition": {
+            "kcal": null,
+            "proteinG": null,
+            "carbohydratesG": null,
+            "fatG": null,
+            "fiberG": null,
+            "sugarsG": null,
+            "note": "Composizione non disponibile; non è possibile stimare qui i macro. Il range energetico resta in externalMeal."
+          },
+          "externalMeal": {
+            "kind": "canteen",
+            "kcalRange": {
+              "min": 550,
+              "max": 700,
+              "unit": "kcal"
+            },
+            "note": "Intervallo comunicato dall’utente fittizio. Pasto acquistato in mensa; composizione e macro non noti."
+          },
+          "instructions": [
+            "Scegli il pasto secondo le preferenze concordate; gli acquisti sono compresi nel servizio mensa."
+          ]
+        },
+        {
+          "mealId": "demo-2026-10-20-snack",
+          "recipeId": "apple-almonds",
+          "type": "snack",
+          "title": "Mela e mandorle",
+          "time": "16:30",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "apple",
+              "name": "Mela",
+              "quantity": 150,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 78,
+                "proteinG": 0,
+                "carbohydratesG": 18,
+                "fatG": 0,
+                "fiberG": 3,
+                "sugarsG": 15
+              }
+            },
+            {
+              "ingredientId": "almonds",
+              "name": "Mandorle",
+              "quantity": 20,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 120,
+                "proteinG": 4,
+                "carbohydratesG": 2,
+                "fatG": 10,
+                "fiberG": 2,
+                "sugarsG": 1
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 198,
+            "proteinG": 4,
+            "carbohydratesG": 20,
+            "fatG": 10,
+            "fiberG": 5,
+            "sugarsG": 16,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Lava la mela e prepara le mandorle in un contenitore."
+          ],
+          "prepMinutes": 2,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-20-dinner",
+          "recipeId": "couscous-chickpeas-zucchini",
+          "type": "dinner",
+          "title": "Cous cous con ceci e zucchine",
+          "time": "19:30",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "couscous",
+              "name": "Cous cous",
+              "quantity": 80,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 285,
+                "proteinG": 10,
+                "carbohydratesG": 57,
+                "fatG": 1,
+                "fiberG": 4,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "chickpeas",
+              "name": "Ceci",
+              "quantity": 130,
+              "unit": "g",
+              "category": "protein",
+              "basis": "drained",
+              "nutrition": {
+                "kcal": 165,
+                "proteinG": 9,
+                "carbohydratesG": 22,
+                "fatG": 3,
+                "fiberG": 8,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "zucchini",
+              "name": "Zucchine",
+              "quantity": 250,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 3,
+                "carbohydratesG": 6,
+                "fatG": 1,
+                "fiberG": 3,
+                "sugarsG": 5
+              }
+            },
+            {
+              "ingredientId": "olive-oil",
+              "name": "Olio di oliva",
+              "quantity": 10,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 585,
+            "proteinG": 22,
+            "carbohydratesG": 85,
+            "fatG": 15,
+            "fiberG": 15,
+            "sugarsG": 8,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Prepara due porzioni: usa il doppio delle quantità della scheda, che descrivono un solo consumo.",
+            "Cuoci le zucchine a pezzi con l’olio, prepara il cous cous seguendo la confezione e unisci i ceci scolati.",
+            "Dividi la preparazione: una porzione per questa cena e una per il pranzo del 21 ottobre. Organizza la conservazione secondo le indicazioni degli ingredienti."
+          ],
+          "prepMinutes": 20,
+          "tags": [],
+          "preparation": {
+            "batchId": "demo-couscous-2026-10-20",
+            "role": "cook",
+            "preparedServings": 2,
+            "note": "Ogni scheda contiene solo la quota di una persona; due consumi collegati."
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-10-21",
+      "workday": {
+        "class": "night-shift",
+        "startTime": "22:00",
+        "endTime": "06:00",
+        "endDayOffset": 1,
+        "label": "Turno notturno"
+      },
+      "meals": [
+        {
+          "mealId": "demo-2026-10-21-breakfast",
+          "recipeId": "yogurt-bread-berries",
+          "type": "breakfast",
+          "title": "Yogurt, pane e frutti di bosco",
+          "time": "08:00",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "plain-yogurt",
+              "name": "Yogurt bianco",
+              "quantity": 170,
+              "unit": "g",
+              "category": "dairy",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 110,
+                "proteinG": 9,
+                "carbohydratesG": 8,
+                "fatG": 5,
+                "fiberG": 0,
+                "sugarsG": 8
+              }
+            },
+            {
+              "ingredientId": "wholegrain-bread",
+              "name": "Pane integrale",
+              "quantity": 60,
+              "unit": "g",
+              "category": "grains",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 150,
+                "proteinG": 5,
+                "carbohydratesG": 27,
+                "fatG": 2,
+                "fiberG": 4,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "berries",
+              "name": "Frutti di bosco",
+              "quantity": 100,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 1,
+                "carbohydratesG": 8,
+                "fatG": 0,
+                "fiberG": 4,
+                "sugarsG": 5
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 305,
+            "proteinG": 15,
+            "carbohydratesG": 43,
+            "fatG": 7,
+            "fiberG": 8,
+            "sugarsG": 15,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Servi lo yogurt con i frutti di bosco e il pane a parte."
+          ],
+          "prepMinutes": 5,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-21-lunch",
+          "recipeId": "couscous-chickpeas-zucchini",
+          "type": "lunch",
+          "title": "Cous cous con ceci e zucchine",
+          "time": "13:00",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "couscous",
+              "name": "Cous cous",
+              "quantity": 80,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 285,
+                "proteinG": 10,
+                "carbohydratesG": 57,
+                "fatG": 1,
+                "fiberG": 4,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "chickpeas",
+              "name": "Ceci",
+              "quantity": 130,
+              "unit": "g",
+              "category": "protein",
+              "basis": "drained",
+              "nutrition": {
+                "kcal": 165,
+                "proteinG": 9,
+                "carbohydratesG": 22,
+                "fatG": 3,
+                "fiberG": 8,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "zucchini",
+              "name": "Zucchine",
+              "quantity": 250,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 3,
+                "carbohydratesG": 6,
+                "fatG": 1,
+                "fiberG": 3,
+                "sugarsG": 5
+              }
+            },
+            {
+              "ingredientId": "olive-oil",
+              "name": "Olio di oliva",
+              "quantity": 10,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 585,
+            "proteinG": 22,
+            "carbohydratesG": 85,
+            "fatG": 15,
+            "fiberG": 15,
+            "sugarsG": 8,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Usa la porzione attribuita a questo pranzo, preparata con la cena del 20 ottobre.",
+            "La scheda indica la sua quota di ingredienti, senza aggiungere l’intera preparazione."
+          ],
+          "prepMinutes": 5,
+          "tags": [],
+          "preparation": {
+            "batchId": "demo-couscous-2026-10-20",
+            "role": "leftover",
+            "note": "Porzione collegata alla cena del 20 ottobre."
+          }
+        },
+        {
+          "mealId": "demo-2026-10-21-dinner",
+          "recipeId": "chicken-potato-carrot",
+          "type": "dinner",
+          "title": "Pollo con patate e carote",
+          "time": "19:30",
+          "structure": "main-and-side",
+          "ingredients": [
+            {
+              "ingredientId": "chicken-breast",
+              "name": "Petto di pollo",
+              "quantity": 150,
+              "unit": "g",
+              "category": "protein",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 165,
+                "proteinG": 34,
+                "carbohydratesG": 0,
+                "fatG": 3,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            },
+            {
+              "ingredientId": "potato",
+              "name": "Patate",
+              "quantity": 250,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 190,
+                "proteinG": 5,
+                "carbohydratesG": 42,
+                "fatG": 0,
+                "fiberG": 4,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "carrot",
+              "name": "Carote",
+              "quantity": 180,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 70,
+                "proteinG": 1,
+                "carbohydratesG": 14,
+                "fatG": 0,
+                "fiberG": 5,
+                "sugarsG": 8
+              }
+            },
+            {
+              "ingredientId": "olive-oil",
+              "name": "Olio di oliva",
+              "quantity": 10,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 515,
+            "proteinG": 40,
+            "carbohydratesG": 56,
+            "fatG": 13,
+            "fiberG": 9,
+            "sugarsG": 10,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Taglia le patate e le carote, condiscile con l’olio e cuocile in forno.",
+            "Cuoci il pollo e servi con le verdure. Segui le indicazioni di cottura del prodotto."
+          ],
+          "prepMinutes": 30,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-21-snack",
+          "recipeId": "apple-almonds",
+          "type": "snack",
+          "title": "Mela e mandorle",
+          "time": "23:30",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "apple",
+              "name": "Mela",
+              "quantity": 150,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 78,
+                "proteinG": 0,
+                "carbohydratesG": 18,
+                "fatG": 0,
+                "fiberG": 3,
+                "sugarsG": 15
+              }
+            },
+            {
+              "ingredientId": "almonds",
+              "name": "Mandorle",
+              "quantity": 20,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 120,
+                "proteinG": 4,
+                "carbohydratesG": 2,
+                "fatG": 10,
+                "fiberG": 2,
+                "sugarsG": 1
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 198,
+            "proteinG": 4,
+            "carbohydratesG": 20,
+            "fatG": 10,
+            "fiberG": 5,
+            "sugarsG": 16,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Lava la mela e prepara le mandorle in un contenitore."
+          ],
+          "prepMinutes": 2,
+          "tags": []
+        }
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "workday": {
+        "class": "day-off",
+        "label": "Riposo dopo il turno"
+      },
+      "meals": [
+        {
+          "mealId": "demo-2026-10-22-breakfast",
+          "recipeId": "oat-banana-bowl",
+          "type": "breakfast",
+          "title": "Avena con latte e banana",
+          "time": "08:00",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "oat-flakes",
+              "name": "Fiocchi di avena",
+              "quantity": 50,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 190,
+                "proteinG": 7,
+                "carbohydratesG": 30,
+                "fatG": 4,
+                "fiberG": 5,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "milk",
+              "name": "Latte",
+              "quantity": 180,
+              "unit": "ml",
+              "category": "dairy",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 85,
+                "proteinG": 6,
+                "carbohydratesG": 9,
+                "fatG": 3,
+                "fiberG": 0,
+                "sugarsG": 9
+              }
+            },
+            {
+              "ingredientId": "banana",
+              "name": "Banana",
+              "quantity": 100,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 1,
+                "carbohydratesG": 21,
+                "fatG": 0,
+                "fiberG": 2,
+                "sugarsG": 12
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 365,
+            "proteinG": 14,
+            "carbohydratesG": 60,
+            "fatG": 7,
+            "fiberG": 7,
+            "sugarsG": 22,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Scalda il latte, aggiungi l’avena e cuoci fino alla consistenza desiderata.",
+            "Completa con la banana a fette."
+          ],
+          "prepMinutes": 8,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-22-lunch",
+          "recipeId": "rice-tuna-tomato",
+          "type": "lunch",
+          "title": "Riso con tonno e pomodori",
+          "time": "13:00",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "rice",
+              "name": "Riso",
+              "quantity": 80,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 285,
+                "proteinG": 6,
+                "carbohydratesG": 63,
+                "fatG": 1,
+                "fiberG": 1,
+                "sugarsG": 0
+              }
+            },
+            {
+              "ingredientId": "tuna-in-water",
+              "name": "Tonno al naturale",
+              "quantity": 100,
+              "unit": "g",
+              "category": "protein",
+              "basis": "drained",
+              "nutrition": {
+                "kcal": 110,
+                "proteinG": 25,
+                "carbohydratesG": 0,
+                "fatG": 1,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            },
+            {
+              "ingredientId": "tomato",
+              "name": "Pomodori",
+              "quantity": 200,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 36,
+                "proteinG": 2,
+                "carbohydratesG": 5,
+                "fatG": 0,
+                "fiberG": 2,
+                "sugarsG": 5
+              }
+            },
+            {
+              "ingredientId": "olive-oil",
+              "name": "Olio di oliva",
+              "quantity": 10,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 521,
+            "proteinG": 33,
+            "carbohydratesG": 68,
+            "fatG": 12,
+            "fiberG": 3,
+            "sugarsG": 5,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Cuoci il riso seguendo la confezione.",
+            "Unisci tonno scolato, pomodori a pezzi e olio."
+          ],
+          "prepMinutes": 20,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-22-snack",
+          "recipeId": "orange-pumpkin-seeds",
+          "type": "snack",
+          "title": "Arancia e semi di zucca",
+          "time": "16:30",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "orange",
+              "name": "Arancia",
+              "quantity": 160,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 75,
+                "proteinG": 1,
+                "carbohydratesG": 16,
+                "fatG": 0,
+                "fiberG": 3,
+                "sugarsG": 13
+              }
+            },
+            {
+              "ingredientId": "pumpkin-seeds",
+              "name": "Semi di zucca",
+              "quantity": 20,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 110,
+                "proteinG": 6,
+                "carbohydratesG": 2,
+                "fatG": 9,
+                "fiberG": 1,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 185,
+            "proteinG": 7,
+            "carbohydratesG": 18,
+            "fatG": 9,
+            "fiberG": 4,
+            "sugarsG": 13,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Sbuccia l’arancia e servi con i semi a parte."
+          ],
+          "prepMinutes": 3,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-22-dinner",
+          "recipeId": "eggs-spinach-bread",
+          "type": "dinner",
+          "title": "Uova con spinaci e pane",
+          "time": "19:30",
+          "structure": "main-and-side",
+          "ingredients": [
+            {
+              "ingredientId": "egg",
+              "name": "Uova",
+              "quantity": 2,
+              "unit": "unit",
+              "category": "protein",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 150,
+                "proteinG": 13,
+                "carbohydratesG": 1,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            },
+            {
+              "ingredientId": "spinach",
+              "name": "Spinaci",
+              "quantity": 200,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 5,
+                "carbohydratesG": 3,
+                "fatG": 1,
+                "fiberG": 4,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "wholegrain-bread",
+              "name": "Pane integrale",
+              "quantity": 70,
+              "unit": "g",
+              "category": "grains",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 175,
+                "proteinG": 6,
+                "carbohydratesG": 32,
+                "fatG": 2,
+                "fiberG": 5,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "olive-oil",
+              "name": "Olio di oliva",
+              "quantity": 5,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 5,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 415,
+            "proteinG": 24,
+            "carbohydratesG": 36,
+            "fatG": 18,
+            "fiberG": 9,
+            "sugarsG": 3,
+            "note": "Valori fittizi per dimostrare il contratto software; non provengono da una banca dati alimentare."
+          },
+          "instructions": [
+            "Cuoci gli spinaci in padella con l’olio.",
+            "Prepara le uova nella stessa padella e servi con il pane."
+          ],
+          "prepMinutes": 15,
+          "tags": [
+            "contains-eggs"
+          ]
+        }
+      ]
+    }
+  ]
+}

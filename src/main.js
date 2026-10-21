@@ -16,19 +16,24 @@ import { renderApp, renderMealMoveFeedback, renderPwaStatus, renderPwaSettings }
 import { t, formatDate } from './ui/i18n.js';
 import { createShoppingText, shoppingTextFileName } from './ui/shopping-output.js';
 import { createPwaManager } from './pwa/client.js';
+import { createMotionController } from './ui/motion.js';
+import { DEFAULT_RECIPE_FILTERS } from './data/recipes.js';
+import { renderRecipeResults } from './ui/recipes-view.js';
 
 const root = document.querySelector('#app');
+const motion = createMotionController({ root });
 const today = todayISO();
 const model = {
   state: createAppState({ uiLanguage: 'it' }), today,
   loading: true, error: null, dialog: null, importDraft: null, backupDraft: null,
   exportSourceId: null, exportRange: { startDate: null, endDate: null },
   exportPreview: null, exportError: null, undoPreview: null, currentSummary: null,
-  notice: null, busy: false,
+  notice: null, busy: false, viewSaving: false,
   storage: { status: 'loading', errorKey: null, hasData: false, hasStoredState: false,
     recoveryAvailable: false, rawBackupAvailable: false },
   manualDraft: { name: '', quantity: '', unit: 'unit', customUnit: '', category: 'other' },
   mealMoveDraft: null,
+  recipeFilters: { ...DEFAULT_RECIPE_FILTERS },
   shoppingRows: [], shoppingSummary: null, shoppingError: null, shoppingCopyText: '', shoppingCopyFileName: '',
   pwa: null, rawBackup: null,
 };
@@ -44,6 +49,10 @@ let lastDialogKey = null;
 let routeRevision = 0;
 let savedUi = null;
 let viewSaveTimer = null;
+let viewSavePromise = null;
+let activeWrite = null;
+const pendingServings = new Map();
+let servingsWriteActive = false;
 
 const storageKeys = {
   STORAGE_UNAVAILABLE: 'unavailable', STORAGE_OPEN: 'unavailable',
@@ -187,7 +196,7 @@ function focusLocator(element = document.activeElement) {
   if (!(element instanceof HTMLElement) || !root.contains(element)) return null;
   if (element.id) return '#' + CSS.escape(element.id);
   const attributes = ['data-action', 'data-control', 'data-entry-id', 'data-date',
-    'data-view', 'data-delta', 'data-offset', 'data-key', 'data-item-id', 'name', 'value'];
+    'data-view', 'data-delta', 'data-offset', 'data-key', 'data-item-id', 'data-recipe-key', 'name', 'value'];
   const selectors = attributes.filter(name => element.hasAttribute(name))
     .map(name => '[' + name + '="' + CSS.escape(element.getAttribute(name)) + '"]');
   return selectors.length ? element.tagName.toLowerCase() + selectors.join('') : null;
@@ -202,7 +211,8 @@ function lockUnavailableEdits() {
     'shopping-start', 'shopping-end', 'shopping-mode', 'meal-date', 'meal-time', 'meal-servings',
     'shopping-check', 'manual-check']);
   for (const control of root.querySelectorAll('button,input,select')) {
-    if (model.busy || (cannotWrite && (mutations.has(control.dataset.action)
+    if (servingsWriteActive && (control.dataset.action === 'change-servings' || control.dataset.control === 'meal-servings')) continue;
+    if ((model.busy && !model.viewSaving) || (cannotWrite && (mutations.has(control.dataset.action)
       || savedControls.has(control.dataset.control)
       || control.closest('[data-form="manual-item"], [data-form="move-meal"]')))) {
       control.disabled = true;
@@ -218,7 +228,7 @@ function render({ focus = focusLocator(), top = false } = {}) {
   updateDerivedViews();
   const view = model.state.ui.view;
   const viewKey = [view, view === 'today' ? model.today : view === 'calendar' ? model.state.ui.selectedDate : '', model.loading].join(':');
-  const dialogKey = model.dialog ? model.dialog.kind + ':' + (model.dialog.entryId ?? model.dialog.action) : null;
+  const dialogKey = model.dialog ? model.dialog.kind + ':' + (model.dialog.entryId ?? model.dialog.recipeKey ?? model.dialog.action) : null;
   const dialogScroll = root.querySelector('dialog .modal-body')?.scrollTop ?? 0;
   const oldScroll = window.scrollY;
   document.documentElement.lang = model.state.settings.uiLanguage;
@@ -242,6 +252,9 @@ function render({ focus = focusLocator(), top = false } = {}) {
   const focusTarget = focus ? root.querySelector(focus) : null;
   if (focusTarget && (!dialog || dialog.contains(focusTarget))) focusTarget.focus({ preventScroll: true });
   window.scrollTo({ top: top ? 0 : oldScroll, behavior: 'auto' });
+  showPendingServings();
+  motion.sync({ reducedMotion: model.state.settings.reducedMotion,
+    pageChanged: viewKey !== lastViewKey, dialogChanged: dialogKey !== lastDialogKey });
   lastViewKey = viewKey;
   lastDialogKey = dialogKey;
   scheduleViewSave();
@@ -269,12 +282,16 @@ async function saveCandidate(candidate, options = {}) {
   const hadStoredState = model.storage.hasStoredState;
   const routeAtStart = routeRevision;
   const focus = focusLocator();
+  const { quiet = false, viewOnly = false, ...commitOptions } = options;
   model.busy = true;
-  model.storage.status = 'saving';
+  if (!viewOnly) model.storage.status = 'saving';
   model.storage.errorKey = null;
-  render({ focus });
+  let finishWrite;
+  const completion = new Promise(resolve => { finishWrite = resolve; });
+  activeWrite = completion;
+  if (!quiet) render({ focus });
   try {
-    const committed = await commitCandidate(repository, candidate, options);
+    const committed = await commitCandidate(repository, candidate, commitOptions);
     // Browser Back/Forward may be used while a transaction is pending. Keep
     // that newer transient route while adopting the committed archive data.
     model.state = routeRevision === routeAtStart ? committed
@@ -294,6 +311,8 @@ async function saveCandidate(candidate, options = {}) {
     throw error;
   } finally {
     model.busy = false;
+    if (activeWrite === completion) activeWrite = null;
+    finishWrite();
     scheduleViewSave();
   }
 }
@@ -335,14 +354,67 @@ function scheduleViewSave() {
     viewSaveTimer = null;
     if (model.busy || model.storage.status !== 'ready' || !hasUnsavedView()) return;
     try { await rememberView(); }
-    catch (error) { notice(errorKey(error, 'storage.errors.write'), {}, 'error'); }
-    render();
+    catch (error) { notice(errorKey(error, 'storage.errors.write'), {}, 'error'); render(); }
   }, 0);
 }
 
 async function rememberView() {
   if (!model.busy && model.storage.status === 'ready' && hasUnsavedView()) {
-    await saveCandidate(cloneStateSnapshot(model.state));
+    model.viewSaving = true;
+    viewSavePromise = saveCandidate(cloneStateSnapshot(model.state), { quiet: true, viewOnly: true });
+    try { await viewSavePromise; }
+    finally { model.viewSaving = false; viewSavePromise = null; refreshPwaParts(); }
+  }
+}
+
+function showPendingServings() {
+  for (const field of root.querySelectorAll('[data-control="meal-servings"]')) {
+    if (!pendingServings.has(field.dataset.entryId)) continue;
+    field.value = pendingServings.get(field.dataset.entryId);
+    field.setAttribute('aria-busy', 'true');
+    const minus = field.closest('.serving-control')?.querySelector('[data-delta="-1"]');
+    if (minus) minus.disabled = Number(field.value) <= 1;
+  }
+}
+
+/** Coalesce rapid taps without dropping clicks or overwriting a later saved count. */
+async function changePeople(entryId, { delta, value } = {}) {
+  if ((model.busy && !servingsWriteActive && !model.viewSaving) || (!servingsWriteActive && model.storage.status !== 'ready')) return;
+  const item = findEntry(model.state, entryId);
+  if (!item) return;
+  const base = pendingServings.get(entryId) ?? item.cookingServings;
+  const count = value ?? Math.max(1, base + delta);
+  try { setEntryServings(model.state, entryId, count); }
+  catch (error) { notice(errorKey(error), {}, 'error'); render(); return; }
+  pendingServings.set(entryId, count);
+  showPendingServings();
+  if (servingsWriteActive) return;
+  servingsWriteActive = true;
+  try {
+    while (pendingServings.size) {
+      // Recheck after every wake-up: another waiting action can acquire the
+      // write slot first. Construct this candidate only from the latest state.
+      while (activeWrite) await activeWrite;
+      const [id, target] = pendingServings.entries().next().value;
+      const previous = findEntry(model.state, id)?.cookingServings ?? target;
+      const candidate = reconcileShopping(setEntryServings(model.state, id, target));
+      await saveCandidate(candidate, { quiet: true });
+      if (pendingServings.get(id) === target) pendingServings.delete(id);
+      render();
+      for (const element of root.querySelectorAll('.meal-people-control[data-entry-id="' + CSS.escape(id) + '"]')) {
+        motion.feedback(element, { direction: target >= previous ? 1 : -1 });
+      }
+      for (const status of root.querySelectorAll('[data-people-status][data-entry-id="' + CSS.escape(id) + '"]')) {
+        status.textContent = t(model.state.settings.uiLanguage, 'meal.peopleSaved', { count: target });
+      }
+    }
+  } catch (error) {
+    pendingServings.clear();
+    notice(errorKey(error), {}, 'error');
+    render();
+  } finally {
+    servingsWriteActive = false;
+    lockUnavailableEdits();
   }
 }
 
@@ -617,7 +689,7 @@ async function confirmAction(action) {
       try { document = await loadDemoDocument(); }
       finally { model.busy = false; }
       candidate = prepareImport(candidate, document, {
-        startDate: model.today, fileName: 'ui-demo-it.diet', dateConfirmed: true,
+        startDate: model.today, fileName: 'meal-plan-it.diet', dateConfirmed: true,
       }).state;
     }
     // Back/Forward may run during the demo fetch, before saveCandidate starts
@@ -701,8 +773,15 @@ root.addEventListener('click', async (event) => {
   const control = event.target.closest('[data-action]');
   if (!control) return;
   event.preventDefault();
-  if (control.disabled || model.busy) return;
   const { action, entryId } = control.dataset;
+  if (action === 'change-servings' && !control.disabled) {
+    await changePeople(entryId, { delta: Number(control.dataset.delta) }); return;
+  }
+  if (control.disabled) return;
+  if (model.viewSaving && !['navigate', 'select-date', 'go-today', 'step-day', 'open-meal', 'open-recipe', 'close-dialog'].includes(action)) {
+    while (activeWrite) await activeWrite;
+  }
+  if (model.busy && !model.viewSaving) return;
   const actionContext = { route: routeRevision, dialog: model.dialog };
   if (mutationActions.has(action) && model.storage.status !== 'ready') return;
   try {
@@ -734,32 +813,34 @@ root.addEventListener('click', async (event) => {
       routeTo(control.dataset.view);
       render({ focus: '#page-title', top: true });
       await rememberView();
-      render();
     } else if (action === 'select-date' || action === 'go-today') {
       selectDate(action === 'go-today' ? todayISO() : control.dataset.date);
       await rememberView();
-      render({ focus: '#day-heading' });
     } else if (action === 'step-day') {
       const currentDate = todayISO();
       const current = model.state.ui.view === 'today' ? currentDate : getSelectedCalendarDate(model.state.ui, currentDate);
       selectDate(addDays(current, Number(control.dataset.offset)));
       await rememberView();
-      render({ focus: '#day-heading' });
     } else if (action === 'open-meal') {
       if (!findEntry(model.state, entryId)) throw Object.assign(new Error('Missing entry'), { code: 'SESSION_ENTRY_NOT_FOUND' });
       openDialog({ kind: 'meal', entryId });
     } else if (action === 'close-dialog') closeDialog();
-    else if (action === 'change-servings') {
-      const current = findEntry(model.state, entryId);
-      if (!current) return;
-      const count = Math.max(1, current.cookingServings + Number(control.dataset.delta));
-      const candidate = reconcileShopping(setEntryServings(model.state, entryId, count));
-      await saveCandidate(candidate);
-      notice('notices.peopleUpdated', { count });
-      render();
+    else if (action === 'open-recipe') {
+      openDialog({ kind: 'recipe', recipeKey: control.dataset.recipeKey });
+    } else if (action === 'open-recipe-occurrence') {
+      const row = findEntry(model.state, entryId);
+      if (!row) return;
+      model.dialog = null;
+      selectDate(row.date);
+      openDialog({ kind: 'meal', entryId });
+      await rememberView();
+    } else if (action === 'clear-recipe-filters' || action === 'search-ingredient') {
+      model.recipeFilters = { ...DEFAULT_RECIPE_FILTERS };
+      if (action === 'search-ingredient') Object.assign(model.recipeFilters, { query: control.dataset.ingredientName, searchIn: 'ingredients' });
+      render({ focus: '#recipe-query' });
     } else if (action === 'load-demo-import') {
       model.busy = true; render();
-      try { previewPlan(await loadDemoDocument(), 'ui-demo-it.diet'); }
+      try { previewPlan(await loadDemoDocument(), 'meal-plan-it.diet'); }
       finally { model.busy = false; }
       render({ focus: '#import-start' });
     } else if (action === 'cancel-import') {
@@ -834,7 +915,12 @@ const transientControls = new Set(['selected-date', 'diet-file', 'backup-file',
 
 root.addEventListener('change', async (event) => {
   const control = event.target;
-  if (!(control instanceof HTMLElement) || model.busy) return;
+  if (!(control instanceof HTMLElement)) return;
+  if (control.dataset.control === 'meal-servings') {
+    await changePeople(control.dataset.entryId, { value: Number(control.value) }); return;
+  }
+  if (model.viewSaving) { while (activeWrite) await activeWrite; }
+  if (model.busy) return;
   if (control.closest('[data-form="manual-item"]') && control.name === 'unit') {
     model.manualDraft.unit = control.value;
     render({ focus: control.value === 'custom' ? '#manual-custom-unit' : '#manual-unit' });
@@ -842,13 +928,18 @@ root.addEventListener('change', async (event) => {
   }
   const name = control.dataset.control;
   if (!name) return;
+  if (name.startsWith('recipe-')) {
+    const key = name.slice(7);
+    if (Object.hasOwn(DEFAULT_RECIPE_FILTERS, key)) { model.recipeFilters[key] = control.value; refreshRecipeResults(); }
+    return;
+  }
   if (!transientControls.has(name) && model.storage.status !== 'ready') return;
   try {
     if (name === 'diet-file' || name === 'backup-file') {
       await readFile(control.files?.[0], name === 'diet-file' ? 'diet' : 'backup'); return;
     }
     if (name === 'selected-date') {
-      selectDate(control.value); await rememberView(); render({ focus: '#day-heading' }); return;
+      selectDate(control.value); await rememberView(); return;
     }
     if (name === 'meal-date') {
       model.mealMoveDraft = {
@@ -918,6 +1009,10 @@ root.addEventListener('change', async (event) => {
 root.addEventListener('submit', async (event) => {
   const form = event.target;
   if (!(form instanceof HTMLFormElement)) return;
+  if (['move-meal', 'manual-item'].includes(form.dataset.form) && model.viewSaving) {
+    event.preventDefault();
+    while (activeWrite) await activeWrite;
+  }
   if (form.dataset.form === 'move-meal') {
     event.preventDefault();
     if (!model.busy && model.storage.status === 'ready') await moveMeal(form);
@@ -949,8 +1044,18 @@ root.addEventListener('submit', async (event) => {
   }
 });
 
+function refreshRecipeResults() {
+  const slot = root.querySelector('[data-recipe-results]');
+  if (!slot) return;
+  slot.innerHTML = renderRecipeResults(model);
+  motion.sync({ reducedMotion: model.state.settings.reducedMotion });
+}
+
 root.addEventListener('input', (event) => {
   const field = event.target;
+  if (field.dataset.control === 'recipe-query') {
+    model.recipeFilters.query = field.value; refreshRecipeResults(); return;
+  }
   if (field.closest('[data-form="manual-item"]') && ['name', 'quantity', 'unit', 'customUnit', 'category'].includes(field.name)) {
     model.manualDraft[field.name] = field.value;
   }
@@ -965,19 +1070,18 @@ root.addEventListener('input', (event) => {
 root.addEventListener('cancel', (event) => {
   if (event.target instanceof HTMLDialogElement) {
     event.preventDefault();
-    if (!model.busy) closeDialog();
+    if (!model.busy || model.viewSaving) closeDialog();
   }
 }, true);
 
 root.addEventListener('keydown', async (event) => {
   const dateButton = event.target.closest('[data-action="select-date"]');
   const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
-  if (!dateButton || !Object.hasOwn(offsets, event.key) || model.busy) return;
+  if (!dateButton || !Object.hasOwn(offsets, event.key) || (model.busy && !model.viewSaving)) return;
   event.preventDefault();
   try {
     selectDate(addDays(dateButton.dataset.date, offsets[event.key]));
     await rememberView();
-    render();
     [...root.querySelectorAll('[data-action="select-date"][data-date="' + model.state.ui.selectedDate + '"]')]
       .find(button => button.getClientRects().length > 0)?.focus({ preventScroll: true });
   } catch (error) {

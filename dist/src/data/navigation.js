@@ -1,7 +1,7 @@
 /** Pure routes: today's clock and the last selected calendar date are separate. */
 import { addDays } from './dates.js';
 
-const VIEWS = new Set(['today', 'calendar', 'shopping', 'import', 'export', 'settings']);
+const VIEWS = new Set(['today', 'calendar', 'shopping', 'recipes', 'import', 'export', 'settings']);
 
 function validDate(value) {
   try { return addDays(value, 0) === value; }

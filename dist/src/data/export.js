@@ -3,6 +3,7 @@ import { addDays } from './dates.js';
 import { getRangeEntries, readablePlan } from './session.js';
 import { timestampFor } from './state.js';
 import { assignmentIdFor } from './provenance.js';
+import { copyWorkdayProperty } from './workday.js';
 
 function exportError(code, message) {
   return Object.assign(new Error(message), { code });
@@ -49,7 +50,12 @@ export function exportCalendarDiet(state, { sourceId, startDate, endDate, now } 
   for (const row of rows) {
     if (!byDate.has(row.date)) {
       const sourceDay = source.document.days.find(day => day.date === row.entry.sourceDate);
-      byDate.set(row.date, { ...structuredClone(sourceDay), date: row.date, meals: [] });
+      const exportedDay = { ...structuredClone(sourceDay), date: row.date, meals: [] };
+      // A work schedule belongs to the actual day, not to the moved recipe.
+      // In particular, an unknown destination must not inherit a source shift.
+      delete exportedDay.workday;
+      Object.assign(exportedDay, copyWorkdayProperty(state.calendar[row.date]));
+      byDate.set(row.date, exportedDay);
     }
     const meal = { ...structuredClone(row.meal), mealId: `${planId}-meal-${++mealIndex}`, time: row.time };
     if (meal.preparation?.batchId) {

@@ -1,526 +1,162 @@
 {
   "format": "meal-planner.diet",
   "schemaVersion": 1,
-  "planId": "phase-2-demo-en-2026-10-21",
-  "title": "Three practical days — example after revision",
+  "planId": "demo-release-1-1-en",
+  "title": "Three days across shifts and rest — DEMO",
   "language": "en",
-  "createdAt": "2026-10-19T14:30:00Z",
-  "suggestedStartDate": "2026-10-21",
+  "createdAt": "2026-10-19T10:00:00Z",
+  "suggestedStartDate": "2026-10-20",
   "baseServings": 1,
-  "notes": "Fictional demonstration profile and plan, unrelated to the real user. One adult requests practical meals for 21–23 October 2026, without calorie or macronutrient targets; they report no food allergies or dietary exclusions, prefer to avoid peppers and accept leftovers. This version follows the replacement of broccoli with courgettes in dinner on 21 October and its linked lunch on 22 October. Frequencies are requested maximums over rolling seven-day windows, not quotas to fill within three days. History outside these dates is unavailable and the weekly context is partial. Timings are practical estimates. Nutritional values are unavailable; this file illustrates the workflow and is not a verified nutritional assessment.",
+  "notes": "Fictional profile, quantities and nutrition values illustrating the app. This is not a personal proposal. History outside this period is unavailable. Version after replacing broccoli with courgettes in both linked meals.",
   "preferences": {
-    "workSchedule": "Work from 09:00 to 18:00. Breakfast at 07:30, lunch at 13:00, snack at 16:30 and dinner at 19:30. Lunch at the office with access to a fridge and microwave. Desired dinner preparation time: no more than 20 minutes.",
-    "leftovers": {
-      "allowed": true,
-      "notes": "One two-portion preparation connects dinner on 21 October with lunch on 22 October. Each meal lists only the ingredients allocated to its consumed portion. Repeating the base is accepted to reduce separate preparations."
+    "profile": {
+      "ageYears": 35,
+      "sex": "female",
+      "weightKg": 68,
+      "heightCm": 169
+    },
+    "goal": "Fictional example: organise meals around different shifts, with no energy or macro target.",
+    "work": {
+      "occupation": "Laboratory technician — fictional profile",
+      "timezone": "Europe/Rome",
+      "facilities": {
+        "fridge": true,
+        "microwave": true
+      },
+      "roster": [
+        {
+          "date": "2026-10-20",
+          "workday": {
+            "class": "day-shift",
+            "startTime": "09:00",
+            "endTime": "18:00",
+            "endDayOffset": 0,
+            "label": "Day shift"
+          }
+        },
+        {
+          "date": "2026-10-21",
+          "workday": {
+            "class": "night-shift",
+            "startTime": "22:00",
+            "endTime": "06:00",
+            "endDayOffset": 1,
+            "label": "Night shift"
+          }
+        },
+        {
+          "date": "2026-10-22",
+          "workday": {
+            "class": "day-off",
+            "label": "Rest after the shift"
+          }
+        }
+      ],
+      "notes": "Only these three dates are known; no repeating rotation was declared."
+    },
+    "cooking": {
+      "equipment": [
+        "Hob",
+        "Oven",
+        "Microwave",
+        "Kettle"
+      ],
+      "maxMinutesPerMeal": 30,
+      "preparationAheadNeeded": true,
+      "transportNeeded": true,
+      "notes": "Prepare the next day’s portion together with dinner when scheduled. Budget unspecified."
+    },
+    "allergens": [],
+    "restrictions": [],
+    "ingredientBlacklist": [
+      "Peppers"
+    ],
+    "mealBlacklist": [],
+    "ingredientWhitelist": [
+      "Chickpeas",
+      "Couscous"
+    ],
+    "mealWhitelist": [
+      "Single dishes suitable for advance preparation"
+    ],
+    "mealStructures": [
+      "single-dish",
+      "main-and-side"
+    ],
+    "sugars": {
+      "max": 60,
+      "unit": "g",
+      "basis": "total"
     },
     "ingredientFrequencyLimits": [
-      {
-        "subject": {
-          "kind": "tag",
-          "id": "contains-cheese",
-          "label": "Meals containing cheese"
-        },
-        "maxMeals": 2,
-        "period": {
-          "days": 7,
-          "alignment": "rolling"
-        }
-      },
       {
         "subject": {
           "kind": "tag",
           "id": "contains-eggs",
           "label": "Meals containing eggs"
         },
-        "maxMeals": 2,
+        "maxMeals": 3,
         "period": {
           "days": 7,
           "alignment": "rolling"
         }
       }
-    ]
+    ],
+    "externalMeals": [
+      {
+        "date": "2026-10-20",
+        "time": "13:00",
+        "type": "lunch",
+        "externalMeal": {
+          "kind": "canteen",
+          "kcalRange": {
+            "min": 550,
+            "max": 700,
+            "unit": "kcal"
+          },
+          "note": "Range supplied by the fictional user. Meal purchased at the canteen; composition and macros unknown."
+        }
+      }
+    ],
+    "leftovers": {
+      "allowed": true,
+      "notes": "Dinner on 20 October and lunch on 21 October share a batch."
+    }
   },
   "days": [
     {
-      "date": "2026-10-21",
+      "date": "2026-10-20",
+      "workday": {
+        "class": "day-shift",
+        "startTime": "09:00",
+        "endTime": "18:00",
+        "endDayOffset": 0,
+        "label": "Day shift"
+      },
       "meals": [
         {
-          "mealId": "day-01-breakfast",
+          "mealId": "demo-2026-10-20-breakfast",
+          "recipeId": "oat-banana-bowl",
           "type": "breakfast",
-          "title": "Yoghurt with oats, pear and walnuts",
-          "time": "07:30",
+          "title": "Oats with milk and banana",
+          "time": "08:00",
+          "structure": "single-dish",
           "ingredients": [
             {
-              "ingredientId": "plain-yogurt",
-              "name": "Plain yoghurt",
-              "quantity": 170,
-              "unit": "g",
-              "category": "dairy",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "rolled-oats",
-              "name": "Rolled oats",
-              "quantity": 40,
+              "ingredientId": "oat-flakes",
+              "name": "Oat flakes",
+              "quantity": 50,
               "unit": "g",
               "category": "grains",
-              "basis": "dry"
-            },
-            {
-              "ingredientId": "pear",
-              "name": "Pear",
-              "quantity": 1,
-              "unit": "unit",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "walnuts",
-              "name": "Shelled walnuts",
-              "quantity": 15,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            }
-          ],
-          "instructions": [
-            "Chop the pear and break up the walnuts.",
-            "Add the oats, pear and walnuts to the yoghurt."
-          ],
-          "prepMinutes": 5
-        },
-        {
-          "mealId": "day-01-lunch",
-          "type": "lunch",
-          "title": "Spelt, cherry tomato and cannellini salad",
-          "time": "13:00",
-          "ingredients": [
-            {
-              "ingredientId": "spelt",
-              "name": "Ready-cooked spelt",
-              "quantity": 150,
-              "unit": "g",
-              "category": "grains",
-              "basis": "cooked"
-            },
-            {
-              "ingredientId": "canned-cannellini-beans",
-              "name": "Canned cannellini beans",
-              "quantity": 130,
-              "unit": "g",
-              "category": "protein",
-              "basis": "drained"
-            },
-            {
-              "ingredientId": "cherry-tomatoes",
-              "name": "Cherry tomatoes",
-              "quantity": 150,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "olive-oil",
-              "name": "Olive oil",
-              "quantity": 8,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "basil",
-              "name": "Basil",
-              "quantity": 3,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "salt",
-              "name": "Salt",
-              "quantity": 1,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            }
-          ],
-          "instructions": [
-            "Use ready-cooked spelt and drained cannellini beans.",
-            "Chop the cherry tomatoes, combine all ingredients and pack the portion for lunch."
-          ],
-          "prepMinutes": 12,
-          "tags": [
-            "legumes"
-          ],
-          "notes": "The timing assumes ready-cooked spelt; its quantity is a cooked weight, not a dry weight."
-        },
-        {
-          "mealId": "day-01-snack",
-          "type": "snack",
-          "title": "Apple and almonds",
-          "time": "16:30",
-          "ingredients": [
-            {
-              "ingredientId": "apple",
-              "name": "Apple",
-              "quantity": 1,
-              "unit": "unit",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "almonds",
-              "name": "Almonds",
-              "quantity": 20,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            }
-          ],
-          "instructions": [
-            "Set aside the apple and portion of almonds for the snack."
-          ],
-          "prepMinutes": 2
-        },
-        {
-          "mealId": "day-01-dinner",
-          "type": "dinner",
-          "title": "Couscous with chickpeas and courgettes",
-          "time": "19:30",
-          "ingredients": [
-            {
-              "ingredientId": "instant-couscous",
-              "name": "Instant couscous",
-              "quantity": 70,
-              "unit": "g",
-              "category": "grains",
-              "basis": "dry"
-            },
-            {
-              "ingredientId": "canned-chickpeas",
-              "name": "Canned chickpeas",
-              "quantity": 130,
-              "unit": "g",
-              "category": "protein",
-              "basis": "drained"
-            },
-            {
-              "ingredientId": "zucchini",
-              "name": "Courgettes",
-              "quantity": 250,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "olive-oil",
-              "name": "Olive oil",
-              "quantity": 8,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "lemon-juice",
-              "name": "Lemon juice",
-              "quantity": 10,
-              "unit": "ml",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "water",
-              "name": "Water",
-              "quantity": 90,
-              "unit": "ml",
-              "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "parsley",
-              "name": "Parsley",
-              "quantity": 2,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "salt",
-              "name": "Salt",
-              "quantity": 1,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            }
-          ],
-          "nutrition": {
-            "kcal": null,
-            "proteinG": null,
-            "carbohydratesG": null,
-            "fatG": null,
-            "fiberG": null,
-            "note": "Nutritional data is unavailable. Replacing broccoli with courgettes does not imply calorie or macronutrient equivalence."
-          },
-          "instructions": [
-            "For the shared preparation, use twice the listed quantities: one portion is for this dinner and one for lunch on 22 October.",
-            "Thinly slice the courgettes and cook them in a pan with the oil and salt; add the drained chickpeas.",
-            "Rehydrate the couscous with the hot water, following the timing on the package.",
-            "Combine the couscous, vegetables and chickpeas; add lemon juice and parsley. Divide into two portions."
-          ],
-          "prepMinutes": 18,
-          "tags": [
-            "legumes"
-          ],
-          "preparation": {
-            "batchId": "couscous-chickpeas-batch-01",
-            "role": "cook",
-            "preparedServings": 2,
-            "note": "The preparation makes two portions, but these ingredients are allocated only to the portion eaten at dinner. The second portion is described in lunch on 22 October."
-          },
-          "notes": "Agreed revision: 200 g of broccoli is replaced with 250 g of courgettes per portion. Estimated preparation time changes from 20 to 18 minutes, including preparation of both portions."
-        }
-      ]
-    },
-    {
-      "date": "2026-10-22",
-      "meals": [
-        {
-          "mealId": "day-02-breakfast",
-          "type": "breakfast",
-          "title": "Wholegrain bread with ricotta and kiwi",
-          "time": "07:30",
-          "ingredients": [
-            {
-              "ingredientId": "wholegrain-bread",
-              "name": "Wholegrain bread",
-              "quantity": 70,
-              "unit": "g",
-              "category": "grains",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "ricotta",
-              "name": "Ricotta",
-              "quantity": 80,
-              "unit": "g",
-              "category": "dairy",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "kiwi",
-              "name": "Kiwi",
-              "quantity": 1,
-              "unit": "unit",
-              "category": "produce",
-              "basis": "raw"
-            }
-          ],
-          "instructions": [
-            "Spread the ricotta on the bread and serve with the kiwi."
-          ],
-          "prepMinutes": 5,
-          "tags": [
-            "contains-cheese"
-          ]
-        },
-        {
-          "mealId": "day-02-lunch",
-          "type": "lunch",
-          "title": "Couscous with chickpeas and courgettes — prepared portion",
-          "time": "13:00",
-          "ingredients": [
-            {
-              "ingredientId": "instant-couscous",
-              "name": "Instant couscous",
-              "quantity": 70,
-              "unit": "g",
-              "category": "grains",
-              "basis": "dry"
-            },
-            {
-              "ingredientId": "canned-chickpeas",
-              "name": "Canned chickpeas",
-              "quantity": 130,
-              "unit": "g",
-              "category": "protein",
-              "basis": "drained"
-            },
-            {
-              "ingredientId": "zucchini",
-              "name": "Courgettes",
-              "quantity": 250,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "olive-oil",
-              "name": "Olive oil",
-              "quantity": 8,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "lemon-juice",
-              "name": "Lemon juice",
-              "quantity": 10,
-              "unit": "ml",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "water",
-              "name": "Water",
-              "quantity": 90,
-              "unit": "ml",
-              "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "parsley",
-              "name": "Parsley",
-              "quantity": 2,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "salt",
-              "name": "Salt",
-              "quantity": 1,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            }
-          ],
-          "nutrition": {
-            "kcal": null,
-            "proteinG": null,
-            "carbohydratesG": null,
-            "fatG": null,
-            "fiberG": null,
-            "note": "Nutritional data is unavailable. Replacing broccoli with courgettes does not imply calorie or macronutrient equivalence."
-          },
-          "instructions": [
-            "Use the portion prepared with dinner on 21 October; the listed ingredients describe its original allocation, not a second preparation."
-          ],
-          "prepMinutes": 5,
-          "tags": [
-            "legumes"
-          ],
-          "preparation": {
-            "batchId": "couscous-chickpeas-batch-01",
-            "role": "leftover",
-            "note": "The second portion of the shared preparation from 21 October. Ingredients retain their original measurement basis and are counted for this meal."
-          },
-          "notes": "The vegetable revision also applies to this lunch at the fictional person’s request. The estimate of 5 minutes to get the meal ready is unchanged."
-        },
-        {
-          "mealId": "day-02-snack",
-          "type": "snack",
-          "title": "Orange and dark chocolate",
-          "time": "16:30",
-          "ingredients": [
-            {
-              "ingredientId": "orange",
-              "name": "Orange",
-              "quantity": 1,
-              "unit": "unit",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "dark-chocolate",
-              "name": "Dark chocolate",
-              "quantity": 15,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            }
-          ],
-          "instructions": [
-            "Set aside the orange and portion of chocolate."
-          ],
-          "prepMinutes": 2
-        },
-        {
-          "mealId": "day-02-dinner",
-          "type": "dinner",
-          "title": "Spinach omelette with wholegrain bread",
-          "time": "19:30",
-          "ingredients": [
-            {
-              "ingredientId": "eggs",
-              "name": "Eggs",
-              "quantity": 2,
-              "unit": "unit",
-              "category": "protein",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "spinach",
-              "name": "Fresh spinach",
-              "quantity": 180,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "olive-oil",
-              "name": "Olive oil",
-              "quantity": 8,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "salt",
-              "name": "Salt",
-              "quantity": 1,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "wholegrain-bread",
-              "name": "Wholegrain bread",
-              "quantity": 60,
-              "unit": "g",
-              "category": "grains",
-              "basis": "as_sold"
-            }
-          ],
-          "instructions": [
-            "Wilt the spinach in a pan with the oil.",
-            "Beat the eggs with the salt, pour over the spinach and cook the omelette on both sides.",
-            "Serve with the wholegrain bread."
-          ],
-          "prepMinutes": 18,
-          "tags": [
-            "contains-eggs"
-          ],
-          "notes": "Both eggs belong to a single meal; the frequency preference counts meals, not individual eggs."
-        }
-      ]
-    },
-    {
-      "date": "2026-10-23",
-      "meals": [
-        {
-          "mealId": "day-03-breakfast",
-          "type": "breakfast",
-          "title": "Porridge with banana and cinnamon",
-          "time": "07:30",
-          "ingredients": [
-            {
-              "ingredientId": "rolled-oats",
-              "name": "Rolled oats",
-              "quantity": 45,
-              "unit": "g",
-              "category": "grains",
-              "basis": "dry"
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 190,
+                "proteinG": 7,
+                "carbohydratesG": 30,
+                "fatG": 4,
+                "fiberG": 5,
+                "sugarsG": 1
+              }
             },
             {
               "ingredientId": "milk",
@@ -528,143 +164,265 @@
               "quantity": 180,
               "unit": "ml",
               "category": "dairy",
-              "basis": "as_sold"
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 85,
+                "proteinG": 6,
+                "carbohydratesG": 9,
+                "fatG": 3,
+                "fiberG": 0,
+                "sugarsG": 9
+              }
             },
             {
               "ingredientId": "banana",
               "name": "Banana",
-              "quantity": 1,
-              "unit": "unit",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "ground-cinnamon",
-              "name": "Ground cinnamon",
-              "quantity": 0.5,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            }
-          ],
-          "instructions": [
-            "Heat the oats with the milk to the desired consistency.",
-            "Add the sliced banana and cinnamon."
-          ],
-          "prepMinutes": 8
-        },
-        {
-          "mealId": "day-03-lunch",
-          "type": "lunch",
-          "title": "Pasta salad with tuna and cherry tomatoes",
-          "time": "13:00",
-          "ingredients": [
-            {
-              "ingredientId": "dry-pasta",
-              "name": "Dried pasta",
-              "quantity": 75,
-              "unit": "g",
-              "category": "grains",
-              "basis": "dry"
-            },
-            {
-              "ingredientId": "canned-tuna",
-              "name": "Canned tuna",
               "quantity": 100,
               "unit": "g",
-              "category": "protein",
-              "basis": "drained"
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 1,
+                "carbohydratesG": 21,
+                "fatG": 0,
+                "fiberG": 2,
+                "sugarsG": 12
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 365,
+            "proteinG": 14,
+            "carbohydratesG": 60,
+            "fatG": 7,
+            "fiberG": 7,
+            "sugarsG": 22,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Warm the milk, add the oats and cook to the preferred consistency.",
+            "Top with the sliced banana."
+          ],
+          "prepMinutes": 8,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-20-lunch",
+          "type": "lunch",
+          "title": "Canteen lunch to choose on arrival",
+          "time": "13:00",
+          "structure": "other",
+          "ingredients": [],
+          "nutrition": {
+            "kcal": null,
+            "proteinG": null,
+            "carbohydratesG": null,
+            "fatG": null,
+            "fiberG": null,
+            "sugarsG": null,
+            "note": "Composition unavailable; macros cannot be estimated here. The energy range remains in externalMeal."
+          },
+          "externalMeal": {
+            "kind": "canteen",
+            "kcalRange": {
+              "min": 550,
+              "max": 700,
+              "unit": "kcal"
             },
+            "note": "Range supplied by the fictional user. Meal purchased at the canteen; composition and macros unknown."
+          },
+          "instructions": [
+            "Choose the meal according to the agreed preferences; the canteen service covers the ingredients."
+          ]
+        },
+        {
+          "mealId": "demo-2026-10-20-snack",
+          "recipeId": "apple-almonds",
+          "type": "snack",
+          "title": "Apple and almonds",
+          "time": "16:30",
+          "structure": "single-dish",
+          "ingredients": [
             {
-              "ingredientId": "cherry-tomatoes",
-              "name": "Cherry tomatoes",
+              "ingredientId": "apple",
+              "name": "Apple",
               "quantity": 150,
               "unit": "g",
               "category": "produce",
-              "basis": "raw"
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 78,
+                "proteinG": 0,
+                "carbohydratesG": 18,
+                "fatG": 0,
+                "fiberG": 3,
+                "sugarsG": 15
+              }
+            },
+            {
+              "ingredientId": "almonds",
+              "name": "Almonds",
+              "quantity": 20,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 120,
+                "proteinG": 4,
+                "carbohydratesG": 2,
+                "fatG": 10,
+                "fiberG": 2,
+                "sugarsG": 1
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 198,
+            "proteinG": 4,
+            "carbohydratesG": 20,
+            "fatG": 10,
+            "fiberG": 5,
+            "sugarsG": 16,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Wash the apple and pack the almonds in a container."
+          ],
+          "prepMinutes": 2,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-20-dinner",
+          "recipeId": "couscous-chickpeas-zucchini",
+          "type": "dinner",
+          "title": "Couscous with chickpeas and courgettes",
+          "time": "19:30",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "couscous",
+              "name": "Couscous",
+              "quantity": 80,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 285,
+                "proteinG": 10,
+                "carbohydratesG": 57,
+                "fatG": 1,
+                "fiberG": 4,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "chickpeas",
+              "name": "Chickpeas",
+              "quantity": 130,
+              "unit": "g",
+              "category": "protein",
+              "basis": "drained",
+              "nutrition": {
+                "kcal": 165,
+                "proteinG": 9,
+                "carbohydratesG": 22,
+                "fatG": 3,
+                "fiberG": 8,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "zucchini",
+              "name": "Courgettes",
+              "quantity": 250,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 3,
+                "carbohydratesG": 6,
+                "fatG": 1,
+                "fiberG": 3,
+                "sugarsG": 5
+              }
             },
             {
               "ingredientId": "olive-oil",
               "name": "Olive oil",
-              "quantity": 8,
+              "quantity": 10,
               "unit": "g",
               "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "basil",
-              "name": "Basil",
-              "quantity": 3,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "salt",
-              "name": "Salt",
-              "quantity": 1,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
             }
           ],
+          "nutrition": {
+            "kcal": 585,
+            "proteinG": 22,
+            "carbohydratesG": 85,
+            "fatG": 15,
+            "fiberG": 15,
+            "sugarsG": 8,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
           "instructions": [
-            "Cook the pasta following the package instructions and drain it.",
-            "Chop the cherry tomatoes and combine with the pasta, drained tuna, oil, basil and salt.",
-            "Pack the portion for lunch at the office."
+            "Prepare two portions: double the quantities on this card, which describe one consumption.",
+            "Cook the chopped courgettes with the oil, prepare the couscous following its package and mix in the drained chickpeas.",
+            "Divide into one portion for this dinner and one for lunch on 21 October. Arrange storage according to the ingredient instructions."
           ],
-          "prepMinutes": 15,
-          "notes": "The stated time is a preparation estimate; it excludes cooling time."
-        },
+          "prepMinutes": 20,
+          "tags": [],
+          "preparation": {
+            "batchId": "demo-couscous-2026-10-20",
+            "role": "cook",
+            "preparedServings": 2,
+            "note": "Each card contains only one person’s share; two linked meals."
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-10-21",
+      "workday": {
+        "class": "night-shift",
+        "startTime": "22:00",
+        "endTime": "06:00",
+        "endDayOffset": 1,
+        "label": "Night shift"
+      },
+      "meals": [
         {
-          "mealId": "day-03-snack",
-          "type": "snack",
-          "title": "Yoghurt and blueberries",
-          "time": "16:30",
+          "mealId": "demo-2026-10-21-breakfast",
+          "recipeId": "yogurt-bread-berries",
+          "type": "breakfast",
+          "title": "Yogurt, bread and berries",
+          "time": "08:00",
+          "structure": "single-dish",
           "ingredients": [
             {
               "ingredientId": "plain-yogurt",
-              "name": "Plain yoghurt",
-              "quantity": 125,
+              "name": "Plain yogurt",
+              "quantity": 170,
               "unit": "g",
               "category": "dairy",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "blueberries",
-              "name": "Blueberries",
-              "quantity": 100,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
-            }
-          ],
-          "instructions": [
-            "Combine the blueberries with the yoghurt."
-          ],
-          "prepMinutes": 2
-        },
-        {
-          "mealId": "day-03-dinner",
-          "type": "dinner",
-          "title": "Lemon chicken with carrots and bread",
-          "time": "19:30",
-          "ingredients": [
-            {
-              "ingredientId": "chicken-breast",
-              "name": "Chicken breast",
-              "quantity": 150,
-              "unit": "g",
-              "category": "protein",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "carrot",
-              "name": "Carrots",
-              "quantity": 200,
-              "unit": "g",
-              "category": "produce",
-              "basis": "raw"
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 110,
+                "proteinG": 9,
+                "carbohydratesG": 8,
+                "fatG": 5,
+                "fiberG": 0,
+                "sugarsG": 8
+              }
             },
             {
               "ingredientId": "wholegrain-bread",
@@ -672,48 +430,604 @@
               "quantity": 60,
               "unit": "g",
               "category": "grains",
-              "basis": "as_sold"
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 150,
+                "proteinG": 5,
+                "carbohydratesG": 27,
+                "fatG": 2,
+                "fiberG": 4,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "berries",
+              "name": "Berries",
+              "quantity": 100,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 1,
+                "carbohydratesG": 8,
+                "fatG": 0,
+                "fiberG": 4,
+                "sugarsG": 5
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 305,
+            "proteinG": 15,
+            "carbohydratesG": 43,
+            "fatG": 7,
+            "fiberG": 8,
+            "sugarsG": 15,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Serve the yogurt with berries and the bread on the side."
+          ],
+          "prepMinutes": 5,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-21-lunch",
+          "recipeId": "couscous-chickpeas-zucchini",
+          "type": "lunch",
+          "title": "Couscous with chickpeas and courgettes",
+          "time": "13:00",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "couscous",
+              "name": "Couscous",
+              "quantity": 80,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 285,
+                "proteinG": 10,
+                "carbohydratesG": 57,
+                "fatG": 1,
+                "fiberG": 4,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "chickpeas",
+              "name": "Chickpeas",
+              "quantity": 130,
+              "unit": "g",
+              "category": "protein",
+              "basis": "drained",
+              "nutrition": {
+                "kcal": 165,
+                "proteinG": 9,
+                "carbohydratesG": 22,
+                "fatG": 3,
+                "fiberG": 8,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "zucchini",
+              "name": "Courgettes",
+              "quantity": 250,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 3,
+                "carbohydratesG": 6,
+                "fatG": 1,
+                "fiberG": 3,
+                "sugarsG": 5
+              }
             },
             {
               "ingredientId": "olive-oil",
               "name": "Olive oil",
-              "quantity": 8,
+              "quantity": 10,
               "unit": "g",
               "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "lemon-juice",
-              "name": "Lemon juice",
-              "quantity": 15,
-              "unit": "ml",
-              "category": "produce",
-              "basis": "raw"
-            },
-            {
-              "ingredientId": "dried-oregano",
-              "name": "Dried oregano",
-              "quantity": 1,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
-            },
-            {
-              "ingredientId": "salt",
-              "name": "Salt",
-              "quantity": 1,
-              "unit": "g",
-              "category": "pantry",
-              "basis": "as_sold"
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
             }
           ],
+          "nutrition": {
+            "kcal": 585,
+            "proteinG": 22,
+            "carbohydratesG": 85,
+            "fatG": 15,
+            "fiberG": 15,
+            "sugarsG": 8,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
           "instructions": [
-            "Cut the chicken into thin strips and julienne the carrots.",
-            "Cook in a pan with the oil, salt and oregano until the chicken is cooked through; add the lemon juice.",
-            "Serve with the wholegrain bread."
+            "Use the portion allocated to this lunch, prepared with dinner on 20 October.",
+            "This card lists its ingredient share without adding the whole batch."
+          ],
+          "prepMinutes": 5,
+          "tags": [],
+          "preparation": {
+            "batchId": "demo-couscous-2026-10-20",
+            "role": "leftover",
+            "note": "Portion linked to dinner on 20 October."
+          }
+        },
+        {
+          "mealId": "demo-2026-10-21-dinner",
+          "recipeId": "chicken-potato-carrot",
+          "type": "dinner",
+          "title": "Chicken with potatoes and carrots",
+          "time": "19:30",
+          "structure": "main-and-side",
+          "ingredients": [
+            {
+              "ingredientId": "chicken-breast",
+              "name": "Chicken breast",
+              "quantity": 150,
+              "unit": "g",
+              "category": "protein",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 165,
+                "proteinG": 34,
+                "carbohydratesG": 0,
+                "fatG": 3,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            },
+            {
+              "ingredientId": "potato",
+              "name": "Potatoes",
+              "quantity": 250,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 190,
+                "proteinG": 5,
+                "carbohydratesG": 42,
+                "fatG": 0,
+                "fiberG": 4,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "carrot",
+              "name": "Carrots",
+              "quantity": 180,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 70,
+                "proteinG": 1,
+                "carbohydratesG": 14,
+                "fatG": 0,
+                "fiberG": 5,
+                "sugarsG": 8
+              }
+            },
+            {
+              "ingredientId": "olive-oil",
+              "name": "Olive oil",
+              "quantity": 10,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 515,
+            "proteinG": 40,
+            "carbohydratesG": 56,
+            "fatG": 13,
+            "fiberG": 9,
+            "sugarsG": 10,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Chop the potatoes and carrots, coat with oil and oven cook.",
+            "Cook the chicken and serve with the vegetables. Follow the product cooking instructions."
+          ],
+          "prepMinutes": 30,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-21-snack",
+          "recipeId": "apple-almonds",
+          "type": "snack",
+          "title": "Apple and almonds",
+          "time": "23:30",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "apple",
+              "name": "Apple",
+              "quantity": 150,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 78,
+                "proteinG": 0,
+                "carbohydratesG": 18,
+                "fatG": 0,
+                "fiberG": 3,
+                "sugarsG": 15
+              }
+            },
+            {
+              "ingredientId": "almonds",
+              "name": "Almonds",
+              "quantity": 20,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 120,
+                "proteinG": 4,
+                "carbohydratesG": 2,
+                "fatG": 10,
+                "fiberG": 2,
+                "sugarsG": 1
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 198,
+            "proteinG": 4,
+            "carbohydratesG": 20,
+            "fatG": 10,
+            "fiberG": 5,
+            "sugarsG": 16,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Wash the apple and pack the almonds in a container."
+          ],
+          "prepMinutes": 2,
+          "tags": []
+        }
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "workday": {
+        "class": "day-off",
+        "label": "Rest after the shift"
+      },
+      "meals": [
+        {
+          "mealId": "demo-2026-10-22-breakfast",
+          "recipeId": "oat-banana-bowl",
+          "type": "breakfast",
+          "title": "Oats with milk and banana",
+          "time": "08:00",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "oat-flakes",
+              "name": "Oat flakes",
+              "quantity": 50,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 190,
+                "proteinG": 7,
+                "carbohydratesG": 30,
+                "fatG": 4,
+                "fiberG": 5,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "milk",
+              "name": "Milk",
+              "quantity": 180,
+              "unit": "ml",
+              "category": "dairy",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 85,
+                "proteinG": 6,
+                "carbohydratesG": 9,
+                "fatG": 3,
+                "fiberG": 0,
+                "sugarsG": 9
+              }
+            },
+            {
+              "ingredientId": "banana",
+              "name": "Banana",
+              "quantity": 100,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 1,
+                "carbohydratesG": 21,
+                "fatG": 0,
+                "fiberG": 2,
+                "sugarsG": 12
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 365,
+            "proteinG": 14,
+            "carbohydratesG": 60,
+            "fatG": 7,
+            "fiberG": 7,
+            "sugarsG": 22,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Warm the milk, add the oats and cook to the preferred consistency.",
+            "Top with the sliced banana."
+          ],
+          "prepMinutes": 8,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-22-lunch",
+          "recipeId": "rice-tuna-tomato",
+          "type": "lunch",
+          "title": "Rice with tuna and tomatoes",
+          "time": "13:00",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "rice",
+              "name": "Rice",
+              "quantity": 80,
+              "unit": "g",
+              "category": "grains",
+              "basis": "dry",
+              "nutrition": {
+                "kcal": 285,
+                "proteinG": 6,
+                "carbohydratesG": 63,
+                "fatG": 1,
+                "fiberG": 1,
+                "sugarsG": 0
+              }
+            },
+            {
+              "ingredientId": "tuna-in-water",
+              "name": "Tuna in water",
+              "quantity": 100,
+              "unit": "g",
+              "category": "protein",
+              "basis": "drained",
+              "nutrition": {
+                "kcal": 110,
+                "proteinG": 25,
+                "carbohydratesG": 0,
+                "fatG": 1,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            },
+            {
+              "ingredientId": "tomato",
+              "name": "Tomatoes",
+              "quantity": 200,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 36,
+                "proteinG": 2,
+                "carbohydratesG": 5,
+                "fatG": 0,
+                "fiberG": 2,
+                "sugarsG": 5
+              }
+            },
+            {
+              "ingredientId": "olive-oil",
+              "name": "Olive oil",
+              "quantity": 10,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 90,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 521,
+            "proteinG": 33,
+            "carbohydratesG": 68,
+            "fatG": 12,
+            "fiberG": 3,
+            "sugarsG": 5,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Cook the rice following its package.",
+            "Add the drained tuna, chopped tomatoes and oil."
           ],
           "prepMinutes": 20,
-          "notes": "The estimate assumes thin chicken strips and finely cut carrots."
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-22-snack",
+          "recipeId": "orange-pumpkin-seeds",
+          "type": "snack",
+          "title": "Orange and pumpkin seeds",
+          "time": "16:30",
+          "structure": "single-dish",
+          "ingredients": [
+            {
+              "ingredientId": "orange",
+              "name": "Orange",
+              "quantity": 160,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 75,
+                "proteinG": 1,
+                "carbohydratesG": 16,
+                "fatG": 0,
+                "fiberG": 3,
+                "sugarsG": 13
+              }
+            },
+            {
+              "ingredientId": "pumpkin-seeds",
+              "name": "Pumpkin seeds",
+              "quantity": 20,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 110,
+                "proteinG": 6,
+                "carbohydratesG": 2,
+                "fatG": 9,
+                "fiberG": 1,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 185,
+            "proteinG": 7,
+            "carbohydratesG": 18,
+            "fatG": 9,
+            "fiberG": 4,
+            "sugarsG": 13,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Peel the orange and serve with the seeds on the side."
+          ],
+          "prepMinutes": 3,
+          "tags": []
+        },
+        {
+          "mealId": "demo-2026-10-22-dinner",
+          "recipeId": "eggs-spinach-bread",
+          "type": "dinner",
+          "title": "Eggs with spinach and bread",
+          "time": "19:30",
+          "structure": "main-and-side",
+          "ingredients": [
+            {
+              "ingredientId": "egg",
+              "name": "Eggs",
+              "quantity": 2,
+              "unit": "unit",
+              "category": "protein",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 150,
+                "proteinG": 13,
+                "carbohydratesG": 1,
+                "fatG": 10,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            },
+            {
+              "ingredientId": "spinach",
+              "name": "Spinach",
+              "quantity": 200,
+              "unit": "g",
+              "category": "produce",
+              "basis": "raw",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 5,
+                "carbohydratesG": 3,
+                "fatG": 1,
+                "fiberG": 4,
+                "sugarsG": 1
+              }
+            },
+            {
+              "ingredientId": "wholegrain-bread",
+              "name": "Wholegrain bread",
+              "quantity": 70,
+              "unit": "g",
+              "category": "grains",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 175,
+                "proteinG": 6,
+                "carbohydratesG": 32,
+                "fatG": 2,
+                "fiberG": 5,
+                "sugarsG": 2
+              }
+            },
+            {
+              "ingredientId": "olive-oil",
+              "name": "Olive oil",
+              "quantity": 5,
+              "unit": "g",
+              "category": "pantry",
+              "basis": "as_sold",
+              "nutrition": {
+                "kcal": 45,
+                "proteinG": 0,
+                "carbohydratesG": 0,
+                "fatG": 5,
+                "fiberG": 0,
+                "sugarsG": 0
+              }
+            }
+          ],
+          "nutrition": {
+            "kcal": 415,
+            "proteinG": 24,
+            "carbohydratesG": 36,
+            "fatG": 18,
+            "fiberG": 9,
+            "sugarsG": 3,
+            "note": "Illustrative values for the software contract; not taken from a food database."
+          },
+          "instructions": [
+            "Cook the spinach in a pan with the oil.",
+            "Cook the eggs in the same pan and serve with the bread."
+          ],
+          "prepMinutes": 15,
+          "tags": [
+            "contains-eggs"
+          ]
         }
       ]
     }

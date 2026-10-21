@@ -1,15 +1,36 @@
 # Project Meal Planner
 
-**Versione 1.0.0 — consegna finale delle fasi 1–8.**
+**Versione 1.1.0 — ricettario, comandi rapidi, turni lavorativi e agente aggiornato.**
 
 PWA personale per importare piani creati in ChatGPT web, organizzare i pasti
 nel calendario e calcolare la spesa. Interfaccia italiana e inglese, stile
 colorato, dati locali e continuità offline dopo la preparazione iniziale.
 
-**Pubblicazione effettiva:** non eseguita in questa sessione. Il checkout
-non ha un remoto Git configurato; non sono disponibili accesso GitHub
-collegato, CLI GitHub o repository di destinazione. Il workflow è incluso e
-la procedura completa è in [GITHUB_PAGES.md](docs/GITHUB_PAGES.md).
+**App esistente:** [matcolombo.github.io/mealPlanCalendar](https://matcolombo.github.io/mealPlanCalendar/).
+La versione 1.1 è preparata in questo progetto; non è ancora pubblicata da questa
+sessione. Il repository è leggibile, ma il tentativo Git di verifica dei permessi
+di invio non dispone di credenziali. La procedura per aggiornare lo stesso URL,
+includendo il service worker compilato, è in [DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+## Novità della versione 1.1
+
+- Comandi persone `− / +` direttamente sui pasti di Oggi e Calendario, con coda
+  per tocchi rapidi, salvataggio locale e feedback animato.
+- Ricettario dei piani importati: ricerca per ricetta o ingrediente, filtri per
+  tipo di pasto, categoria e presenza nel calendario; conteggi e collegamenti
+  alle date passate, da oggi in avanti e complessive.
+- Macro per pasto, ingredienti e giornata: i valori dichiarati prevalgono; in
+  loro assenza si sommano i contributi disponibili degli ingredienti. I dati
+  parziali sono indicati esplicitamente e non diventano zeri.
+- Tipo di giornata strutturato: `workday.class`, con orari facoltativi. Il turno
+  resta sulla data quando si sposta un pasto.
+- Selettore file senza filtro di estensione per consentire `.diet` anche su
+  iOS, contenimenti dei componenti e transizioni elastiche con lieve tilt.
+- Intervista dell’agente estesa a profilo, rotazione lavorativa, mensa e range
+  kcal, attrezzatura, preferenze e struttura dei pasti; proposta in sezioni.
+
+Dettagli, verifiche eseguite e prove ancora necessarie:
+[RELEASE_1_1.md](docs/RELEASE_1_1.md).
 
 ## Avvio e sviluppo locale
 
@@ -70,7 +91,7 @@ conversazione e ChatGPT non modifica automaticamente il calendario.
 2. Leggi titolo, durata, data suggerita e intervallo risultante.
 3. Scegli la data iniziale e confermala manualmente, anche mantenendo quella
    suggerita. Cambiare data azzera la conferma.
-4. Se sono presenti pasti nelle date interessate, esamina le sovrapposizioni
+4. Se sono presenti pasti o un tipo di giornata nelle date interessate, esamina le sovrapposizioni
    e conferma esplicitamente la sostituzione completa di quei giorni.
 5. Applica l'importazione oppure annulla. L'ultima importazione resta
    annullabile anche dopo la riapertura.
@@ -83,8 +104,9 @@ richiede una conferma distinta.
 
 ## Calendario, quantità e spesa
 
-Oggi, Calendario e Spesa condividono IndexedDB. Nel dettaglio del pasto puoi
-modificare data, ora e persone per cui cucinare. La destinazione conserva
+Oggi, Calendario, Spesa e Ricettario condividono i dati di IndexedDB. I comandi
+per le persone sono sulle schede principali; nel dettaglio puoi modificare
+anche data e ora. La destinazione conserva
 gli altri pasti e li ordina per orario. Il Calendario mantiene la data
 selezionata; Oggi usa la data locale senza cancellare quella selezione.
 
@@ -173,11 +195,11 @@ di ripetere la pubblicazione dopo aver configurato Pages.
 
 Per completare la pubblicazione dal progetto consegnato:
 
-1. Crea un repository pubblico GitHub di destinazione e carica i sorgenti
-   nella radice, includendo il workflow.
+1. Aggiorna il repository MatColombo/mealPlanCalendar con i sorgenti della
+   versione 1.1, includendo `.github/workflows/pages.yml`.
 2. In **Settings → Pages → Build and deployment → Source**, scegli
    **GitHub Actions**.
-3. In **Actions**, esegui **Verify and publish Meal Planner** sul ramo main.
+3. In **Actions**, esegui **Meal Planner Pages** sul ramo main.
 4. Attendi il deploy e il controllo HTTP sull'URL restituito.
 
 GitHub Pages è disponibile sui repository pubblici con GitHub Free;
@@ -200,13 +222,14 @@ Procedura Git, aggiornamenti, verifica dell'URL e recupero:
 Le verifiche coprono importazione e conferme, confini di calendario e ora
 legale Europe/Rome, sovrascrittura/undo, pasti, tre modalità della spesa,
 persistenza, backup, cambio lingua, continuità offline e aggiornamenti.
-Il resoconto aggiornato è in [PHASE_8_VERIFICATION.md](docs/PHASE_8_VERIFICATION.md).
+Il resoconto aggiornato è in [RELEASE_1_1.md](docs/RELEASE_1_1.md); il resoconto storico della fase 8 è
+[PHASE_8_VERIFICATION.md](docs/PHASE_8_VERIFICATION.md).
 
-In questa sessione sono disponibili Node e simulazioni delle API browser,
-non un browser interattivo supportato. Installazione e comportamento reale
-su desktop, Android e iOS richiedono il collaudo indicato nel resoconto.
-Il workflow GitHub e l'URL pubblico non sono stati eseguiti/verificati qui,
-perché accesso e destinazione non sono disponibili.
+Sono stati usati Node e simulazioni delle API browser. Il supervisore
+per l’anteprima interattiva non è disponibile: layout e animazioni su browser
+reali, installazione PWA e selettore File iOS richiedono ancora il collaudo
+indicato nel resoconto 1.1. L’URL esistente è raggiungibile; la nuova release
+non è stata inviata al repository o pubblicata da questa sessione.
 
 **Nessun test valuta ricette, adeguatezza dei pasti, bilanciamento, kcal,
 macro o frequenze alimentari.** Schemi e verifiche riguardano soltanto
@@ -219,8 +242,8 @@ struttura, integrità dei dati e comportamento del software.
 - [CONVERSATION_EXAMPLE.md](docs/CONVERSATION_EXAMPLE.md): dialogo con sostituzione.
 - [PHASE_5_CALENDAR.md](docs/PHASE_5_CALENDAR.md): calendario e persone.
 - [PHASE_6_SHOPPING.md](docs/PHASE_6_SHOPPING.md): quantità, categorie e checklist.
-- [Piano italiano](examples/phase-2/meal-plan-it.diet) e
-  [piano inglese](examples/phase-2/meal-plan-en.diet).
+- [Piano italiano](examples/release-1.1/meal-plan-it.diet) e
+  [piano inglese](examples/release-1.1/meal-plan-en.diet).
 - [Demo spesa](examples/phase-6/shopping-demo-it.diet) e
   [backup dimostrativo completo](examples/phase-6/shopping-backup.json).
 

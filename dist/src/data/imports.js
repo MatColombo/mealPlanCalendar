@@ -4,6 +4,7 @@ import { buildImportPreview, readablePlan } from './session.js';
 import { validateAppState } from './validation.js';
 import { undoEntryIds } from './provenance.js';
 import { reconcileShoppingChecks } from '../shopping/list.js';
+import { copyWorkdayProperty } from './workday.js';
 
 function importError(code, message, details = {}) {
   return Object.assign(new Error(message), { code, ...details });
@@ -37,6 +38,10 @@ function assignmentMatches(state, plan, sourceId, mappings) {
     const sourceDay = plan.days.find(day => day.date === sourceDate);
     const assigned = state.calendar[assignedDate];
     if (!assigned || assigned.meals.length !== sourceDay.meals.length) return false;
+    // A legacy assignment may predate explicit day-context copying. Reapplying
+    // that file must preview a real replacement so its supplied class can be
+    // assigned after confirmation, rather than being an ineffective no-op.
+    if (Object.hasOwn(sourceDay, 'workday') && !equal(assigned.workday ?? null, sourceDay.workday ?? null)) return false;
     const expected = new Set(sourceDay.meals.map(meal => meal.mealId));
     return assigned.meals.every(entry => entry.sourceId === sourceId && entry.sourceDate === sourceDate
       && expected.delete(entry.mealId)) && expected.size === 0;
@@ -52,7 +57,8 @@ function assignedDates(state, sourceIds) {
 /**
  * Preview exact duplicates, changed revisions and occupied dates. Current
  * people/time overrides do not turn a repeated identical assignment into a
- * new import. Empty calendar days are replaceable without an overlap alert.
+ * new import. An explicit workday remains occupied after its last meal moves;
+ * empty dates without workday context retain the prior no-alert behavior.
  */
 export function previewImport(state, document, startDate) {
   const plan = readablePlan(document);
@@ -68,7 +74,10 @@ export function previewImport(state, document, startDate) {
   const identicalSourceId = exactSource ?? identicalSourceIds[0] ?? null;
   return {
     ...preview,
-    overlaps: preview.dayMappings.filter(mapping => state.calendar[mapping.assignedDate]?.meals.length > 0)
+    overlaps: preview.dayMappings.filter(mapping => {
+      const day = state.calendar[mapping.assignedDate];
+      return day?.meals.length > 0 || day?.workday != null;
+    })
       .map(mapping => mapping.assignedDate),
     identicalSourceId,
     identicalSourceIds,
@@ -141,6 +150,7 @@ export function prepareImport(state, document, {
     const sourceDay = source.document.days.find(day => day.date === mapping.sourceDate);
     next.calendar[mapping.assignedDate] = {
       date: mapping.assignedDate,
+      ...copyWorkdayProperty(sourceDay),
       meals: sourceDay.meals.map(meal => {
         let entry;
         do { entry = createCalendarEntry({ sourceId, sourceDate: mapping.sourceDate, mealId: meal.mealId, assignmentId: importId }); }
