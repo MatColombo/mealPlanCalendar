@@ -101,6 +101,24 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
+      - name: Diagnose deployed service worker
+        shell: bash
+        run: |
+          echo "=== LOCAL ==="
+          head -c 250 dist/sw.js
+          echo
+          sha256sum dist/sw.js
+
+          echo "=== REMOTE ==="
+          curl -fLsS \
+            -H "Cache-Control: no-cache" \
+            "${MEAL_PLANNER_URL%/}/sw.js?debug=${GITHUB_RUN_ID}" \
+            -o /tmp/remote-sw.js
+
+          head -c 250 /tmp/remote-sw.js
+          echo
+          sha256sum /tmp/remote-sw.js
+
       - name: Verify the returned public URL
         env:
           MEAL_PLANNER_URL: ${{ steps.deployment.outputs.page_url }}
