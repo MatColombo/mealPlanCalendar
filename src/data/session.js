@@ -279,6 +279,42 @@ export function setEntryTime(state, entryId, time) {
   return updateEntry(state, entryId, { timeOverride: time });
 }
 
+/** Hide an occurrence from personal day totals and advanced shopping without touching its source meal. */
+export function setEntryHidden(state, entryId, hidden, { now } = {}) {
+  if (typeof hidden !== 'boolean') throw sessionError('SESSION_INVALID_VISIBILITY', 'Meal visibility must be boolean.');
+  const next = updateEntry(state, entryId, { hidden });
+  next.meta.updatedAt = timestampFor(now);
+  return next;
+}
+
+/**
+ * Exchange two calendar slots. Each recipe keeps its source identity, people and open metadata,
+ * while effective date/time are swapped. Date workday context stays attached to the date.
+ */
+export function swapEntries(state, firstEntryId, secondEntryId, { now } = {}) {
+  if (firstEntryId === secondEntryId) throw sessionError('SESSION_SWAP_SAME_ENTRY', 'Choose a different meal to swap.');
+  const first = findEntry(state, firstEntryId);
+  const second = findEntry(state, secondEntryId);
+  if (!first || !second) throw sessionError('SESSION_ENTRY_NOT_FOUND', 'A calendar entry is no longer available.');
+  const next = materializeCalendarProvenance(state);
+  const firstEntry = next.calendar[first.date].meals.find(item => item.entryId === firstEntryId);
+  const secondEntry = next.calendar[second.date].meals.find(item => item.entryId === secondEntryId);
+  const firstTime = first.time;
+  const secondTime = second.time;
+  firstEntry.timeOverride = secondTime === first.meal.time ? null : secondTime;
+  secondEntry.timeOverride = firstTime === second.meal.time ? null : firstTime;
+  if (first.date !== second.date) {
+    next.calendar[first.date].meals = next.calendar[first.date].meals.filter(item => item.entryId !== firstEntryId);
+    next.calendar[second.date].meals = next.calendar[second.date].meals.filter(item => item.entryId !== secondEntryId);
+    next.calendar[first.date].meals.push(secondEntry);
+    next.calendar[second.date].meals.push(firstEntry);
+  }
+  next.calendar[first.date].meals = getDayEntries(next, first.date).map(row => row.entry);
+  if (first.date !== second.date) next.calendar[second.date].meals = getDayEntries(next, second.date).map(row => row.entry);
+  next.meta.updatedAt = timestampFor(now);
+  return next;
+}
+
 /**
  * Move one occurrence without replacing either day's metadata or other meals.
  * Source references, time, people and open occurrence fields remain intact.
@@ -306,7 +342,8 @@ export function getShoppingEntries(state) {
   const { range, excludedMealTypes = [] } = state.shopping;
   if (range.startDate === null || range.endDate === null) return [];
   return getRangeEntries(state, range.startDate, range.endDate)
-    .filter(({ meal }) => !excludedMealTypes.includes(meal.type));
+    .filter(({ meal, entry }) => !excludedMealTypes.includes(meal.type)
+      && !(state.shopping.mode === 'advanced' && entry.hidden === true));
 }
 
 export function getShoppingItems(state) {

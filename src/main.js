@@ -5,7 +5,7 @@ import { addDays, todayISO } from './data/dates.js';
 import { DEMO_DOCUMENT_URL } from './data/demo.js';
 import { previewImport, prepareImport, previewUndoImport, undoLastImport, reconcileShopping } from './data/imports.js';
 import { exportCalendarDiet, exportSourceDiet } from './data/export.js';
-import { findEntry, getRangeEntries, setEntryDate, setEntryServings, setEntryTime } from './data/session.js';
+import { findEntry, getRangeEntries, setEntryDate, setEntryServings, setEntryTime, setEntryHidden, swapEntries } from './data/session.js';
 import { resolveNavigation, resolveRoute, getSelectedCalendarDate } from './data/navigation.js';
 import { createIndexedDBRepository, readStoredBackup } from './persistence/indexeddb.js';
 import { loadCompatibleState } from './persistence/migrations.js';
@@ -34,7 +34,7 @@ const model = {
   storage: { status: 'loading', errorKey: null, hasData: false, hasStoredState: false,
     recoveryAvailable: false, rawBackupAvailable: false },
   manualDraft: { name: '', quantity: '', unit: 'unit', customUnit: '', category: 'other' },
-  mealMoveDraft: null,
+  mealMoveDraft: null, swapDraft: null,
   recipeFilters: { ...DEFAULT_RECIPE_FILTERS },
   shoppingRows: [], shoppingSummary: null, shoppingError: null, shoppingCopyText: '', shoppingCopyFileName: '',
   pwa: null, rawBackup: null,
@@ -121,7 +121,7 @@ function errorKey(error, fallback = 'errors.generic') {
   return ({
     SESSION_INVALID_DATE: 'errors.invalidDate', SESSION_INVALID_RANGE: 'errors.invalidRange',
     SESSION_IMPORT_OVERLAP: 'errors.importOverlap', SESSION_INVALID_SERVINGS: 'errors.invalidServings',
-    SESSION_INVALID_TIME: 'errors.invalidTime', SESSION_ENTRY_NOT_FOUND: 'errors.missingEntry',
+    SESSION_INVALID_TIME: 'errors.invalidTime', SESSION_INVALID_VISIBILITY: 'errors.generic', SESSION_SWAP_SAME_ENTRY: 'errors.generic', SESSION_ENTRY_NOT_FOUND: 'errors.missingEntry',
     SESSION_BROKEN_REFERENCE: 'errors.invalidBackup', SESSION_INVALID_PLAN: 'errors.invalidDiet',
     SESSION_DUPLICATE_ID: 'errors.invalidDiet', IMPORT_DATE_CONFIRMATION_REQUIRED: 'errors.dateConfirmation',
     SESSION_INVALID_SHOPPING_MODE: 'errors.shoppingCalculation',
@@ -208,7 +208,8 @@ function focusLocator(element = document.activeElement) {
 function lockUnavailableEdits() {
   const cannotWrite = model.storage.status !== 'ready';
   const mutations = new Set(['change-servings', 'confirm-import', 'request-restore',
-    'clear-session', 'reset-demo', 'confirm-action', 'undo-last-import', 'remove-manual']);
+    'clear-session', 'reset-demo', 'confirm-action', 'undo-last-import', 'remove-manual',
+    'toggle-meal-hidden', 'confirm-meal-swap']);
   const savedControls = new Set(['language', 'reduced-motion', 'week-starts',
     'shopping-start', 'shopping-end', 'shopping-mode', 'meal-date', 'meal-time', 'meal-servings',
     'shopping-check', 'manual-check', 'shopping-exclusion']);
@@ -435,12 +436,14 @@ function openDialog(dialog) {
   model.dialog = dialog;
   const row = dialog.kind === 'meal' ? findEntry(model.state, dialog.entryId) : null;
   model.mealMoveDraft = row ? { entryId: row.entry.entryId, date: row.date, error: null } : null;
+  if (dialog.kind !== 'meal-swap') model.swapDraft = null;
   render({ focus: null });
 }
 
 function closeDialog() {
   model.dialog = null;
   model.mealMoveDraft = null;
+  model.swapDraft = null;
   model.shoppingCopyText = '';
   model.shoppingCopyFileName = '';
   render({ focus: dialogOpener });
@@ -759,7 +762,8 @@ function refreshMealMoveForm(field) {
 }
 
 const mutationActions = new Set(['change-servings', 'confirm-import', 'request-restore',
-  'clear-session', 'reset-demo', 'confirm-action', 'undo-last-import', 'remove-manual']);
+  'clear-session', 'reset-demo', 'confirm-action', 'undo-last-import', 'remove-manual',
+  'toggle-meal-hidden', 'confirm-meal-swap']);
 
 /** Late optional-browser results must not recreate a form opened meanwhile. */
 function presentPwaResult(context, key, type = 'success') {
@@ -830,6 +834,38 @@ root.addEventListener('click', async (event) => {
     } else if (action === 'open-meal') {
       if (!findEntry(model.state, entryId)) throw Object.assign(new Error('Missing entry'), { code: 'SESSION_ENTRY_NOT_FOUND' });
       openDialog({ kind: 'meal', entryId });
+    } else if (action === 'toggle-meal-hidden') {
+      const hidden = control.dataset.hidden === 'true';
+      let candidate = setEntryHidden(model.state, entryId, hidden);
+      candidate = reconcileShopping(candidate);
+      await saveCandidate(candidate);
+      notice(hidden ? 'notices.mealHidden' : 'notices.mealRestored');
+      if (model.dialog?.kind === 'meal' && model.dialog.entryId === entryId) model.dialog = null;
+      render();
+    } else if (action === 'open-meal-swap') {
+      const selected = findEntry(model.state, entryId);
+      if (!selected || selected.entry.hidden === true) return;
+      model.swapDraft = { browseDate: selected.date, targetEntryId: null };
+      openDialog({ kind: 'meal-swap', entryId });
+      model.swapDraft = { browseDate: selected.date, targetEntryId: null };
+      render({ focus: null });
+    } else if (action === 'swap-step-day') {
+      if (model.dialog?.kind !== 'meal-swap') return;
+      const base = model.swapDraft?.browseDate || findEntry(model.state, model.dialog.entryId)?.date;
+      if (!base) return;
+      model.swapDraft = { ...(model.swapDraft || {}), browseDate: addDays(base, Number(control.dataset.offset)), targetEntryId: null };
+      render({ focus: '[data-control="swap-date"]' });
+    } else if (action === 'select-swap-target') {
+      if (model.dialog?.kind !== 'meal-swap' || entryId === model.dialog.entryId) return;
+      model.swapDraft = { ...(model.swapDraft || {}), targetEntryId: entryId };
+      render({ focus: '[data-action="confirm-meal-swap"]' });
+    } else if (action === 'confirm-meal-swap') {
+      if (model.dialog?.kind !== 'meal-swap' || !model.swapDraft?.targetEntryId) return;
+      let candidate = swapEntries(model.state, model.dialog.entryId, model.swapDraft.targetEntryId);
+      candidate = reconcileShopping(candidate);
+      await saveCandidate(candidate);
+      model.dialog = null; model.swapDraft = null; model.mealMoveDraft = null;
+      notice('notices.mealSwapped'); render();
     } else if (action === 'close-dialog') closeDialog();
     else if (action === 'open-recipe') {
       openDialog({ kind: 'recipe', recipeKey: control.dataset.recipeKey });
@@ -917,7 +953,7 @@ root.addEventListener('click', async (event) => {
 
 const transientControls = new Set(['selected-date', 'diet-file', 'backup-file',
   'import-start', 'import-date-confirmed', 'import-duplicate-confirmed',
-  'export-source', 'export-start', 'export-end']);
+  'export-source', 'export-start', 'export-end', 'swap-date']);
 
 root.addEventListener('change', async (event) => {
   const control = event.target;
@@ -946,6 +982,11 @@ root.addEventListener('change', async (event) => {
     }
     if (name === 'selected-date') {
       selectDate(control.value); await rememberView(); return;
+    }
+    if (name === 'swap-date') {
+      if (model.dialog?.kind !== 'meal-swap' || !validDate(control.value)) return;
+      model.swapDraft = { ...(model.swapDraft || {}), browseDate: control.value, targetEntryId: null };
+      render({ focus: '[data-control="swap-date"]' }); return;
     }
     if (name === 'meal-date') {
       model.mealMoveDraft = {
@@ -1111,6 +1152,7 @@ root.addEventListener('drop', async (event) => {
 function handleHistory() {
   model.dialog = null;
   model.mealMoveDraft = null;
+  model.swapDraft = null;
   model.notice = null;
   readRoute();
   render({ focus: '#page-title', top: true });
